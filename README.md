@@ -6,3 +6,4 @@ Working on Login/ Register Functionality how it could had been done.
 Working on Attendance Management System
 
 ### Team member → Piyush Deshpande
+Working on Events and venues
