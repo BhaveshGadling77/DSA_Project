@@ -1,7 +1,13 @@
 import { exec } from "child_process";
-const data = "bhavesh Gadling";
-exec(`./myExecutable 100 2000`, (error, stdout, stderr) => p(stdout));
-
-function p(data) {
-        console.log(data.split(" "));
-}
+const data = "Working on dsa project";
+exec(`myExecutable.exe "${data}"`, (error, stdout, stderr) => {
+        if (error) {
+                console.error(`Error: ${error}`);
+                return;
+        }
+        if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                return;
+        }
+        console.log(stdout);
+});
