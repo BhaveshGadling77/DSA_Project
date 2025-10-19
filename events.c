@@ -17,5 +17,4 @@ typedef struct event {
     int eventID;
     int guests;             // Number of guests
     char organiser;
-    
 } event;
