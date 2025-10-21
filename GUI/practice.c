@@ -1,70 +1,64 @@
 #include <gtk/gtk.h>
 
-static void Login(GtkWidget *widget,gpointer   data)
-{
+static void Login(GtkWidget *widget,gpointer   data) {
   g_print ("You had Clicked On Login Button.\n");
 }
 
-static void Register(GtkWidget *widget,gpointer   data)
-{
+static void Register(GtkWidget *widget,gpointer   data) {
   g_print ("You had Clicked On Register Button.\n");
 }
-static void
-activate (GtkApplication *app, gpointer user_data)
-{
-  GtkWidget *window;
-  GtkWidget *grid;
-  GtkWidget *button;
 
-  /* create a new window, and set its title */
-  window = gtk_application_window_new (app);
-  gtk_window_set_title (GTK_WINDOW (window), "Window");
+static void activate (GtkApplication *app, gpointer user_data) {	
+  	GtkWidget *window;
+  	GtkWidget *grid;
+  	GtkWidget *button;
 
-  /* Here we construct the container that is going pack our buttons */
-  grid = gtk_grid_new ();
+  	/* create a new window, and set its title */
+  	window = gtk_application_window_new (app);
+  	gtk_window_set_title (GTK_WINDOW (window), "Window");
 
-  /* Pack the container in the window */
-  gtk_window_set_child (GTK_WINDOW (window), grid);
+  	/* Here we construct the container that is going pack our buttons */
+  	grid = gtk_grid_new ();
 
-  button = gtk_button_new_with_label ("Login");
-  g_signal_connect (button, "clicked", G_CALLBACK (Login), NULL);
+  	/* Pack the container in the window */
+  	gtk_window_set_child (GTK_WINDOW (window), grid);
 
-  /* Place the first button in the grid cell (0, 0), and make it fill
-   * just 1 cell horizontally and vertically (ie no spanning)
-   */
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
+  	button = gtk_button_new_with_label ("Login");
+  	g_signal_connect (button, "clicked", G_CALLBACK (Login), NULL);
 
-  button = gtk_button_new_with_label ("Register");
-  g_signal_connect (button, "clicked", G_CALLBACK (Register), NULL);
+  	/* Place the first button in the grid cell (0, 0), and make it fill
+  	 * just 1 cell horizontally and vertically (ie no spanning)
+  	 */
+  	gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
 
-  /* Place the second button in the grid cell (1, 0), and make it fill
-   * just 1 cell horizontally and vertically (ie no spanning)
-   */
-  gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
+  	button = gtk_button_new_with_label ("Register");
+  	g_signal_connect (button, "clicked", G_CALLBACK (Register), NULL);
 
-  button = gtk_button_new_with_label ("Quit");
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
+  	/* Place the second button in the grid cell (1, 0), and make it fill
+  	 * just 1 cell horizontally and vertically (ie no spanning)
+  	 */
+  	gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
 
-  /* Place the Quit button in the grid cell (0, 1), and make it
-   * span 2 columns.
-   */
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 2, 1);
+  	button = gtk_button_new_with_label ("Quit");
+  	g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
 
-  gtk_window_present (GTK_WINDOW (window));
-}
+  	/* Place the Quit button in the grid cell (0, 1), and make it
+  	 * span 2 columns.
+  	 */
+  	gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 2, 1);
 
-int
-main (int    argc,
-      char **argv)
-{
-  GtkApplication *app;
-  int status;
+  	gtk_window_present (GTK_WINDOW (window));
+}	
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
-  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
-  status = g_application_run (G_APPLICATION (app), argc, argv);
-  g_object_unref (app);
+int main (int argc, char *argv[]) {
+  	GtkApplication *app;
+  	int status;
 
-  return status;
+  	app = gtk_application_new ("com.example.dsaProject", G_APPLICATION_DEFAULT_FLAGS);
+  	g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  	status = g_application_run (G_APPLICATION (app), argc, argv);
+  	g_object_unref (app);
+
+  	return status;
 }
 
