@@ -7,9 +7,9 @@ typedef struct time {
 } time;
 
 typedef struct date {
-    short unsigned int date;        // [1, 28, 29, 30, 31]
-    short unsigned int month;       // [1, 12]
-    short unsigned int year;
+    short int date;
+    short int month;
+    short int year;
 } date;
 
 typedef struct event {
@@ -17,8 +17,4 @@ typedef struct event {
     int eventID;
     int guests;             // Number of guests
     char organiser;
-    date eventDate;
-    time inTime;
-    time outTime;
 } event;
-
