@@ -1,0 +1,101 @@
+venueID,venueName,capacity,rentalCostPerHour,venueHandler,handlerContact,venueHandlerEmail,parkingCapacity,indoor,location
+1,Innovation Hub,4445,14149,Mr. Joshi,7359790015,innovationhub@coep.ac.in,189,1,Pune
+2,Admin Building Auditorium,4241,17330,Mr. Patil,7359579877,adminbuildingauditorium@coep.ac.in,265,0,Mumbai
+3,Library Conference Hall,2774,15161,Mr. Joshi,8704217922,libraryconferencehall@coep.ac.in,221,1,Nagpur
+4,Tech Pavilion,4984,8758,Mr. Kulkarni,8630631031,techpavilion@coep.ac.in,198,1,Aurangabad
+5,Workshop Hall,2983,2885,Mr. Deshmukh,9171483330,workshophall@coep.ac.in,29,1,Aurangabad
+6,Tech Pavilion,2830,3574,Mr. Joshi,8303514990,techpavilion@coep.ac.in,32,1,Nagpur
+7,Robotics Arena,4451,6232,Mr. Deshmukh,7135174040,roboticsarena@coep.ac.in,219,1,Nagpur
+8,Computer Science Lab 1,515,2866,Mr. Patil,7544668442,computersciencelab1@coep.ac.in,170,1,Aurangabad
+9,Admin Building Auditorium,3536,17209,Mr. Patil,8822752811,adminbuildingauditorium@coep.ac.in,39,1,Pune
+10,Sports Complex,4018,13564,Mr. Deshmukh,9382549311,sportscomplex@coep.ac.in,184,1,Pune
+11,Mechanical Seminar Hall,1002,18709,Mr. Patil,9128289079,mechanicalseminarhall@coep.ac.in,244,1,Pune
+12,Innovation Hub,100,13831,Mr. Patil,9853963282,innovationhub@coep.ac.in,160,0,Pune
+13,Mini Auditorium,4129,18797,Mr. Joshi,8931462774,miniauditorium@coep.ac.in,281,1,Aurangabad
+14,Mini Auditorium,1274,13635,Mr. Joshi,7367973305,miniauditorium@coep.ac.in,44,1,Mumbai
+15,Tech Pavilion,3729,10250,Mr. Patil,8757426744,techpavilion@coep.ac.in,260,1,Aurangabad
+16,Electronics Dept Conference Room,355,9815,Mr. Patil,8868085011,electronicsdeptconferenceroom@coep.ac.in,134,0,Mumbai
+17,Sports Complex,459,16345,Mr. Joshi,9998649757,sportscomplex@coep.ac.in,81,1,Aurangabad
+18,Sports Complex,941,15682,Mr. Joshi,8768159861,sportscomplex@coep.ac.in,238,1,Pune
+19,Mechanical Seminar Hall,1256,13314,Mr. Joshi,8765851839,mechanicalseminarhall@coep.ac.in,127,1,Pune
+20,Mini Auditorium,4430,14456,Mr. Mehta,9558004271,miniauditorium@coep.ac.in,93,1,Nashik
+21,Robotics Arena,2618,5885,Mr. Deshmukh,7438439423,roboticsarena@coep.ac.in,270,0,Nashik
+22,Admin Building Auditorium,3027,8589,Mr. Patil,9291107419,adminbuildingauditorium@coep.ac.in,270,0,Nashik
+23,Electronics Dept Conference Room,3569,4659,Mr. Kulkarni,9649202984,electronicsdeptconferenceroom@coep.ac.in,40,0,Nashik
+24,Workshop Hall,1229,8063,Mr. Joshi,9748767511,workshophall@coep.ac.in,135,0,Pune
+25,Open Ground A,1026,9165,Mr. Joshi,8203476712,opengrounda@coep.ac.in,171,0,Pune
+26,Sports Complex,3545,9482,Mr. Deshmukh,9543985835,sportscomplex@coep.ac.in,112,0,Nashik
+27,Library Conference Hall,1884,10719,Mr. Patil,7808908250,libraryconferencehall@coep.ac.in,218,0,Mumbai
+28,Workshop Hall,4355,18702,Mr. Patil,7073640566,workshophall@coep.ac.in,59,1,Aurangabad
+29,Innovation Hub,3512,16248,Mr. Joshi,8336707317,innovationhub@coep.ac.in,133,1,Mumbai
+30,Civil Hall,595,2544,Mr. Patil,7998275542,civilhall@coep.ac.in,41,1,Nagpur
+31,Computer Science Lab 1,1981,3775,Mr. Kulkarni,8543512743,computersciencelab1@coep.ac.in,93,0,Nagpur
+32,Mini Auditorium,4856,3528,Mr. Joshi,9539379448,miniauditorium@coep.ac.in,229,0,Mumbai
+33,Robotics Arena,1334,3953,Mr. Joshi,8561753671,roboticsarena@coep.ac.in,41,0,Pune
+34,Electronics Dept Conference Room,987,12522,Mr. Deshmukh,9272470960,electronicsdeptconferenceroom@coep.ac.in,299,1,Pune
+35,Open Ground A,1570,14844,Mr. Patil,9553286624,opengrounda@coep.ac.in,269,1,Nagpur
+36,Open Ground A,4422,12460,Mr. Joshi,8721533459,opengrounda@coep.ac.in,236,0,Pune
+37,Cultural Center,2538,8950,Mr. Patil,8655579236,culturalcenter@coep.ac.in,269,0,Nagpur
+38,Cultural Center,2622,14802,Mr. Patil,9725448160,culturalcenter@coep.ac.in,42,1,Nagpur
+39,Electronics Dept Conference Room,1214,5065,Mr. Patil,9966091398,electronicsdeptconferenceroom@coep.ac.in,283,0,Nagpur
+40,Electronics Dept Conference Room,380,19295,Mr. Deshmukh,8600246961,electronicsdeptconferenceroom@coep.ac.in,148,0,Aurangabad
+41,Cultural Center,2740,11017,Mr. Kulkarni,9699845550,culturalcenter@coep.ac.in,55,1,Mumbai
+42,Admin Building Auditorium,4301,12519,Mr. Deshmukh,7410878235,adminbuildingauditorium@coep.ac.in,153,1,Mumbai
+43,Innovation Hub,3669,13291,Mr. Deshmukh,8847504464,innovationhub@coep.ac.in,285,1,Mumbai
+44,Tech Pavilion,4576,3257,Mr. Patil,8553086795,techpavilion@coep.ac.in,238,1,Aurangabad
+45,Electronics Dept Conference Room,3703,5394,Mr. Patil,7695489071,electronicsdeptconferenceroom@coep.ac.in,300,1,Pune
+46,Mechanical Seminar Hall,3518,8712,Mr. Kulkarni,8260288649,mechanicalseminarhall@coep.ac.in,131,0,Pune
+47,Electronics Dept Conference Room,4911,17304,Mr. Joshi,8946300047,electronicsdeptconferenceroom@coep.ac.in,84,1,Pune
+48,COEP Main Auditorium,967,18946,Mr. Kulkarni,7473209341,coepmainauditorium@coep.ac.in,55,0,Pune
+49,Computer Science Lab 1,3994,8317,Mr. Deshmukh,7743767577,computersciencelab1@coep.ac.in,103,1,Mumbai
+50,Workshop Hall,2305,3393,Mr. Joshi,7257508604,workshophall@coep.ac.in,227,0,Nashik
+51,Cultural Center,3834,13199,Mr. Joshi,9177485505,culturalcenter@coep.ac.in,268,1,Nashik
+52,Mechanical Seminar Hall,4158,11310,Mr. Deshmukh,9677727861,mechanicalseminarhall@coep.ac.in,195,1,Aurangabad
+53,Library Conference Hall,3139,16430,Mr. Mehta,9479468698,libraryconferencehall@coep.ac.in,119,1,Aurangabad
+54,Civil Hall,3708,12360,Mr. Kulkarni,9366582925,civilhall@coep.ac.in,78,1,Mumbai
+55,Civil Hall,4026,9694,Mr. Joshi,9714339151,civilhall@coep.ac.in,177,0,Nagpur
+56,Workshop Hall,4710,13199,Mr. Kulkarni,9324200461,workshophall@coep.ac.in,63,0,Pune
+57,COEP Main Auditorium,2842,7904,Mr. Kulkarni,8088825157,coepmainauditorium@coep.ac.in,113,1,Mumbai
+58,Cultural Center,582,18311,Mr. Deshmukh,9856672222,culturalcenter@coep.ac.in,142,0,Nagpur
+59,Mini Auditorium,308,5494,Mr. Joshi,7284549414,miniauditorium@coep.ac.in,249,1,Nashik
+60,Mini Auditorium,2237,6617,Mr. Deshmukh,8350770865,miniauditorium@coep.ac.in,158,0,Pune
+61,COEP Boat Club,3610,14361,Mr. Kulkarni,8721871600,coepboatclub@coep.ac.in,265,0,Mumbai
+62,Workshop Hall,4079,6882,Mr. Patil,9527967213,workshophall@coep.ac.in,260,1,Pune
+63,Computer Science Lab 1,1891,18125,Mr. Joshi,8210311488,computersciencelab1@coep.ac.in,153,0,Aurangabad
+64,Sports Complex,3232,11993,Mr. Joshi,8927815314,sportscomplex@coep.ac.in,193,1,Nagpur
+65,COEP Main Auditorium,1962,10151,Mr. Mehta,9865210119,coepmainauditorium@coep.ac.in,72,1,Mumbai
+66,Civil Hall,149,2835,Mr. Kulkarni,7793900583,civilhall@coep.ac.in,287,0,Pune
+67,Open Ground A,3942,5490,Mr. Deshmukh,7395080791,opengrounda@coep.ac.in,159,0,Nagpur
+68,Library Conference Hall,3177,7634,Mr. Deshmukh,7556660142,libraryconferencehall@coep.ac.in,181,1,Aurangabad
+69,Admin Building Auditorium,1956,16951,Mr. Deshmukh,8223420128,adminbuildingauditorium@coep.ac.in,258,0,Mumbai
+70,COEP Main Auditorium,4708,19412,Mr. Kulkarni,9238006788,coepmainauditorium@coep.ac.in,56,1,Nagpur
+71,Admin Building Auditorium,424,19627,Mr. Patil,7287591482,adminbuildingauditorium@coep.ac.in,173,1,Aurangabad
+72,Workshop Hall,4256,4763,Mr. Joshi,8067664507,workshophall@coep.ac.in,293,0,Nashik
+73,Sports Complex,171,16791,Mr. Deshmukh,7567456080,sportscomplex@coep.ac.in,30,0,Nashik
+74,Workshop Hall,4689,14848,Mr. Kulkarni,9598257039,workshophall@coep.ac.in,159,0,Mumbai
+75,Civil Hall,3420,15853,Mr. Deshmukh,7631724008,civilhall@coep.ac.in,214,1,Pune
+76,Mini Auditorium,2063,12998,Mr. Mehta,8504377246,miniauditorium@coep.ac.in,86,0,Nagpur
+77,Electronics Dept Conference Room,3964,3251,Mr. Deshmukh,7428592995,electronicsdeptconferenceroom@coep.ac.in,32,0,Pune
+78,Robotics Arena,3014,16818,Mr. Joshi,7915720741,roboticsarena@coep.ac.in,102,0,Pune
+79,Robotics Arena,3071,15918,Mr. Joshi,9849706069,roboticsarena@coep.ac.in,40,0,Pune
+80,Workshop Hall,801,13405,Mr. Kulkarni,9837142961,workshophall@coep.ac.in,117,1,Mumbai
+81,Open Ground A,647,16372,Mr. Mehta,7511350215,opengrounda@coep.ac.in,93,0,Pune
+82,COEP Main Auditorium,3261,8030,Mr. Kulkarni,7618383972,coepmainauditorium@coep.ac.in,166,1,Mumbai
+83,COEP Main Auditorium,3684,14588,Mr. Kulkarni,7729691854,coepmainauditorium@coep.ac.in,209,0,Pune
+84,Workshop Hall,618,3465,Mr. Mehta,8534252969,workshophall@coep.ac.in,65,0,Nagpur
+85,Mini Auditorium,4761,6697,Mr. Joshi,9650855694,miniauditorium@coep.ac.in,99,0,Mumbai
+86,Robotics Arena,1552,10365,Mr. Deshmukh,9541971124,roboticsarena@coep.ac.in,198,0,Mumbai
+87,Cultural Center,805,13459,Mr. Mehta,9533198191,culturalcenter@coep.ac.in,120,1,Nagpur
+88,Innovation Hub,2873,11740,Mr. Deshmukh,9524464503,innovationhub@coep.ac.in,167,0,Mumbai
+89,Cultural Center,3709,10492,Mr. Kulkarni,9685828732,culturalcenter@coep.ac.in,114,0,Nashik
+90,Electronics Dept Conference Room,4201,17973,Mr. Kulkarni,8779283946,electronicsdeptconferenceroom@coep.ac.in,111,0,Mumbai
+91,Tech Pavilion,4086,18277,Mr. Kulkarni,7180225516,techpavilion@coep.ac.in,206,1,Nagpur
+92,Admin Building Auditorium,2190,16201,Mr. Patil,9257130021,adminbuildingauditorium@coep.ac.in,50,1,Nashik
+93,Sports Complex,3958,7229,Mr. Kulkarni,8960481701,sportscomplex@coep.ac.in,257,1,Nashik
+94,Mini Auditorium,3829,10499,Mr. Mehta,9637292256,miniauditorium@coep.ac.in,56,1,Mumbai
+95,Mechanical Seminar Hall,2978,16117,Mr. Patil,9243374496,mechanicalseminarhall@coep.ac.in,49,1,Nashik
+96,Mini Auditorium,4587,12479,Mr. Kulkarni,9087078626,miniauditorium@coep.ac.in,154,1,Nagpur
+97,Civil Hall,1778,13039,Mr. Mehta,8464752686,civilhall@coep.ac.in,58,0,Mumbai
+98,Tech Pavilion,1416,14473,Mr. Joshi,9333178346,techpavilion@coep.ac.in,140,1,Nagpur
+99,Open Ground A,3407,18623,Mr. Kulkarni,7828838431,opengrounda@coep.ac.in,52,0,Pune
+100,Library Conference Hall,3970,15393,Mr. Patil,9314320534,libraryconferencehall@coep.ac.in,270,1,Aurangabad

@@ -1,36 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.96.1 -->
 <interface>
-  <!-- interface-name eventmanagementsystem.ui -->
-  <requires lib="gtk" version="4.18"/>
-  <object class="GtkWindow">
+  <requires lib="gtk" version="4.14"/>
+  <object id="window" class="GtkWindow">
     <child>
-      <object class="GtkStack">
-        <child>
+      <object id="main_stack" class="GtkStack"> <child>
           <object class="GtkBox">
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkButton">
+              <object id="login" class="GtkButton">
                 <property name="label">Login</property>
                 <property name="valign">center</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object id="register" class="GtkButton">
                 <property name="label">Register</property>
                 <property name="margin-start">15</property>
                 <property name="valign">center</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object id="quit" class="GtkButton">
                 <property name="label">Quit</property>
                 <property name="margin-start">15</property>
                 <property name="valign">center</property>
               </object>
             </child>
           </object>
+          <attributes>
+            <attribute name="name">page_main</attribute>
+          </attributes>
         </child>
         <child>
           <object class="GtkBox">
@@ -89,6 +89,16 @@
                   </object>
                 </child>
                 <child>
+                  <object id="btn_back_to_main" class="GtkButton"> <property name="label">Back</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">1</property>
+                      <property name="row">2</property>
+                      <property name="row-span">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkButton">
                     <property name="label">Login</property>
                     <layout>
@@ -102,6 +112,9 @@
               </object>
             </child>
           </object>
+          <attributes>
+            <attribute name="name">page_login</attribute>
+          </attributes>
         </child>
       </object>
     </child>

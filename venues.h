@@ -1,13 +1,13 @@
 #include <stdio.h>
-
-typedef struct venue {
-    char venueName[32];
+typedef struct Venue {
     int venueID;
-    long long int capacity;
-    int rentalCost;                     // Cost of booking the venue per hour
-    char venuHandler[32];               // Name of the person handling the venue
-    unsigned long int handlerContact;   // Handler Mobile Contact information
-    char venueHandlerEmail[48];         // Handler emailID
+    char venueName[64];
+    long long capacity;
+    int rentalCostPerHour;
+    char venueHandlerName[64];
+    unsigned long long handlerContact;
+    char venueHandlerEmail[64];
     int parkingCapacity;
-    int indoor;                         // 1 → Indoor, 0 → Outdoor
-} venue;
+    int indoor;             // 1 = Indoor, 0 = Outdoor
+    char location[128];     // City or full address
+} Venue;

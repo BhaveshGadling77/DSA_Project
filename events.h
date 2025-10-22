@@ -12,9 +12,12 @@ typedef struct date {
     short int year;
 } date;
 
-typedef struct event {
-    char eventName[24];
+typedef struct Event {
     int eventID;
-    int guests;             // Number of guests
-    char organiser;
-} event;
+    char eventName[64];
+    int organiserID;        // Linked to Organiser
+    int venueID;            // Linked to Venue
+    struct date eventDate;
+    struct time startTime;
+    struct time endTime;
+} Event;
