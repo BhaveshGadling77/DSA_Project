@@ -9,4 +9,11 @@ typedef struct AttendanceCount{
     float attedance_percentage;
 } AttendanceCount;
 
+
+// Function declarations
+void markAttendance();
+void viewAttendance();
+AttendanceCount getAttendanceStats(int event_id);
+
 #endif
+
