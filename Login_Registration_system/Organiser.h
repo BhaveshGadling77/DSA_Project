@@ -6,3 +6,6 @@ typedef struct Organiser {
     char email[64];
     char organisationName[64];
 } Organiser;
+
+void RegisterAsOrganiser();
+
