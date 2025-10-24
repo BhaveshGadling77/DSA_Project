@@ -1,4 +1,4 @@
-// if organizer wants attendees report.
+// attendees report
 #ifndef REPORT_H
 #define REPORT_H
 
