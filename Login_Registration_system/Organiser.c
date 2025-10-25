@@ -12,6 +12,16 @@ typedef struct Organiser {
     char email[64];
 } Organiser;
 
+int validateEmail(char *str) {
+	int n = strlen(str);
+	int cntd = 0, cntat = 0;
+	if ((str[0] == '.' || str[0] == '@' || str[n-1] == '.' || str[n-1] == '@') && str[i] - 'a' != 'z'- 'a' && str[i] - 'A' != 'Z' - 'A') {
+
+	}
+	for (int i = 0; i < n; i++) {
+
+	}
+}
 void RegisterAsOrganiser() {
 	Organiser *org = (Organiser *)malloc(sizeof(Organiser));
 	org->organiserID = rand();
@@ -30,8 +40,16 @@ void RegisterAsOrganiser() {
 	printf("Enter Your Phone Number:- ");
 	scanf("%llu", &(org->mobileNumber));
 	printf("Enter Your Email :- ");
-	scanf("%s", (org->email));
-
+	while(scanf("%s", (org->email)) == 1) {
+		if (validateEmail(org->email)) {
+			break;
+		} else {
+			/*Continue the Loop */
+			printf("Email Should be valid.\n");
+			printf("Please Enter Your Email Again:- ");
+		}
+	}
+	
 	/* Printing details for the Organiser*/
 	printf("Name :- %s\n", org->name);
 	printf("Mobile Number :- %llu\n", org->mobileNumber);
@@ -42,10 +60,19 @@ void RegisterAsOrganiser() {
     struct stat st = {0};
     char folder[64] = "../Data/";
     strcat(folder, org->name);
-    /*Making the Directory of the with organiser name.*/
+	printf("folder = %s\n", folder);
+    /* Making the Directory of the with organiser name.*/
     if (stat(folder, &st) == -1) {
         mkdir(folder, 0700);
     } else {
         printf("Organiser Already Exist.\n");
+		return;
     }
+	char cwd[1024]; /* Buffer to store the directory path */
+	chdir(folder);
+	if (getcwd(cwd, sizeof(cwd)) != NULL) {
+   	   printf("Current working directory: %s\n", cwd);
+   	} else {
+   	   perror("getcwd() error"); /* Prints error if getcwd() fails*/
+   	}
 }
