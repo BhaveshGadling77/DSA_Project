@@ -1,30 +1,33 @@
 #ifndef ATTENDEE_H
 #define ATTENDEE_H
 
-typedef struct time {
-    short unsigned int hour;        // [0, 23]
-    short unsigned int minute;      // [0, 59]
-    short unsigned int second;      // [0, 59]
-} time;
-
-typedef struct Attendee{
-    char *attendee_id;
+// Attendee structure
+typedef struct Attendee {
+    int attendeeID;
     char name[50];
     char email[50];
-    long unsigned phone_no;
-    int event_id;
-    char status[15]; // registered or present or absent
-    char registration_date[30];
-    time attendance_time; // time when registered
+    unsigned long phoneNo;
+    int eventID;
+    char status[15];           // present, absent or only registered
+    char registrationDate[30];
 } Attendee;
 
-// function declarations
-void viewAllAttendee();
-void searchAttendee();
-void updateAttendee();
-void deleteAttendee();
-int getNextAttendeeId(int event_id);
-void displayAttendee(Attendee a);
+// Linked List Node
+typedef struct Node {
+    Attendee data;
+    struct Node* next;
+} Node;
 
+// Function declarations
+void registerAttendee(Node** head, int eventID);
+void unregisterAttendee(Node** head, int attendeeID);
+void markAttendance(Node* head);
+void viewAttendees(Node* head);
+void searchAttendee(Node* head);
+void viewStatistics(Node* head);
+void saveToFile(Node* head, int eventID);
+void loadFromFile(Node** head, int eventID);
+void freeList(Node* head);
+void getCurrentDateTime(char* buffer);
 
 #endif
