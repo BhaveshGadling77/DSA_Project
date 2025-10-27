@@ -33,7 +33,7 @@ int main(void)
         int choice = menu();
         switch(choice){
             case 1:
-                registerAttendee(&head, eventID);
+                RegisterAsAttendee(&head, eventID);
                 saveToFile(head, eventID);
                 break;
             case 2:
