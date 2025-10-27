@@ -1,3 +1,0 @@
-command to compile the code 
-=> gcc `pkg-config --cflags gtk4` -o login.out Login.c `pkg-config --libs gtk4`
-
