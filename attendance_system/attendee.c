@@ -149,4 +149,28 @@ void saveToFile(Node *head, int eventId){
     fclose(fp);
     printf("File 'data/attendance/event_%d.txt' has been saved.", eventId);
 }
+void loadFromFile(Node **head, int eventID){
+    char filename[100];
+    sprintf(filename, "data/attendance/event_%d.txt", eventID); //  loads file
 
+    FILE *fp = fopen(filename, "r");
+    if(fp == NULL) return;
+
+    Attendee a;
+    while(fscanf(fp, "%d|%[^|]|%[^|]|%lu|%d|%[^|]|%[^\n]\n", &a.attendeeID, a.name, a.email, &a.phoneNo, &a.eventID, 
+    a.status, a.registrationDate) == 7){
+        Node *newNode = (Node *) malloc(sizeof(Node));
+        newNode->data = a;
+        newNode->next = *head;
+        *head = newNode;
+    }
+    fclose(fp);
+}
+void freeList(Node *head){
+    Node *temp;
+    while(head != NULL){
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
