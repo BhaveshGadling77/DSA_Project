@@ -3,6 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 *{
-    font-family: Roboto, Arial;
+    font-family: Roboto, Arial, sans-serif;
     font-size: large;
 }
