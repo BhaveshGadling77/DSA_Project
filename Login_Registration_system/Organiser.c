@@ -11,17 +11,17 @@ typedef struct Organiser {
     unsigned long long mobileNumber;
     char email[64];
 } Organiser;
+/* Validate the email*/
+// int validateEmail(char *str) {
+// 	int n = strlen(str);
+// 	int cntd = 0, cntat = 0;
+// 	if ((str[0] == '.' || str[0] == '@' || str[n-1] == '.' || str[n-1] == '@') && str[i] - 'a' != 'z'- 'a' && str[i] - 'A' != 'Z' - 'A') {
 
-int validateEmail(char *str) {
-	int n = strlen(str);
-	int cntd = 0, cntat = 0;
-	if ((str[0] == '.' || str[0] == '@' || str[n-1] == '.' || str[n-1] == '@') && str[i] - 'a' != 'z'- 'a' && str[i] - 'A' != 'Z' - 'A') {
+// 	}
+// 	for (int i = 0; i < n; i++) {
 
-	}
-	for (int i = 0; i < n; i++) {
-
-	}
-}
+// 	}
+// }
 void RegisterAsOrganiser() {
 	Organiser *org = (Organiser *)malloc(sizeof(Organiser));
 	org->organiserID = rand();
@@ -40,15 +40,16 @@ void RegisterAsOrganiser() {
 	printf("Enter Your Phone Number:- ");
 	scanf("%llu", &(org->mobileNumber));
 	printf("Enter Your Email :- ");
-	while(scanf("%s", (org->email)) == 1) {
-		if (validateEmail(org->email)) {
-			break;
-		} else {
-			/*Continue the Loop */
-			printf("Email Should be valid.\n");
-			printf("Please Enter Your Email Again:- ");
-		}
-	}
+	scanf("%s", (org->email));
+	// while(scanf("%s", (org->email)) == 1) {
+	// 	if (validateEmail(org->email)) {
+	// 		break;
+	// 	} else {
+	// 		/*Continue the Loop */
+	// 		printf("Email Should be valid.\n");
+	// 		printf("Please Enter Your Email Again:- ");
+	// 	}
+	// }
 	
 	/* Printing details for the Organiser*/
 	printf("Name :- %s\n", org->name);
