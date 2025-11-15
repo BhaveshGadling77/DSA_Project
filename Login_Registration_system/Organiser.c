@@ -12,20 +12,33 @@ typedef struct Organiser {
     char email[64];
 } Organiser;
 /* Validate the email*/
-// int validateEmail(char *str) {
-// 	int n = strlen(str);
-// 	int cntd = 0, cntat = 0;
-// 	if ((str[0] == '.' || str[0] == '@' || str[n-1] == '.' || str[n-1] == '@') && str[i] - 'a' != 'z'- 'a' && str[i] - 'A' != 'Z' - 'A') {
-
-// 	}
-// 	for (int i = 0; i < n; i++) {
-
-// 	}
-// }
+ int validateEmail(char *email) {
+ 	int n = strlen(email);
+	int cntat = 0;
+	for (int i = 0; i < n; i++) {
+		if (email[i] == '@') {
+			cntat++;
+		}
+		if (email[i] == ' ' || email[i] == '/' || email[i] == ':' || email[i] == ';'
+				|| email[i] == '<' || email[i] == '['|| email[i] == '>' || email[i] == ']' || email[i] == ':') {
+			return 0;
+		}
+ 	}
+	if (cntat == 1) {
+		if (email[0] != '@') {
+			char *dot = strchr(email, '.');
+			if (dot != NULL && dot > strchr(email, '@')) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+ }
 void RegisterAsOrganiser() {
 	Organiser *org = (Organiser *)malloc(sizeof(Organiser));
 	org->organiserID = rand();
 	char str[64];
+	char num[32];
 	printf("Enter Your Name : ");
 	char ch;
 	getchar();
@@ -38,19 +51,25 @@ void RegisterAsOrganiser() {
 	strcpy(org->name, str);
 	org->noOfEventsOrganised = 0;
 	printf("Enter Your Phone Number:- ");
-	scanf("%llu", &(org->mobileNumber));
+	while (scanf("%s", num) == 1) {
+		if (strlen(num) == 10) {
+			org->mobileNumber = stoi(num);
+		} else {
+	 		printf("Mobile Number Should be of 10 digits.\n");
+	 		printf("Please Enter Your Email Again:- ");
+		}
+	}
 	printf("Enter Your Email :- ");
-	scanf("%s", (org->email));
-	// while(scanf("%s", (org->email)) == 1) {
-	// 	if (validateEmail(org->email)) {
-	// 		break;
-	// 	} else {
-	// 		/*Continue the Loop */
-	// 		printf("Email Should be valid.\n");
-	// 		printf("Please Enter Your Email Again:- ");
-	// 	}
-	// }
-	
+	while(scanf("%s", (org->email)) == 1) {
+		if (validateEmail(org->email)) {
+			break;
+	 	} else {
+	 		/*Continue the Loop */
+	 		printf("Email Should be valid.\n");
+	 		printf("Please Enter Your Email Again:- ");
+	 	}
+	}
+	fflush(stdin);
 	/* Printing details for the Organiser*/
 	printf("Name :- %s\n", org->name);
 	printf("Mobile Number :- %llu\n", org->mobileNumber);
