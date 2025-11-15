@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "../attendance_system/attendee.h"
+#include <time.h>
 typedef struct Organiser {
     int organiserID;
     char name[64];
@@ -50,7 +51,8 @@ long long giveValidMobileNumber() {
 	long long n;
 	while (scanf("%s", num) == 1) {
 		if (strlen(num) == 10) {
-			n = atoi(num);
+			n = atol(num);
+			// printf("%ld\n", n);
 			break;
 		} else {
 	 		printf("Mobile Number Should be of 10 digits.\n");
@@ -62,6 +64,7 @@ long long giveValidMobileNumber() {
 /*Register as organiser.*/
 void RegisterAsOrganiser() {
 	Organiser *org = (Organiser *)malloc(sizeof(Organiser));
+	srand(time(0));
 	org->organiserID = rand();
 	char str[64];
 	printf("Enter Your Name : ");
@@ -115,7 +118,24 @@ void RegisterAsOrganiser() {
    	}
 }
 
+int userValidation(user *a) {
+	user comp;
+	FILE *fp = fopen("../Data/userAttendee.csv", "r");
+	if (fp == NULL) {
+		printf("Error in file opening.\n");
+		exit(1);
+	}
+	while(fscanf(fp,"%d,%s,%lld,%u,%s\n", &comp.userId, &comp.name, &comp.mobileNumber, &comp.noOfEventsAttended, comp.email) == 4) {
+		if (strcmp(comp.email, a->email) == 0 || strcmp(comp.name, a->name) == 0) {
+			continue;
+		} else {
+			return 1;
+		}
+	}
+	return -1;
+}
 void RegisterAsAttendee() {
+	srand(time(0));
 	user *att = (user *)malloc(sizeof(user));
 	att->userId = rand();
 	att->noOfEventsAttended = 0;
@@ -132,11 +152,19 @@ void RegisterAsAttendee() {
 	strcpy(att->name, str);
 	printf("Enter Your Phone Number:- ");
 	att->mobileNumber = giveValidMobileNumber();
+	printf("%lld", att->mobileNumber);
 	printf("Enter Your Email :- ");
 	while(scanf("%s", (att->email)) == 1) {
 		// printf("%s", att->email);
 		if (validateEmail(att->email)) {
-			break;
+			if (userValidation(att->email) == 1) {
+				printf("Failed to save the because user already Exist.\n");
+				break;
+			} else {
+				printf("user already exist please Login.\n");
+				exit(1);
+				break;
+			}
 		} else {
 			/*Continue the Loop */
 			printf("Email Should be valid.\n");
@@ -149,6 +177,6 @@ void RegisterAsAttendee() {
 		printf("Error in Opening User File");
 		exit(1);
 	}
-	fprintf(fp, "%d,%s,%ld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
+	fprintf(fp, "%d,%s,%lld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
 	fclose(fp);
 }
