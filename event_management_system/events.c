@@ -4,6 +4,7 @@
 #include <time.h>
 #include "events.h"
 #include "venues.h"
+#include <errno.h>
 
 EventNode *eventList = NULL; // Linked list for sequential access
 EventBST *eventTree = NULL; // BST for fast search/delete by ID
@@ -69,18 +70,30 @@ EventBST* deleteBST(EventBST* root, int eventID) {
 void addToList(event e) {
     EventNode* newNode = (EventNode*)malloc(sizeof(EventNode));
     newNode->evt = e;
+    newNode->next = NULL;
+    if (eventList == NULL) {
+        eventList = newNode;
+        return;
+    }
+    EventNode* p = eventList;
+    while (p->next) {
+        p = p->next;
+    }
+    p->next = newNode;
+
+    /*
     newNode->next = eventList;
     eventList = newNode;
+    */
 }
 
 // Load events from CSV into linked list and BST
 void loadEvents(void) {
-    FILE *file = fopen("./Data/events.csv", "r");
+    FILE *file = fopen("../Data/events.csv", "r");
     if (!file) {
-        printf("Error: Unable to open events.csv\n");
+        perror("Error opening events.csv");
         return;
     }
-
     char line[256];
     fgets(line, sizeof(line), file);        // Skip header
     while (fgets(line, sizeof(line), file)) {
@@ -142,9 +155,9 @@ void cleanPastEvents(void) {
         }
     }
     // Rewrite cleaned events to CSV
-    FILE *file = fopen("./Data/events.csv", "w");
+    FILE *file = fopen("../Data/events.csv", "w");
     if (!file) {
-        printf("Error: Unable to open events.csv\n");
+        perror("Error opening events.csv");
         return;
     }
     fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
@@ -266,9 +279,9 @@ void addEvent(void) {
     eventTree = insertBST(eventTree, newEvent);
 
     // Append to CSV
-    FILE *file = fopen("./Data/events.csv", "a");
+    FILE *file = fopen("../Data/events.csv", "a");
     if (!file) {
-        printf("Error: Unable to open events.csv\n");
+        perror("Error opening events.csv");
         return;
     }
     fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu\n",
@@ -311,9 +324,9 @@ void deleteEvent(void) {
     }
 
     // Rewrite CSV
-    FILE *file = fopen("./Data/events.csv", "w");
+    FILE* file = fopen("../Data/events.csv", "w");
     if (!file) {
-        printf("Error: Unable to open events.csv\n");
+        perror("Error opening events.csv");
         return;
     }
     fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
@@ -352,9 +365,9 @@ void modifyEvent(void) {
     scanf("%d", &node->evt.venueID);
     printf("Enter new Event Date (DD-MM-YYYY): ");
     scanf("%10s", dateStr);
-    printf("Enter new Start Time (HH:MM:SS): ");
+    printf("Enter new Start Time (HH:MM:SS in 24 hour time format): ");
     scanf("%8s", startTimeStr);
-    printf("Enter new End Time (HH:MM:SS): ");
+    printf("Enter new End Time (HH:MM:SS in 24 hour time format): ");
     scanf("%8s", endTimeStr);
 
     sscanf(dateStr, "%hd-%hd-%hd", &node->evt.eventDate.date, &node->evt.eventDate.month, &node->evt.eventDate.year);
@@ -382,9 +395,9 @@ void modifyEvent(void) {
     }
 
     // Rewrite CSV
-    FILE *file = fopen("./Data/events.csv", "w");
+    FILE *file = fopen("../Data/events.csv", "w");
     if (!file) {
-        printf("Error: Unable to open events.csv\n");
+        perror("Error opening events.csv");
         return;
     }
     fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
