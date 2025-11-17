@@ -9,6 +9,32 @@
 EventNode *eventList = NULL; // Linked list for sequential access
 EventBST *eventTree = NULL; // BST for fast search/delete by ID
 
+int checkValidTime(Time startTime, Time endTime) {
+    if (startTime.hour >= 24 || startTime.minute >= 60 ||  startTime.second >= 60) {
+            printf("Invalid start time of event\n");
+            return 0;
+        }
+    if (endTime.hour >= 24 || endTime.hour < 0 || endTime.minute >= 60 || endTime.minute < 0 ||
+        endTime.second >= 60 || endTime.second < 0) {
+            printf("Invalid end time of the event\n");
+            return 0;
+        }
+    int s = startTime.hour * 3600 + startTime.minute * 60 + startTime.second;
+    int e = endTime.hour * 3600 + endTime.minute * 60 + endTime.second;
+    if (s >= e) {
+        printf("Start time must be before end time\n");
+        return 0;
+    }
+    return 1;
+}
+
+int checkValidDate(date d) {
+    if (d.month > 12 || d.month <= 0 || d.date <= 0 || d.date > 31 || d.year <= 0 || d.year >= 2050) {
+        printf("Invalid date of event\n");
+        return 0;
+    }
+    
+}
 // Function to create new BST node
 EventBST* newBSTNode(event e) {
     EventBST* node = (EventBST*)malloc(sizeof(EventBST));
@@ -238,10 +264,11 @@ int listToArray(event arr[]) {
 // Add event
 void addEvent(void) {
     event newEvent;
-    char dateStr[11], startTimeStr[9], endTimeStr[9];
-
-    printf("Enter Event ID: ");
-    scanf("%d", &newEvent.eventID);
+    int i = 0;
+    char dateStr[11], startTimeStr[9], endTimeStr[9], c, regDue[9];
+    char *desc = (char*)malloc(sizeof(char) * 2048);
+/*    printf("Enter Event ID: ");
+    scanf("%d", &newEvent.eventID);*/
     printf("Enter Event Name: ");
     scanf(" %31[^\n]", newEvent.eventName);
     printf("Enter Organiser ID: ");
@@ -250,15 +277,23 @@ void addEvent(void) {
     scanf("%d", &newEvent.venueID);
     printf("Enter Event Date (DD-MM-YYYY): ");
     scanf("%10s", dateStr);
-    printf("Enter Start Time (HH:MM:SS): ");
+    printf("Enter Start Time (HH:MM:SS in 24 hour format with colons): ");
     scanf("%8s", startTimeStr);
-    printf("Enter End Time (HH:MM:SS): ");
+    printf("Enter End Time (HH:MM:SS in 24 hour format with colons): ");
     scanf("%8s", endTimeStr);
+    printf("Enter time upto which event can be registered (HH:MM:SS in 24 hour format with colons): ");
+    scanf("%8s", regDue);
+    printf("Enter the description of the event (Upto 2000 characters)\n");
+    while(i <= 2047 && scanf("%c", &c) && c != '\n') {
+        desc[i++] = c;
+    }
+    desc[i] = '\0';
 
     sscanf(dateStr, "%hd-%hd-%hd", &newEvent.eventDate.date, &newEvent.eventDate.month, &newEvent.eventDate.year);
     sscanf(startTimeStr, "%hu:%hu:%hu", &newEvent.startTime.hour, &newEvent.startTime.minute, &newEvent.startTime.second);
     sscanf(endTimeStr, "%hu:%hu:%hu", &newEvent.endTime.hour, &newEvent.endTime.minute, &newEvent.endTime.second);
-
+    sscanf(regDue, "%hu:%hu:%hu", &newEvent.regDue.hour, &newEvent.regDue.minute, &newEvent.regDue.second);
+    
     // Validate venue availability and existence
     if (!getVenueByID(newEvent.venueID)) {
         printf("Error: Invalid Venue ID.\n");
@@ -346,7 +381,9 @@ void deleteEvent(void) {
 
 // Modify event (using BST)
 void modifyEvent(void) {
-    int eventID;
+    int eventID, i = 0;
+    char regDue[9], c;
+    char *desc = (char*)malloc(sizeof(char) * 2048);
     printf("Enter Event ID to modify: ");
     scanf("%d", &eventID);
 
@@ -369,11 +406,17 @@ void modifyEvent(void) {
     scanf("%8s", startTimeStr);
     printf("Enter new End Time (HH:MM:SS in 24 hour time format): ");
     scanf("%8s", endTimeStr);
-
+    printf("Enter new time upto which event can be registered (HH:MM:SS in 24 hour format with colons): ");
+    scanf("%8s", regDue);
+    printf("Enter the description of the event (Upto 2000 characters)\n");
+    while(i <= 2047 && scanf("%c", &c) && c != '\n') {
+        desc[i++] = c;
+    }
+    desc[i] = '\0';
     sscanf(dateStr, "%hd-%hd-%hd", &node->evt.eventDate.date, &node->evt.eventDate.month, &node->evt.eventDate.year);
     sscanf(startTimeStr, "%hu:%hu:%hu", &node->evt.startTime.hour, &node->evt.startTime.minute, &node->evt.startTime.second);
     sscanf(endTimeStr, "%hu:%hu:%hu", &node->evt.endTime.hour, &node->evt.endTime.minute, &node->evt.endTime.second);
-
+    sscanf(regDue, "%hu:%hu:%hu", &node->evt.regDue.hour, &node->evt.regDue.minute, &node->evt.regDue.second);
     // Validate venue
     if (!getVenueByID(node->evt.venueID)) {
         printf("Error: Invalid Venue ID.\n");

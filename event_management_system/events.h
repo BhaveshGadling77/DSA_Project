@@ -15,13 +15,15 @@ typedef struct date {
 } date;
 
 typedef struct event {
-    int eventID;
+    int eventID;                            // Provided by us if adding an event
     char eventName[32];
     int organiserID;                        // Linked to Organiser
     int venueID;                            // Linked to Venue
     struct date eventDate;
     Time startTime;
     Time endTime;
+    Time regDue;
+    char* description;
 } event;
 
 // Linked list node for events
@@ -62,4 +64,6 @@ void addEvent(void);                                    // Add a new event
 void deleteEvent(void);                                 // Delete event using BST
 void modifyEvent(void);                                 // Modify event
 void addToList(event e);                                // Add event node to BST
+int checkValidTime(Time startTime, Time endTime);         // Return 1 if valid, 0 if invalid
+int checkValidDate(date d);                             // Return 1 if valid, 0 if invalid
 #endif

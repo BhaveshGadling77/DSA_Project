@@ -120,7 +120,7 @@ int main() {
                     VenueNode* node = venueHashTable[i];
                     while (node) {
                         Venue v = node->venue;
-                        printf("%d | %s | %lld | %d | %s | %llu | %s | %d | %s | %s\n",
+                        printf("%d | %s | %lld | %d | %s | %llu | %s | %d | %s | %s",
                                v.venueID, v.venueName, v.capacity, v.rentalCostPerHour,
                                v.venueHandlerName, v.handlerContact, v.venueHandlerEmail,
                                v.parkingCapacity, v.indoor ? "Yes" : "No", v.location);
