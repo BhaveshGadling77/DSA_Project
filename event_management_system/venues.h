@@ -1,4 +1,7 @@
+#ifndef VENUES_H
+#define VENUES_H
 #include <stdio.h>
+#include "events.h"
 
 typedef struct Venue {
     int venueID;
@@ -12,18 +15,6 @@ typedef struct Venue {
     int indoor;                         // 1 = Indoor, 0 = Outdoor
     char location[128];                 // City or full address
 } Venue;
-
-typedef struct date {
-    short int date;
-    short int month;
-    short int year;
-} date;
-
-typedef struct Time {
-    short unsigned int hour;                // [0, 23]
-    short unsigned int minute;              // [0, 59]
-    short unsigned int second;              // [0, 59]
-} Time;
 
 // Interval structure for booked times
 typedef struct Interval {
@@ -39,6 +30,10 @@ typedef struct VenueNode {
     struct VenueNode *next;
 } VenueNode;
 
+#define HASH_SIZE 101
+
+extern VenueNode* venueHashTable[HASH_SIZE];
+
 // Function prototypes
 void loadVenues(void);
 Venue* getVenueByID(int venueID);
@@ -49,3 +44,5 @@ Interval* insertInterval(Interval* root, int start, int end);
 int doOverlap(int start1, int end1, int start2, int end2);
 int checkOverlap(Interval* root, int start, int end);
 void freeIntervalTree(Interval* root);
+
+#endif

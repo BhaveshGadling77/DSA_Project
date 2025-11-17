@@ -4,8 +4,6 @@
 #include "venues.h"
 #include "events.h"
 
-#define HASH_SIZE 101               // Hash table size for venues
-
 VenueNode *venueHashTable[HASH_SIZE];
 
 // Hash function for venueID
