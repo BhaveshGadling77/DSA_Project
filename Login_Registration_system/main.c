@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "Organiser.h"
-
 int main() {
 	int choice, check = 0;
 	printf("What you want to do ?\n");

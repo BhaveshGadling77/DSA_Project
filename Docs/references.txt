@@ -1,2 +1,6 @@
 https://www.tutorialspoint.com/find-out-the-current-working-directory-in-c-cplusplus
 https://www.geeksforgeeks.org/javascript/how-to-run-c-code-in-nodejs/
+https://www.geeksforgeeks.org/cpp/fseek-in-c-with-example/
+https://stackoverflow.com/questions/17802302/does-fscanf-moves-the-passed-file-pointer-ahead
+https://stackoverflow.com/questions/13566082/how-to-check-if-a-file-has-content-or-not-using-c
+https://www.geeksforgeeks.org/c/c-file-pointer/
