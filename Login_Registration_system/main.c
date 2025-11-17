@@ -17,8 +17,8 @@ int main() {
 				fflush(stdout);
 				RegisterAsOrganiser();
 			} else {
-				// RegisterAsAttendee();
-				printf("Registering As Organiser.\n");
+				RegisterAsAttendee();
+				printf("Registering As Attendee.\n");
 			}
 		} else if (choice == 2) {
 			/* This is the Choice for the Login.*/
