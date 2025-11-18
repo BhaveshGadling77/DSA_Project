@@ -1,10 +1,10 @@
 CC = gcc
 FLAGS = -O3
 
-a.out: main.o Organiser.o
+a.out: main.o login_registration.o
 	${CC} ${FLAGS} $^
 
-Organiser.o: Organiser.c
+login_registration.o: login_registration.c
 	${CC} ${FLAGS} $^ -c 
 
 main.o:	main.c

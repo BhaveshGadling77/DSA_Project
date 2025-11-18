@@ -4,8 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../attendance_system/attendee.h"
-#include "Organiser.h"
+#include "login_registration.h"
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
@@ -160,6 +159,7 @@ void registerAsUser(int choice) {
 		fp = fopen("../Data/userAttendee.csv", "r+");
 	} else {
 		fp = fopen("../Data/userOrganizer.csv", "r+");
+		
 	}
 	if (fp == NULL) {
 		printf("This is error.\n");
@@ -179,6 +179,14 @@ void registerAsUser(int choice) {
 		newAttId = atoi(strtok(buffer, ","));
 	}
 	att->userId = ++newAttId;
+	if (choice == 1) {
+		char filename[128], num[15];
+		sprintf(num,"%d.csv", att->userId);
+		strcpy(filename, "../Data/Organizer_");
+		strcat(filename, num);
+		FILE *fp1 = fopen(filename, "w");
+		fclose(fp1);
+	}
 	printf("Your UserId is :- %d\n", att->userId);
 	fprintf(fp, "%d,%s,%lld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
 	fclose(fp);
@@ -276,7 +284,7 @@ void loginAsUser(int choice) {
 				break;
 			}
 		} else {
-			/*Continue the Loop */
+			/* Continue the Loop */
 			printf("Email Should be valid.\n");
 			printf("Please Enter Your Email Again:- ");
 		}
