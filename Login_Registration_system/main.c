@@ -14,9 +14,9 @@ int main() {
 			scanf("%d", &choice);
 			if (choice == 1) {
 				fflush(stdout);
-				RegisterAsOrganiser();
+				registerAsUser(1);
 			} else {
-				RegisterAsAttendee();
+				registerAsUser(2);
 				printf("Registering As Attendee.\n");
 			}
 		} else if (choice == 2) {
