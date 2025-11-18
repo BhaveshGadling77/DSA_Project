@@ -7,6 +7,21 @@
 #include "../attendance_system/attendee.h"
 #include "Organiser.h"
 #include <time.h>
+typedef struct Organiser {
+    int organiserID;
+    char name[64];
+    unsigned int noOfEventsOrganised; /*No. of events organised.*/
+    long long mobileNumber;
+    char email[64];
+} Organiser;
+
+typedef struct user {
+	int userId;
+	char name[64];
+	unsigned int noOfEventsAttended;
+	long long mobileNumber;
+	char email[64];
+} user;
 
 /* Validate the email*/
 int validateEmail(char *email) {
