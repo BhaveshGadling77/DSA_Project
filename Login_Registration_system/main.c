@@ -4,6 +4,7 @@ int main() {
 	int choice, check = 0;
 	printf("What you want to do ?\n");
 	while (check != -1) {
+	while (check != -1) {
 		printf("1. Register\n");
 		printf("2. Login\n");
 		check = scanf("%d", &choice);
@@ -15,12 +16,12 @@ int main() {
 			if (choice == 1) {
 				fflush(stdout);
 				registerAsUser(1);
-				registerAsUser(1);
+				
 			} else {
 				registerAsUser(2);
 				printf("Registering As Attendee.\n");
 			}
-			userStatus st = getDetails();
+			status st = getDetails();
 			printf("Is Logged In : %s\n", st.status ? " Yes it Logged In": "No it is not logged In");
 			
 		} else if (choice == 2) {
@@ -35,7 +36,7 @@ int main() {
 				loginAsUser(2);
 				printf("Login As Attendee.\n");
 			}
-			userStatus st = getDetails();
+			status st = getDetails();
 			printf("User ID : %d\n",st.userId);
 			printf("Is Logged In : %s\n", st.status ? " Yes it Logged In": "No it is not logged In");
 			printf("Organiser Or Attendee : %s\n", st.isOrg ? "Organiser": "Attendee");
