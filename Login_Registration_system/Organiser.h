@@ -12,7 +12,9 @@ typedef struct status {
     bool status; // true = logged in, false = not logged in
     bool isOrg; //if org = true, else  false;
 } status;
-void registeAsUser(int); /*register the o; /*Register the Attendee and save data in userAttendee.csv*/
-void loginAsOrganiser(); 
-void loginAsAttendee();
-
+void registerAsUser(int); /*register the organizer or Register the Attendee and save data in userAttendee.csv*/
+void loginAsUser(int choice);
+int giveUserDetails(char *email, int id, FILE *fp, char *givenName);
+int userValidation(user *a, int choice);
+long long giveValidMobileNumber();
+status getDetails();
