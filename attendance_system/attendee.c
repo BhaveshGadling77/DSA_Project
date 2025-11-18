@@ -295,40 +295,33 @@ void saveToFile(Node *head, int eventId)
     char filename[100];
 
     // sprintf function use to write to the file
-    sprintf(filename, "data/event_%d.csv", eventId);
+    sprintf(filename, "data/attendees/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
-    if (fp == NULL)
-    {
+    if(fp == NULL){
         printf("Couldn't create file.\n");
         return;
     }
     // header line
-    fprintf(fp, "AttendeeID,Name,Email,Phone,EventId,Status,RegistrationDate\n");
+    fprintf(fp, "AttendeeID,Name,Email,Phone,EventId,Status,RegistrationDate"); 
 
     Node *temp = head;
-    while (temp != NULL)
-    {
+    while(temp != NULL){
         fprintf(fp, "%d,%s,%s,%lu,%d,%s,%s\n",
-                temp->data.attendeeID, temp->data.name, temp->data.email, temp->data.phoneNo, temp->data.eventID,
-                temp->data.status, temp->data.registrationDate);
+            temp->data.attendeeID, temp->data.name, temp->data.email, temp->data.phoneNo, temp->data.eventID,
+        temp->data.status, temp->data.registrationDate);
         temp = temp->next;
     }
     fclose(fp);
-    printf("File 'data/event_%d.csv' has been saved.", eventId);
+    printf("File 'data/attendees/event_%d.csv' has been saved.", eventId);
 }
 void loadFromFile(Node **head, int eventID)
 {
     char filename[100];
-    sprintf(filename, "data/event_%d.csv", eventID); //  loads file
+    sprintf(filename, "data/attendees/event_%d.csv", eventID); //  loads file
 
     FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-        return;
-
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
-    // as we've wrote header line before saving file.
+    if(fp == NULL) return;
 
     char buffer[500]; 
     fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
@@ -336,11 +329,10 @@ void loadFromFile(Node **head, int eventID)
 
     Attendee a;
     // delimiters are handled.
-    while (fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n",
-                  &a.attendeeID, a.name, a.email, &a.phoneNo, &a.eventID,
-                  a.status, a.registrationDate) == 7)
-    {
-        Node *newNode = (Node *)malloc(sizeof(Node));
+    while(fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n", 
+        &a.attendeeID, a.name, a.email, &a.phoneNo, &a.eventID, 
+    a.status, a.registrationDate) == 7){
+        Node *newNode = (Node *) malloc(sizeof(Node));
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
