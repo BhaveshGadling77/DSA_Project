@@ -2,7 +2,7 @@
 #include "login_registration.h"
 #include <stdlib.h>
 void optionsAtOrganizer() {
-	status st = getDetails();
+	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
 	int choice, check = 1;
 	while (check != -1) {
@@ -47,7 +47,7 @@ void optionsAtOrganizer() {
 	}
 }
 void optionsAtAttendee() {
-	status st = getDetails();
+	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
 	int choice, check = 1;
 	while (check != -1) {
@@ -122,9 +122,12 @@ int main() {
 			if (choice == 1) {
 				fflush(stdout);
 				registerAsUser(1);
+				printf("Logged in As Organiser.\n");
+				optionsAtOrganizer();
 			} else {
 				registerAsUser(2);
-				printf("Registering As Attendee.\n");
+				printf("Logged in As Attendee.\n");
+				optionsAtAttendee();
 			}
 			printf("Please Login now.\n");
 			
