@@ -1,6 +1,8 @@
 #ifndef ATTENDEE_H
 #define ATTENDEE_H
 
+#include <stdbool.h>
+#include "../Login_Registration_system/login_registration.h"
 // Attendee structure
 typedef struct Attendee {
     int attendeeID;
@@ -19,15 +21,23 @@ typedef struct Node {
 } Node;
 
 // Function declarations
-void registerAttendee(Node** head, int eventID);
-void unregisterAttendee(Node** head, int attendeeID);
+
+// Attendee Functions (only attendees can call)
+void registerAttendeeForEvent(Node** head, int eventID, userStatus *user);
+void unregisterAttendee(Node** head, userStatus* user);
+
+
+// organizer functions
 void markAttendance(Node* head);
-void viewAttendees(Node* head);
+void viewAllAttendees(Node* head, int eventID);
+void viewStatistics(Node *head);
+
+// common function
+void getCurrentDateTime(char* buffer);
 void searchAttendee(Node* head);
-void viewStatistics(Node* head);
 void saveToFile(Node* head, int eventID);
 void loadFromFile(Node** head, int eventID);
 void freeList(Node* head);
-void getCurrentDateTime(char* buffer);
+
 
 #endif
