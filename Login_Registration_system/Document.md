@@ -74,3 +74,7 @@ I refactored the RegisterAsorganiser and registerAsAttendee function and made mo
 
 ### Date : 18th Nov 2025
 I had completed the part of Login functions and made a status struct which will give me userId, status(is logged in?) and isOrganiser, true means it is organiser userId and false means it is attendee.
+
+### Date : 19th Nov 2025 
+so today i had started the integrating the whole system and doing the integration of the functions of piyush and sumit. we had brainstorm how the system will flow and
+and many more discussion.
