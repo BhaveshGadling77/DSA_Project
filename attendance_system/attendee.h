@@ -13,13 +13,6 @@ typedef struct Attendee {
     char registrationDate[30];
 } Attendee;
 
-// user status 
-typedef struct userStatus {
-    int userId;
-    bool status; // true = logged in, false = not logged in
-    bool isOrg; //if org = true, else  false;
-} userStatus;
-
 // Linked List Node
 typedef struct Node {
     Attendee data;

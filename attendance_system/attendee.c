@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "attendee.h"
+#include "../Login_Registration_system/login_registration.h"
 
 // get current date & time function
 void getCurrentDateTime(char *buffer)
