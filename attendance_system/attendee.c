@@ -330,6 +330,10 @@ void loadFromFile(Node **head, int eventID)
     fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
     // as we've wrote header line before saving file.
 
+    char buffer[500]; 
+    fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
+    // as we've wrote header line before saving file.
+
     Attendee a;
     // delimiters are handled.
     while (fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n",
