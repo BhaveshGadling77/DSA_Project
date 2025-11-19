@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <time.h>
 #include "attendee.h"
 
@@ -33,7 +34,7 @@ void RegisterAsAttendee(Node **head, int eventID){
     t->next = *head;
     *head = t;
 
-
+    // number of events attended = count++;
     printf("\n Registered! ID: %d\n", a.attendeeID);
 }
 
@@ -74,10 +75,12 @@ void markAttendance(Node *head){
 }
 
 void viewAttendees(Node* head){
+    // store all attendees in eventDetails_<eventId>.txt
     if(head == NULL){
         printf("\n No attendees.!\n");
         return;
     }
+    // use fprintf 
     printf("\n%-5s %-20s %-25s %-15s %-12s\n", "ID", "Name", "Email", "Phone", "Status");
     
     Node *temp = head;
@@ -88,6 +91,8 @@ void viewAttendees(Node* head){
 
         temp = temp->next;
     }
+
+    // then tell organizer that data is stored at this place.
 }
 void searchAttendee(Node *head){
     int id;

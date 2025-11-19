@@ -4,7 +4,7 @@
 
 int menu()
 {
-    printf("-------- MENU --------\n");
+    printf("\n------- MENU --------\n");
     printf("1. Register for Event \n");
     printf("2. Unregister from Event\n");
     printf("3. Mark Attendance\n");
@@ -15,8 +15,10 @@ int menu()
 
     int choice;
     scanf("%d", &choice);
+    return choice;
 }
-int main(void)
+
+int main(void)  
 {
     Node *head = NULL;
     int eventID = 1;    
