@@ -1,5 +1,6 @@
 #ifndef ATTENDEE_H
 #define ATTENDEE_H
+
 #include <stdbool.h>
 
 #include <stdbool.h>
@@ -16,12 +17,11 @@ typedef struct Attendee {
 } Attendee;
 
 // user status 
-typedef struct UserStatus{
+typedef struct userStatus {
     int userId;
-    bool status; // should be true
-    bool isOrg; // should be false
-    char userName[50]; 
-}UserStatus;
+    bool status; // true = logged in, false = not logged in
+    bool isOrg; //if org = true, else  false;
+} userStatus;
 
 // Linked List Node
 typedef struct Node {
