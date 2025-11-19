@@ -1,5 +1,6 @@
 #ifndef ATTENDEE_H
 #define ATTENDEE_H
+
 #include <stdbool.h>
 #include "../Login_Registration_system/login_registration.h"
 // Attendee structure
