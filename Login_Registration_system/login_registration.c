@@ -131,6 +131,8 @@ void registerAsUser(int choice) {
 	}
 	str[i] = '\0';
 	strcpy(att->name, str);
+	strcpy(st.name, att->name);
+	st.status = true;
 	printf("Enter Your Phone Number:- ");
 	att->mobileNumber = giveValidMobileNumber();
 	printf("%lld", att->mobileNumber);
@@ -157,9 +159,10 @@ void registerAsUser(int choice) {
 	}
 	if (choice == 2) {
 		fp = fopen("../Data/userAttendee.csv", "r+");
+		st.isOrg = false;
 	} else {
+		st.isOrg = true;
 		fp = fopen("../Data/userOrganizer.csv", "r+");
-		
 	}
 	if (fp == NULL) {
 		printf("This is error.\n");
@@ -179,8 +182,9 @@ void registerAsUser(int choice) {
 		newAttId = atoi(strtok(buffer, ","));
 	}
 	att->userId = ++newAttId;
+	st.userId = att->userId;
 	if (choice == 1) {
-		char filename[128], num[15];
+		char filename[128], num[16];
 		sprintf(num,"%d.csv", att->userId);
 		strcpy(filename, "../Data/Organizer_");
 		strcat(filename, num);
@@ -251,14 +255,15 @@ void loginAsUser(int choice) {
 	if (choice == 1) {
 		// this is the choice for the organiser.
 		fp = fopen("../Data/userOrganizer.csv", "r");
+		st.isOrg = true;
 
 	} else {
 		// this is the choice for the attendee.
+		st.isOrg = false;
 		fp = fopen("../Data/userAttendee.csv", "r");
 	}
 	printf("For login you need to have the your Registration id and email\n");
 	printf("Enter Your Name : ");
-	
 	char ch;
 	getchar();
 	int i = 0;
@@ -267,6 +272,8 @@ void loginAsUser(int choice) {
 		str[i++] = ch;
 	}
 	str[i] = '\0';
+	strcpy(st.name, str);
+	printf("%s", st.name);
 	printf("Enter Your Registration ID : ");
 	if(scanf("%d", &id) == -1) {
 		return;
@@ -291,5 +298,6 @@ void loginAsUser(int choice) {
 	}
 }
 userStatus getDetails() {
+	
 	return st; 
 }

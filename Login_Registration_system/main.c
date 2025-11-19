@@ -20,7 +20,7 @@ int main() {
 				registerAsUser(2);
 				printf("Registering As Attendee.\n");
 			}
-			status st = getDetails();
+			userStatus st = getDetails();
 			printf("Is Logged In : %s\n", st.status ? " Yes it Logged In": "No it is not logged In");
 			
 		} else if (choice == 2) {
@@ -35,7 +35,7 @@ int main() {
 				loginAsUser(2);
 				printf("Login As Attendee.\n");
 			}
-			status st = getDetails();
+			userStatus st = getDetails();
 			printf("User ID : %d\n",st.userId);
 			printf("Is Logged In : %s\n", st.status ? " Yes it Logged In": "No it is not logged In");
 			printf("Organiser Or Attendee : %s\n", st.isOrg ? "Organiser": "Attendee");
