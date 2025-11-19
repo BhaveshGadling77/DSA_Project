@@ -64,4 +64,7 @@ We had decided to complete this project After our intial end semesters papers go
 
 ### Date :- 15th Nov 2025
 So today i get the thought how the my main.c will get to know that the user is logged in. 
-I think i can handle it with the extern variables but i have to research.
+I think i can handle it with the extern variables but i have to research so far i had made the register as attendee function.
+
+### Date :- 16th Nov 2025
+I am finding a way to generate unique id every time i assign a attendee and organise a id. found the way i can just check the if the generated id by rand() function is assigned to anyone if it is then regenerate the id.
