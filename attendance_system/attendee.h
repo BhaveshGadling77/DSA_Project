@@ -1,7 +1,7 @@
 #ifndef ATTENDEE_H
 #define ATTENDEE_H
-#include <stdbool.h>
 
+#include <stdbool.h>
 // Attendee structure
 typedef struct Attendee {
     int attendeeID;
@@ -14,12 +14,11 @@ typedef struct Attendee {
 } Attendee;
 
 // user status 
-typedef struct UserStatus{
+typedef struct userStatus {
     int userId;
-    bool status; // should be true
-    bool isOrg; // should be false
-    char userName[50]; 
-}UserStatus;
+    bool status; // true = logged in, false = not logged in
+    bool isOrg; //if org = true, else  false;
+} userStatus;
 
 // Linked List Node
 typedef struct Node {
@@ -29,22 +28,22 @@ typedef struct Node {
 
 // Function declarations
 
-// Attendee Functions (only attedees can call)
-void registerAttendeeForEvent(Node** head, int eventID, UserStatus *user);
-void unregisterAttendee(Node** head, UserStatus* user);
+// Attendee Functions (only attendees can call)
+void registerAttendeeForEvent(Node** head, int eventID, userStatus *user);
+void unregisterAttendee(Node** head, userStatus* user);
 
 
 // organizer functions
 void markAttendance(Node* head);
 void viewAllAttendees(Node* head, int eventID);
-void viewStatistics(Node* head);
-
-void getCurrentDateTime(char* buffer);
+void viewStatistics(Node *head);
 
 // common function
+void getCurrentDateTime(char* buffer);
 void searchAttendee(Node* head);
 void saveToFile(Node* head, int eventID);
 void loadFromFile(Node** head, int eventID);
 void freeList(Node* head);
+
 
 #endif
