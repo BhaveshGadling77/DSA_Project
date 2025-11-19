@@ -23,8 +23,7 @@ int main(void)
     loadFromFile(&head, eventID);
 
     printf("ATTENDANCE MANAGEMENT SYSTEM\n");
-    printf("Logged in as: %-22s ║\n", currUser.name);
-    printf("Role: %-30s \n", currUser.isOrg ? "Organizer" : "Attendee");
+    printf("Logged in as: %-30s \n", currUser.isOrg ? "Organizer" : "Attendee");
 
     int choice;
 

@@ -4,7 +4,6 @@
 #include <string.h>
 #include <time.h>
 #include "attendee.h"
-#include "../Login_Registration_system/login_registration.h"
 
 // get current date & time function
 void getCurrentDateTime(char *buffer)
@@ -296,7 +295,7 @@ void saveToFile(Node *head, int eventId)
     char filename[100];
 
     // sprintf function use to write to the file
-    sprintf(filename, "data/attendees/event_%d.csv", eventId);
+    sprintf(filename, "data/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
@@ -316,12 +315,12 @@ void saveToFile(Node *head, int eventId)
         temp = temp->next;
     }
     fclose(fp);
-    printf("File 'data/attendees/event_%d.csv' has been saved.", eventId);
+    printf("File 'data/event_%d.csv' has been saved.", eventId);
 }
 void loadFromFile(Node **head, int eventID)
 {
     char filename[100];
-    sprintf(filename, "data/attendees/event_%d.csv", eventID); //  loads file
+    sprintf(filename, "data/event_%d.csv", eventID); //  loads file
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
