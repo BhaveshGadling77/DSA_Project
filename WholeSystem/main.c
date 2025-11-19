@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "attendee.h"
 #include "login_registration.h"
 #include <stdlib.h>
 void optionsAtOrganizer() {
@@ -9,7 +10,9 @@ void optionsAtOrganizer() {
 		printf("1. Add Event.\n");
 		printf("2. Delete Event.\n");
 		printf("3. Modify Event.\n");
-		printf("4. List the Attendees.\n");
+		printf("4. View All Attendees.\n");
+		printf("5. Mark Attendees.\n");
+		printf("6. View Statistics.\n");
 		printf("5. Logout.\n");
 		int check = scanf("%d", &choice);
 		switch (choice)
@@ -28,9 +31,38 @@ void optionsAtOrganizer() {
 			break;
 
 		case 4:
-			printf("\nList of Attendees for a particular Event.\n");
+			printf("\n View All Attendees.\n");
+			int eventId;
+			printf("Enter the Event Id which you want to view.\n");
+			scanf("%d", &eventId);
+			Node *head;
+			loadFromFile(&head, eventId);
+			viewAllAttendees(head, eventId);
+			freeList(head);
 			break;
+
 		case 5:
+			printf("\nMark All Attendees.\n");
+			int eventId;
+			printf("Enter the Event Id which you want to mark Attendee.\n");
+			scanf("%d", &eventId);
+			Node *head;
+			loadFromFile(&head, eventId);
+			markAttendance(head);
+			freeList(head);
+			break;
+		case 6:
+			int eventId;
+			printf("Enter the Event Id which you want to View Statistics.\n");
+			scanf("%d", &eventId);
+			Node *head;
+			loadFromFile(&head, eventId);
+			viewStatistics(head);
+			freeList(head);
+			printf("\nView Statistics.\n");
+			break;
+		
+		case 7:
 			printf("\nLogging out");
 			for (int i = 0; i < 3; i++) {
 				printf(".");
@@ -48,49 +80,61 @@ void optionsAtOrganizer() {
 }
 void optionsAtAttendee() {
 	userStatus st = getDetails();
-	printf("Organiser Id : %d\n", st.userId);
+	printf("attendee Id : %d\n", st.userId);
 	int choice, check = 1;
+	
 	while (check != -1) {
 		printf("1. register for Event.\n");
 		printf("2. unregister for Event.\n");
-		printf("3. Mark the Attendence for Event.\n");
-		printf("4. Sort Events by Chronological Order.\n");
-		printf("5. Sort Events by There IDs.\n");
-		printf("6. Sort Events by there Timings.\n");
-		printf("7. List All the Events.\n");
-		printf("8. Logout\n");
+		printf("3. Sort Events by Chronological Order.\n");
+		printf("4. Sort Events by There IDs.\n");
+		printf("5. Sort Events by there Timings.\n");
+		printf("6. List All the Events.\n");
+		printf("7. Logout\n");
 		int check = scanf("%d", &choice);
 		switch (choice)
 		{
 		case 1:
-			/* Add events */
+			/* register for event */
 			printf("\nRegistered for Event.\n");
+			int eventId;
+			Node *head;
+			printf("Enter The Event ID: ");
+			scanf("%d", &eventId);
+			loadFromFile(&head, eventId);
+			registerAttendeeForEvent(&head, eventId, &st);
+			saveToFile(head, eventId);
+			freeList(head);
 			break;
 		
 		case 2:
+			printf("Enter the Event ID: ");
+			int eventId;
+			scanf("%d", &eventId);
+			Node *head1;
+			loadFromFile(&head1, eventId);
+			unregisterAttendee(&head, eventId);
+			saveToFile(head, eventId);
+			freeList(head1);
 			printf("\nunRegistered for Event.\n");
 			break;
-		
-		case 3:
-			printf("\nMark the Attendence for the Event.\n");
-			break;
 
-		case 4:
+		case 3:
 			printf("\nSorted the Events by There chronological order.\n");
 			break;
 
-		case 5:
+		case 4:
 			printf("\nSorted the Events by There IDs.\n");
 			break;
 		
-		case 6:
+		case 5:
 			printf("\nSorted the Events by there Timings.\n");
 			break;
 		
-		case 7: 
+		case 6: 
 			printf("\nList All the Events.\n");
 			break;
-		case 8:
+		case 7:
 			printf("\nLogging out");
 			for (int i = 0; i < 3; i++) {
 				printf(".");

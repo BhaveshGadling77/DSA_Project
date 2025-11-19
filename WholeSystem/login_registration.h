@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 typedef struct user {
 	int userId;
 	char name[64];
