@@ -1,3 +1,6 @@
+#ifndef LOGIN_REGISTRATION_H
+#define LOGIN_REGISTRATION_H
+
 #include <stdbool.h>
 typedef struct user {
 	int userId;
@@ -19,3 +22,5 @@ int giveUserDetails(char *email, int id, FILE *fp, char *givenName);
 int userValidation(user *a, int choice);
 long long giveValidMobileNumber();
 userStatus getDetails();
+
+#endif
