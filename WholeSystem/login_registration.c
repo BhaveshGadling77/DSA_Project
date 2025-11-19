@@ -16,7 +16,7 @@ void convertToLowerCase(char *s) {
     }
 }
 /*User id of the person.*/
-static status st;
+static userStatus st;
 /* Validate the email*/
 int validateEmail(char *email) {
  	int n = strlen(email);
@@ -290,6 +290,6 @@ void loginAsUser(int choice) {
 		}
 	}
 }
-status getDetails() {
+userStatus getDetails() {
 	return st; 
 }
