@@ -310,16 +310,16 @@ void updateEventsOrganized(int userID)
         return;
     }
 
-    char buffer[500];
+    char buffer[2048];
     fgets(buffer, sizeof(buffer), fp); // skip header & take into buffer
     fprintf(temp, "%s", buffer);       // paste buffer into temp
 
     int OrgId, eventsOrganized;
     unsigned long phone;
-    char name[100], email[100], organisationName[100];
+    char name[100], email[100];
 
-    while (fscanf(fp, "%d,%[^,],%d,%lu,%d,%[^,\n],%[^,]\n",
-                  &OrgId, name, &eventsOrganized, &phone, email, organisationName) == 6)
+    while (fscanf(fp, "%d,%[^,],%d,%lu,%s\n",
+                  &OrgId, name, &eventsOrganized, &phone, email) == 5)
     {
         if (OrgId == userID)
         {
@@ -327,8 +327,8 @@ void updateEventsOrganized(int userID)
         }
 
         // curr orgaizer data into temp file
-        fprintf(temp, "%d,%s,%d,%lu,%d,%s,%s\n",
-                OrgId, name, eventsOrganized, phone, email, organisationName);
+        fprintf(temp, "%d,%s,%d,%lu,%d,%s\n",
+                OrgId, name, eventsOrganized, phone, email);
     }
 
     fclose(fp);
@@ -417,7 +417,7 @@ void addEvent(void) {
     printf("Event added!\n");
 
     // Creation of a file to store the attendees of that event
-    char filename[16];
+    char filename[32];
     sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
     if (file)
@@ -498,7 +498,7 @@ void listEventsOfOrganizer() {
     while (fgets(line, sizeof(line), fp)) {
         struct event e;
         char desc[2048];
-        char dateStr[11], startTimeStr[9], endTimeStr[9];
+        char dateStr[11], startTimeStr[11], endTimeStr[11];
         sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
                dateStr, startTimeStr, endTimeStr, desc);
@@ -584,7 +584,7 @@ void modifyEvent(void) {
 
     char dateStr[11], startTimeStr[9], endTimeStr[9];
     printf("Enter new Event Name: ");
-    scanf(" %31[^\n]", node->evt.eventName);
+    scanf("%s[^\n]", node->evt.eventName);
     node->evt.organiserID = user.userId;
     scanf("%d", &node->evt.venueID);
     printf("Enter new Event Date (DD-MM-YYYY): ");
@@ -665,7 +665,7 @@ void modifyEvent(void) {
     fclose(file);
     free(desc);
     //modify the event details in Organizer_<UserId>.csv
-    modifyEventDetails(node->evt);
+    modifyEventDetailsInOrganizerFile(node->evt);
     printf("Event modified!\n");
 }
 

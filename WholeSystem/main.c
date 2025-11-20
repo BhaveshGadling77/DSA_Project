@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include "attendee.h"
 #include "login_registration.h"
+#include "events.h"
+#include "venues.h"
 #include <stdlib.h>
 void optionsAtOrganizer() {
 	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
+	loadEvents();
+	loadVenues();
+	cleanPastEvents();
 	int choice, check = 1;
 	while (check != -1) {
 		printf("1. Add Event.\n");
@@ -13,20 +18,24 @@ void optionsAtOrganizer() {
 		printf("4. View All Attendees.\n");
 		printf("5. Mark Attendees.\n");
 		printf("6. View Statistics.\n");
-		printf("5. Logout.\n");
+		printf("7. List Your Events\n");
+		printf("8. Logout.\n");
 		int check = scanf("%d", &choice);
 		switch (choice)
 		{
 		case 1:
 			/* Add events */
+			addEvent();
 			printf("\nAdded the Event.\n");
 			break;
 		
 		case 2:
+			deleteEvent();
 			printf("\nDelete the Event.\n");
 			break;
 		
 		case 3:
+			modifyEvent();
 			printf("\nSuccessfully Modified the Event.\n");
 			break;
 
@@ -43,19 +52,16 @@ void optionsAtOrganizer() {
 
 		case 5:
 			printf("\nMark All Attendees.\n");
-			int eventId;
 			printf("Enter the Event Id which you want to mark Attendee.\n");
 			scanf("%d", &eventId);
-			Node *head;
 			loadFromFile(&head, eventId);
 			markAttendance(head);
 			freeList(head);
 			break;
+
 		case 6:
-			int eventId;
 			printf("Enter the Event Id which you want to View Statistics.\n");
 			scanf("%d", &eventId);
-			Node *head;
 			loadFromFile(&head, eventId);
 			viewStatistics(head);
 			freeList(head);
@@ -63,6 +69,11 @@ void optionsAtOrganizer() {
 			break;
 		
 		case 7:
+			listEventsOfOrganizer();
+			printf("list of Your events.\n");
+			break;
+		
+		case 8:
 			printf("\nLogging out");
 			for (int i = 0; i < 3; i++) {
 				printf(".");
@@ -109,29 +120,31 @@ void optionsAtAttendee() {
 		
 		case 2:
 			printf("Enter the Event ID: ");
-			int eventId;
 			scanf("%d", &eventId);
-			Node *head1;
-			loadFromFile(&head1, eventId);
-			unregisterAttendee(&head, eventId);
+			loadFromFile(&head, eventId);
+			unregisterAttendee(&head, &st);
 			saveToFile(head, eventId);
-			freeList(head1);
+			freeList(head);
 			printf("\nunRegistered for Event.\n");
 			break;
 
 		case 3:
+			sortEventChronological();
 			printf("\nSorted the Events by There chronological order.\n");
 			break;
 
 		case 4:
+			sortEventByID();
 			printf("\nSorted the Events by There IDs.\n");
 			break;
 		
 		case 5:
+			sortEventByTime();
 			printf("\nSorted the Events by there Timings.\n");
 			break;
 		
-		case 6: 
+		case 6:
+			viewEvents();
 			printf("\nList All the Events.\n");
 			break;
 		case 7:
