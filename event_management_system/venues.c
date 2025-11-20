@@ -135,3 +135,20 @@ int checkVenueAvailability(int venueID, struct date eventDate, struct Time start
     freeIntervalTree(intervalTree);
     return !overlap;
 }
+
+// Function to view all venues
+void viewVenues(void) {
+    printf("\n--- All Venues ---\n");
+    printf("ID | Name | Capacity | Cost/Hr | Handler | Contact | Email | Parking | Indoor | Location\n");
+    for (int i = 0; i < HASH_SIZE; i++) {
+        VenueNode* node = venueHashTable[i];
+        while (node) {
+            Venue v = node->venue;
+            printf("%d | %s | %lld | %d | %s | %llu | %s | %d | %s | %s",
+                    v.venueID, v.venueName, v.capacity, v.rentalCostPerHour,
+                    v.venueHandlerName, v.handlerContact, v.venueHandlerEmail,
+                    v.parkingCapacity, v.indoor ? "Yes" : "No", v.location);
+            node = node->next;
+        }
+    }
+}

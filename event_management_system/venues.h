@@ -44,5 +44,5 @@ Interval* insertInterval(Interval* root, int start, int end);
 int doOverlap(int start1, int end1, int start2, int end2);
 int checkOverlap(Interval* root, int start, int end);
 void freeIntervalTree(Interval* root);
-
+void viewVenues(void);
 #endif

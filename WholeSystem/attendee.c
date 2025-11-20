@@ -198,7 +198,7 @@ void viewAllAttendees(Node *head, int eventID)
     char filePath[100];
 
     // write file path in filePath variable
-    sprintf(filePath, "data/attendees/eventDetails_%d.txt", eventID);
+    sprintf(filePath, "../Data/eventDetails_%d.txt", eventID);
 
     // Open file for writing
     fp = fopen(filePath, "w");
