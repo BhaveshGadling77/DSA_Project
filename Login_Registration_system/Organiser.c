@@ -5,19 +5,41 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "../attendance_system/attendee.h"
+<<<<<<< HEAD
+typedef struct Organiser {
+    int organiserID;
+    char name[64];
+    unsigned int noOfEventsOrganised; /*No. of events organised.*/
+    long long mobileNumber;
+<<<<<<< HEAD
+    long long mobileNumber;
+    char email[64];
+=======
+    char email[128];
+>>>>>>> f977129 (Added new files according to flow.)
+} Organiser;
+
+typedef struct user {
+	int userId;
+	char name[64];
+	unsigned int noOfEventsAttended;
+	long long mobileNumber;
+	char email[128];
+} user;
+
+
+typedef struct user {
+	int userId;
+	char name[64];
+	unsigned int noOfEventsAttended;
+	long long mobileNumber;
+	char email[64];
+} user;
+=======
 #include "Organiser.h"
 #include <time.h>
-#include <ctype.h>
-#include <stdbool.h>
-/*Convert Uppercase to lower case*/
-void convertToLowerCase(char *s) {
-	int n = strlen(s);
-	for (int i = 0; i < strlen(s); i++) {
-        s[i] = tolower(s[i]);
-    }
-}
-/*User id of the person.*/
-static status st;
+>>>>>>> 65dccf3 (made few changes)
+
 /* Validate the email*/
 int validateEmail(char *email) {
  	int n = strlen(email);
@@ -56,55 +78,84 @@ long long giveValidMobileNumber() {
 	}
 	return n;
 }
-int userValidation(user *a, int choice) {
-	int userId;
-	FILE *fp;
-	unsigned int noOfEventattended;
-	char name[256], email[256];
-	long long mobileNum;
-	if (choice == 1) {
-		fp = fopen("../Data/userOrganizer.csv", "r");
-	} else {
-		fp = fopen("../Data/userAttendee.csv", "r");
+/*Register as organiser.*/
+void RegisterAsOrganiser() {
+	Organiser *org = (Organiser *)malloc(sizeof(Organiser));
+	int newOrgId;
+	FILE *fp = fopen("../Data/userOrganizer.csv", "r+");
+	if (fp == NULL) {
+		printf("This is error.\n");
+		perror("Error in opening userOrganizer.csv!\n");
+		exit(1);
 	}
+	fseek(fp, 0, SEEK_END);
+	if (ftell(fp) == 0) {
+		printf("this is empty file.\n");
+		org->organiserID = 0;
+	} else {
+		fseek(fp, 0, SEEK_SET);
+		char buffer[2048];
+		while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+			;
+		}
+		newOrgId = atoi(strtok(buffer, ","));
+	}
+	// printf("Name :- %s\n", org->name);
+	// printf("Mobile Number :- %llu\n", org->mobileNumber);
+	// printf("Email :- %s\n", org->email);
+	// printf("Organiser ID :- %d\n", org->organiserID);
+	// printf("noOfEventsOrganised :- %d\n", org->noOfEventsOrganised);
+	// printf("Successfully Stored Your Data\n");
+	char str[64];
+	printf("Enter Your Name : ");
+	char ch;
+	getchar();
+	int i = 0;
+	org->organiserID = ++newOrgId;
+	/* Taking the name input of person. */
+	while ((scanf("%c", &ch) != -1) && ch != '\n') {
+		str[i++] = ch;
+	}
+	str[i] = '\0';
+	strcpy(org->name, str);
+	org->noOfEventsOrganised = 0;
+	printf("Enter Your Phone Number:- ");
+	org->mobileNumber = giveValidMobileNumber();
+	printf("Enter Your Email :- ");
+	while(scanf("%s", (org->email)) == 1) {
+		if (validateEmail(org->email)) {
+			break;
+		} else {
+			/*Continue the Loop */
+			printf("Email Should be valid.\n");
+			printf("Please Enter Your Email Again:- ");
+		}
+	}
+	fflush(stdin);
+	/* Printing details for the Organiser*/
+	printf("Name :- %s\n", org->name);
+	printf("Mobile Number :- %llu\n", org->mobileNumber);
+	printf("Email :- %s\n", org->email);
+	printf("Organiser ID :- %d\n", org->organiserID);
+	printf("noOfEventsOrganised :- %d\n", org->noOfEventsOrganised);
+	printf("Successfully Stored Your Data\n");
+	fprintf(fp, "%d,%s,%d,%lld,%s\n", org->organiserID, org->name, org->noOfEventsOrganised, org->mobileNumber, org->email);
+	free(org);
+}
+
+<<<<<<< HEAD
+=======
+int userValidation(user *a) {
+	user comp;
+	FILE *fp = fopen("../Data/userAttendee.csv", "r");
 	if (fp == NULL) {
 		printf("Error in file opening.\n");
 		exit(1);
 	}
-	char buffer[2048];
-	/* Checking if the user already exist or not.*/
-	while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-		/* tokenize safely and check each token before using */
-		char *token = strtok(buffer, ",");
-		if (token == NULL) continue;
-		userId = atoi(token);
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		strncpy(name, token, sizeof(name) - 1);
-		name[sizeof(name) - 1] = '\0';
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		mobileNum = atol(token);
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		noOfEventattended = (unsigned int)atoi(token);
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		/* remove any trailing newline from email token */
-		strncpy(email, token, sizeof(email) - 1);
-		email[sizeof(email) - 1] = '\0';
-		size_t ln = strlen(email);
-		if (ln > 0 && email[ln - 1] == '\n') email[ln - 1] = '\0';
-
-		// Convert the name and email to the lower case 
-		convertToLowerCase(email);
-		convertToLowerCase(name);
-		if (strcmp(email, a->email) == 0 || strcmp(name, a->name) == 0 || mobileNum == a->mobileNumber) {
-			printf("User Already Exist please Try to login.\n");
+	while(fscanf(fp,"%d,%s,%lld,%u,%s\n", &comp.userId, &comp.name, &comp.mobileNumber, &comp.noOfEventsAttended, comp.email) == 4) {
+		if (strcmp(comp.email, a->email) == 0 || strcmp(comp.name, a->name) == 0) {
+			continue;
+		} else {
 			fclose(fp);
 			return 1;
 		}
@@ -112,11 +163,10 @@ int userValidation(user *a, int choice) {
 	fclose(fp);
 	return -1;
 }
-/*Register as Both organiser and attendee based on the choice.*/
-void registerAsUser(int choice) {
+>>>>>>> 65dccf3 (made few changes)
+void RegisterAsAttendee() {
 	user *att = (user *)malloc(sizeof(user));
 	att->userId = 0;
-	FILE *fp;
 	att->noOfEventsAttended = 0;
 	char str[64];
 	int newAttId;
@@ -137,33 +187,33 @@ void registerAsUser(int choice) {
 	while(scanf("%s", (att->email)) == 1) {
 		// printf("%s", att->email);
 		if (validateEmail(att->email)) {
-			if (userValidation(att, choice) == 1) {
+<<<<<<< HEAD
+			break;
+=======
+			if (userValidation(att->email) == 1) {
 				printf("Failed to save the because user already Exist.\n");
-				isUserExist = true;
 				break;
 			} else {
+				printf("user already exist please Login.\n");
 				break;
 			}
+>>>>>>> 65dccf3 (made few changes)
 		} else {
 			/*Continue the Loop */
 			printf("Email Should be valid.\n");
 			printf("Please Enter Your Email Again:- ");
 		}
 	}
-	if (isUserExist) {
-		printf("Please Try to login.\n");
-		return ;
-	}
-	if (choice == 2) {
-		fp = fopen("../Data/userAttendee.csv", "r+");
-	} else {
-		fp = fopen("../Data/userOrganizer.csv", "r+");
-	}
+	int newAttId;
+	FILE *fp = fopen("../Data/userAttendee.csv", "r+");
 	if (fp == NULL) {
 		printf("This is error.\n");
 		perror("Error in opening userAttendee.csv!\n");
 		exit(1);
 	}
+<<<<<<< HEAD
+	fprintf(fp, "%d,%s,%ld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
+=======
 	fseek(fp, 0, SEEK_END);
 	if (ftell(fp) == 0) {
 		printf("this is empty file.\n");
@@ -177,109 +227,24 @@ void registerAsUser(int choice) {
 		newAttId = atoi(strtok(buffer, ","));
 	}
 	att->userId = ++newAttId;
-	printf("Your UserId is :- %d\n", att->userId);
 	fprintf(fp, "%d,%s,%lld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
+>>>>>>> 65dccf3 (made few changes)
 	fclose(fp);
 	free(att);
 }
-int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
-	char buffer[2048];
-	char name[128];
-	int userId;
-	char emailF[128];
-	long long mobileNum;
-	unsigned int noOfEventattended;
-	/* Checking if the user already exist or not.*/
-	while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-		/* tokenize safely and check each token before using */
-		char *token = strtok(buffer, ",");
-		if (token == NULL) continue;
-		userId = atoi(token);
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		strncpy(name, token, sizeof(name) - 1);
-		name[sizeof(name) - 1] = '\0';
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		mobileNum = atol(token);
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		noOfEventattended = (unsigned int)atoi(token);
-
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		/* remove any trailing newline from email token */
-		strncpy(emailF, token, sizeof(emailF) - 1);
-		emailF[sizeof(emailF) - 1] = '\0';
-		size_t ln = strlen(emailF);
-		if (ln > 0 && emailF[ln - 1] == '\n') emailF[ln - 1] = '\0';
-
-		// Convert the name and email to the lower case 
-		convertToLowerCase(emailF);
-		convertToLowerCase(name);
-		convertToLowerCase(givenName);
-		if (strcmp(emailF, email) == 0 && strcmp(name, givenName) == 0 && id == userId) {
-			st.status = true;
-			st.userId = userId;
-			fclose(fp);
-			return 1;
-		} else if (strcmp(emailF, email) == 0 && strcmp(name, givenName) == 0) {
-			printf("Names and Email Details are correct but userId is wrong.\n");
-		}
+void loginAsOrganiser() {
+	FILE *fp = fopen("../Data/userOrganizer.csv", "r");
+	Organiser org;
+	printf("You have to Enter Your OrganiserID and your email.\n");
+	printf("Email is case sensitive.\n");
+	if (fp == NULL) {
+		printf("Error while opening file\n");
+		exit(1);
 	}
-	printf("Failed to Logged in User Dosen't exist.\n");
-	fclose(fp);
-	return -1;
-}
-void loginAsUser(int choice) {
-	FILE *fp;
-	int id;
-	char email[200], str[200];
-	if (choice == 1) {
-		// this is the choice for the organiser.
-		fp = fopen("../Data/userOrganizer.csv", "r");
 
-	} else {
-		// this is the choice for the attendee.
-		fp = fopen("../Data/userAttendee.csv", "r");
+	while (fp != NULL) {
+		fscanf(fp, "%d,%s,%lld,%u,%s\n", &org.organiserID, org.name, org.noOfEventsOrganised, org.mobileNumber, org.email);
 	}
-	printf("For login you need to have the your Registration id and email\n");
-	printf("Enter Your Name : ");
-	
-	char ch;
-	getchar();
-	int i = 0;
-	/* Taking the name input of person. */
-	while ((scanf("%c", &ch) != -1) && ch != '\n') {
-		str[i++] = ch;
-	}
-	str[i] = '\0';
-	printf("Enter Your Registration ID : ");
-	if(scanf("%d", &id) == -1) {
-		return;
-	}
-	printf("Enter Your Email Address : ");
-	while(scanf("%s", (email)) == 1) {
-		// printf("%s", att->email);
-		if (validateEmail(email)) {
-			if(giveUserDetails(email, id, fp, str) == 1) {
-				//User exist and validation is successful.
-				st.isOrg = (choice == 1 ? true : false);
-				break;
-			} else {
-				printf("Please Check the user Details Correctly.\n");
-				break;
-			}
-		} else {
-			/*Continue the Loop */
-			printf("Email Should be valid.\n");
-			printf("Please Enter Your Email Again:- ");
-		}
-	}
-}
-status getDetails() {
-	return st; 
+	printf("last entry :- %d,%s,%lld,%u,%s", org.organiserID, org.name, org.noOfEventsOrganised, org.mobileNumber, org.email);
 }
