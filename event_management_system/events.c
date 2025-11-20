@@ -5,12 +5,13 @@
 #include "events.h"
 #include "venues.h"
 #include <errno.h>
+#include "../WholeSystem/login_registration.h"
 
-EventNode *eventList = NULL; // Linked list for sequential access
-EventBST *eventTree = NULL; // BST for fast search/delete by ID
+EventNode *eventList = NULL;                            // Linked list for sequential access
+EventBST *eventTree = NULL;                             // BST for fast search/delete by ID
 
 // Function to check if the provided time is valid or not
-int checkValidTime(Time startTime, Time endTime) {
+int checkValidTime(Time regEndtime, Time startTime, Time endTime) {
     if (startTime.hour >= 24 || startTime.minute >= 60 ||  startTime.second >= 60) {
             printf("Invalid start time of event\n");
             return 0;
@@ -18,11 +19,20 @@ int checkValidTime(Time startTime, Time endTime) {
     if (endTime.hour >= 24 || endTime.minute >= 60 || endTime.second >= 60) {
             printf("Invalid end time of the event\n");
             return 0;
-        }
+    }
+    if (regEndtime.hour >= 24 || regEndtime.minute >= 60 || regEndtime.second >= 60) {
+            printf("Invalid end time to register for the event\n");
+            return 0;
+    }
     int s = startTime.hour * 3600 + startTime.minute * 60 + startTime.second;
     int e = endTime.hour * 3600 + endTime.minute * 60 + endTime.second;
+    int r = regEndtime.hour * 3600 + regEndtime.minute * 60 + regEndtime.second;
     if (s >= e) {
         printf("Start time must be before end time\n");
+        return 0;
+    }
+    if (r >= s) {
+        printf("Registration must end before the event begins\n");
         return 0;
     }
     return 1;
@@ -123,7 +133,7 @@ EventBST* deleteBST(EventBST* root, int eventID) {
     return root;
 }
 
-// Add to linked list
+// Add  event node to the end of the linked list
 void addToList(event e) {
     EventNode* newNode = (EventNode*)malloc(sizeof(EventNode));
     newNode->evt = e;
@@ -137,11 +147,6 @@ void addToList(event e) {
         p = p->next;
     }
     p->next = newNode;
-
-    /*
-    newNode->next = eventList;
-    eventList = newNode;
-    */
 }
 
 // Load events from CSV into linked list and BST
@@ -301,14 +306,17 @@ void addEvent(void) {
     int i = 0;
     char dateStr[11], startTimeStr[9], endTimeStr[9], c, regDue[9];
     (newEvent.description) = (char*)malloc(sizeof(char) * 2048);
-/*    printf("Enter Event ID: ");
-    scanf("%d", &newEvent.eventID);*/
+    userStatus user = getDetails();
+    /*
+    printf("Enter Event ID: ");
+    scanf("%d", &newEvent.eventID);
+    */
     newEvent.eventID = generateEventID();
     printf("Your event's alloted event ID: %d\n", newEvent.eventID);
+    printf("Your user ID is %d\n", user.userId);
     printf("Enter Event Name: ");
     scanf(" %31[^\n]", newEvent.eventName);
-    printf("Enter Organiser ID: ");
-    scanf("%d", &newEvent.organiserID);
+    newEvent.organiserID = user.userId;
     printf("Enter Venue ID: ");
     scanf("%d", &newEvent.venueID);
     printf("Enter Event Date (DD-MM-YYYY): ");
@@ -332,7 +340,7 @@ void addEvent(void) {
     
     // Validate time and date
     if (checkValidDate(newEvent.eventDate) == 0) return;
-    if (checkValidTime(newEvent.startTime, newEvent.endTime) == 0 || checkValidTime(newEvent.regDue, newEvent.startTime) == 0) return;
+    if (checkValidTime(newEvent.regDue, newEvent.startTime, newEvent.endTime) == 0) return;
 
     // Validate venue availability and existence
     if (!getVenueByID(newEvent.venueID)) {
@@ -370,12 +378,23 @@ void addEvent(void) {
 
     // Creation of a file to store the attendees of that event
     char filename[16];
-    sprintf(filename, "../Data/event_%d.txt", newEvent.eventID);
+    sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
     if (file)
         fclose(file);
     else
         printf("%s file could not be created\n", filename);
+
+    // event details to be added in organiser_<userID>.csv
+    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    file = fopen(filename, "a");
+    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
+        newEvent.eventDate.date, newEvent.eventDate.month, newEvent.eventDate.year,
+        newEvent.startTime.hour, newEvent.startTime.minute, newEvent.startTime.second,
+        newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second,
+        newEvent.description ? newEvent.description : "");
+    fclose(file);
 }
 
 // Delete event (using BST)
@@ -437,7 +456,8 @@ void modifyEvent(void) {
     char *desc = (char*)malloc(sizeof(char) * 2048);
     printf("Enter Event ID to modify: ");
     scanf("%d", &eventID);
-
+    userStatus user = getDetails();
+    
     EventBST* node = searchBST(eventTree, eventID);
     if (!node) {
         printf("Event ID not found.\n");
@@ -449,9 +469,7 @@ void modifyEvent(void) {
     char dateStr[11], startTimeStr[9], endTimeStr[9];
     printf("Enter new Event Name: ");
     scanf(" %31[^\n]", node->evt.eventName);
-    printf("Enter new Organiser ID: ");
-    scanf("%d", &node->evt.organiserID);
-    printf("Enter new Venue ID: ");
+    node->evt.organiserID = user.userId;
     scanf("%d", &node->evt.venueID);
     printf("Enter new Event Date (DD-MM-YYYY): ");
     scanf("%10s", dateStr);
@@ -479,7 +497,7 @@ void modifyEvent(void) {
         free(desc);
         return;
     }
-    if (checkValidTime(node->evt.startTime, node->evt.endTime) == 0 || checkValidTime(node->evt.regDue, node->evt.startTime) == 0) {
+    if (checkValidTime(node->evt.regDue , node->evt.startTime, node->evt.endTime) == 0) {
         node->evt = originalEvent;
         free(desc);
         return;
