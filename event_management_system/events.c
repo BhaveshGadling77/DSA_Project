@@ -304,8 +304,9 @@ void addEvent(void) {
 /*    printf("Enter Event ID: ");
     scanf("%d", &newEvent.eventID);*/
     newEvent.eventID = generateEventID();
+    printf("Your event's alloted event ID: %d\n", newEvent.eventID);
     printf("Enter Event Name: ");
-    scanf("%31[^\n]", newEvent.eventName);
+    scanf(" %31[^\n]", newEvent.eventName);
     printf("Enter Organiser ID: ");
     scanf("%d", &newEvent.organiserID);
     printf("Enter Venue ID: ");
@@ -318,6 +319,7 @@ void addEvent(void) {
     scanf("%8s", endTimeStr);
     printf("Enter time upto which event can be registered (HH:MM:SS in 24 hour format with colons): ");
     scanf("%8s", regDue);
+    getchar();
     printf("Enter the description of the event (Upto 2000 characters)\n");
     while(i <= 2047 && scanf("%c", &c) && c != '\n') {
         newEvent.description[i++] = c;
@@ -365,6 +367,15 @@ void addEvent(void) {
         newEvent.description ? newEvent.description : "");
     fclose(file);
     printf("Event added!\n");
+
+    // Creation of a file to store the attendees of that event
+    char filename[16];
+    sprintf(filename, "../Data/event_%d.txt", newEvent.eventID);
+    file = fopen(filename, "w");
+    if (file)
+        fclose(file);
+    else
+        printf("%s file could not be created\n", filename);
 }
 
 // Delete event (using BST)
@@ -450,6 +461,7 @@ void modifyEvent(void) {
     scanf("%8s", endTimeStr);
     printf("Enter new time upto which event can be registered (HH:MM:SS in 24 hour format with colons): ");
     scanf("%8s", regDue);
+    getchar();
     printf("Enter the description of the event (Upto 2000 characters)\n");
     while(i <= 2047 && scanf("%c", &c) && c != '\n') {
         desc[i++] = c;
