@@ -488,7 +488,34 @@ void deleteEvent(void) {
     fclose(file);
     printf("Event deleted!\n");
 }
-
+void listEventsOfOrganizer() {
+    userStatus st = getDetails();
+    char line[2048];
+    char filename[32];
+    sprintf(filename, "Organizer_%d", st.userId);
+    FILE *fp = fopen(filename, "r");
+    printf("List of Events organised:- \n\n");
+    while (fgets(line, sizeof(line), fp)) {
+        struct event e;
+        char desc[2048];
+        char dateStr[11], startTimeStr[9], endTimeStr[9];
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
+               &e.eventID, e.eventName, &e.organiserID, &e.venueID,
+               dateStr, startTimeStr, endTimeStr, desc);
+        sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
+        sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
+        sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
+        e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
+        strcpy(e.description, desc);
+        printf("Event ID: %d\n", e.eventID);
+        printf("Event Name: %s", e.eventName);
+        printf("Venue ID: %d\n", e.venueID);
+        printf("Date: %s\n", dateStr);
+        printf("Starting Time: %s\n", startTimeStr);
+        printf("End Time: %s\n", startTimeStr);
+        printf("Description: %s\n", desc);
+    }
+}
 // modify the event details organizer_<userId>.csv
 void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
@@ -523,13 +550,14 @@ void modifyEventDetailsInOrganizerFile(event modified) {
                 modified.endTime.hour, modified.endTime.minute, modified.endTime.second,
                 modified.description ? modified.description : "");
                 
-        }
-        fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        } else {
+            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
                 e.endTime.hour, e.endTime.minute, e.endTime.second,
                 e.description ? e.description : "");
+        }
     }
     fclose(fp);
     fclose(temp);
