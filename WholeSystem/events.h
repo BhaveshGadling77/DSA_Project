@@ -64,7 +64,9 @@ void addEvent(void);                                    // Add a new event
 void deleteEvent(void);                                 // Delete event using BST
 void modifyEvent(void);                                 // Modify event
 void addToList(event e);                                // Add event node to BST
-int checkValidTime(Time startTime, Time endTime);       // Return 1 if valid, 0 if invalid
+int checkValidTime(Time regEndtime, Time startTime, Time endTime);       // Return 1 if valid, 0 if invalid
 int checkValidDate(date d);                             // Return 1 if valid, 0 if invalid
 int generateEventID(void);                              // Generates a unique event ID
+void listEventsOfOrganizer();                           // list the events Organised by specific organiser.
+void modifyEventDetailsInOrganizerFile(event modified); // modify's the event details of the particular Organizer_<userId>.csv
 #endif
