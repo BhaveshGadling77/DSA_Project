@@ -19,10 +19,10 @@ typedef struct event {
     char eventName[32];
     int organiserID;                        // Linked to Organiser
     int venueID;                            // Linked to Venue
-    struct date eventDate;
+    date eventDate;
     Time startTime;
     Time endTime;
-    Time regDue;
+    Time regDue;                            // Time by which registration 
     char* description;
 } event;
 
