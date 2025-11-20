@@ -295,7 +295,7 @@ void saveToFile(Node *head, int eventId)
     char filename[100];
 
     // sprintf function use to write to the file
-    sprintf(filename, "data/event_%d.csv", eventId);
+    sprintf(filename, "../Data/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
@@ -315,22 +315,18 @@ void saveToFile(Node *head, int eventId)
         temp = temp->next;
     }
     fclose(fp);
-    printf("File 'data/event_%d.csv' has been saved.", eventId);
+    printf("File '../Data/event_%d.csv' has been saved.", eventId);
 }
 void loadFromFile(Node **head, int eventID)
 {
     char filename[100];
-    sprintf(filename, "data/event_%d.csv", eventID); //  loads file
+    sprintf(filename, "../Data/event_%d.csv", eventID); //  loads file
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
         return;
 
     char buffer[500];
-    fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
-    // as we've wrote header line before saving file.
-
-    char buffer[500]; 
     fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
     // as we've wrote header line before saving file.
 

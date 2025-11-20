@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "login_registration.h"
+#include "Organiser.h"
 int main() {
 	int choice, check = 0;
 	printf("What you want to do ?\n");
@@ -15,8 +15,8 @@ int main() {
 			if (choice == 1) {
 				fflush(stdout);
 				registerAsUser(1);
-				
 			} else {
+				registerAsUser(2);
 				registerAsUser(2);
 				printf("Registering As Attendee.\n");
 			}

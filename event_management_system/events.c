@@ -299,7 +299,45 @@ int listToArray(event arr[]) {
     }
     return count;
 }
+void updateEventsOrganized(int userID)
+{
+    FILE *fp = fopen("../Data/organisers.csv", "r"); // main file to read data
+    FILE *temp = fopen("../Data/temp.csv", "w");       // temp file to write/update data
 
+    if (!fp || !temp)
+    {
+        printf("Error opening user file!\n");
+        return;
+    }
+
+    char buffer[500];
+    fgets(buffer, sizeof(buffer), fp); // skip header & take into buffer
+    fprintf(temp, "%s", buffer);       // paste buffer into temp
+
+    int OrgId, eventsOrganized;
+    unsigned long phone;
+    char name[100], email[100], organisationName[100];
+
+    while (fscanf(fp, "%d,%[^,],%d,%lu,%d,%[^,\n],%[^,]\n",
+                  &OrgId, name, &eventsOrganized, &phone, email, organisationName) == 6)
+    {
+        if (OrgId == userID)
+        {
+            eventsOrganized++;
+        }
+
+        // curr orgaizer data into temp file
+        fprintf(temp, "%d,%s,%d,%lu,%d,%s,%s\n",
+                OrgId, name, eventsOrganized, phone, email, organisationName);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    // replace old file with new file
+    remove("../Data/organisers.csv");
+    rename("../Data/temp.csv", "../Data/organisers.csv");
+}
 // Add event
 void addEvent(void) {
     event newEvent;
@@ -374,6 +412,8 @@ void addEvent(void) {
         newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second,
         newEvent.description ? newEvent.description : "");
     fclose(file);
+
+    updateEventsOrganized(newEvent.organiserID);
     printf("Event added!\n");
 
     // Creation of a file to store the attendees of that event
