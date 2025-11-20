@@ -488,12 +488,54 @@ void deleteEvent(void) {
     fclose(file);
     printf("Event deleted!\n");
 }
-void modifyEventDetailsInOrganizerFile(event e) {
+
+// modify the event details organizer_<userId>.csv
+void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
     sprintf(filename, "Organizer_%d.csv", st.userId);
-    
+    FILE *fp = fopen(filename, "r"); // main file to read data
+    FILE *temp = fopen("../Data/temp.csv", "w");       // temp file to write/update data
 
+    if (!fp || !temp)
+    {
+        printf("Error opening user file!\n");
+        return;
+    }
+    char line[4084];
+    while (fgets(line, sizeof(line), fp)) {
+        struct event e;
+        char desc[2048];
+        char dateStr[11], startTimeStr[9], endTimeStr[9];
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
+               &e.eventID, e.eventName, &e.organiserID, &e.venueID,
+               dateStr, startTimeStr, endTimeStr, desc);
+        sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
+        sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
+        sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
+        e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
+        strcpy(e.description, desc);
+        if (e.eventID == modified.eventID) {
+            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+                modified.eventID, modified.eventName, modified.organiserID, modified.venueID,
+                modified.eventDate.date, modified.eventDate.month, modified.eventDate.year,
+                modified.startTime.hour, modified.startTime.minute, modified.startTime.second,
+                modified.endTime.hour, modified.endTime.minute, modified.endTime.second,
+                modified.description ? modified.description : "");
+                
+        }
+        fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+                e.eventID, e.eventName, e.organiserID, e.venueID,
+                e.eventDate.date, e.eventDate.month, e.eventDate.year,
+                e.startTime.hour, e.startTime.minute, e.startTime.second,
+                e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.description ? e.description : "");
+    }
+    fclose(fp);
+    fclose(temp);
+    // replace old file with new file
+    remove(filename);
+    rename("../Data/temp.csv", filename);
 }
 // Modify event (using BST)
 void modifyEvent(void) {
@@ -595,7 +637,7 @@ void modifyEvent(void) {
     fclose(file);
     free(desc);
     //modify the event details in Organizer_<UserId>.csv
-    modifyEventDetails(originalEvent);
+    modifyEventDetails(node->evt);
     printf("Event modified!\n");
 }
 
