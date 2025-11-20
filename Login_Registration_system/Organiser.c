@@ -10,8 +10,12 @@ typedef struct Organiser {
     char name[64];
     unsigned int noOfEventsOrganised; /*No. of events organised.*/
     long long mobileNumber;
+<<<<<<< HEAD
     long long mobileNumber;
     char email[64];
+=======
+    char email[128];
+>>>>>>> f977129 (Added new files according to flow.)
 } Organiser;
 
 typedef struct user {
@@ -19,7 +23,7 @@ typedef struct user {
 	char name[64];
 	unsigned int noOfEventsAttended;
 	long long mobileNumber;
-	char email[64];
+	char email[128];
 } user;
 
 
@@ -160,9 +164,10 @@ void RegisterAsAttendee() {
 	chdir("../Data");
 	FILE *fp = fopen("./userAttendee.csv", "a");
 	if (fp == -1) {
-		printf("Error in Opening User File");
+		printf("Error in Opening User File\n");
 		exit(1);
 	}
 	fprintf(fp, "%d,%s,%ld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
 	fclose(fp);
 }
+

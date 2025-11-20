@@ -68,13 +68,3 @@ I think i can handle it with the extern variables but i have to research so far 
 
 ### Date :- 16th Nov 2025
 I am finding a way to generate unique id every time i assign a attendee and organise a id. found the way i can just check the if the generated id by rand() function is assigned to anyone if it is then regenerate the id.
-
-### Date : 17th Nov 2025
-I refactored the RegisterAsorganiser and registerAsAttendee function and made more modular using choice.
-
-### Date : 18th Nov 2025
-I had completed the part of Login functions and made a status struct which will give me userId, status(is logged in?) and isOrganiser, true means it is organiser userId and false means it is attendee.
-
-### Date : 19th Nov 2025 
-so today i had started the integrating the whole system and doing the integration of the functions of piyush and sumit. we had brainstorm how the system will flow and
-and many more discussion.
