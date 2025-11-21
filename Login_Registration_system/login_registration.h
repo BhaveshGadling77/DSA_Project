@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f2a6607 (Corrected format of header file)
 #ifndef LOGIN_REGISTRATION_H
 #define LOGIN_REGISTRATION_H
 
@@ -48,9 +51,12 @@ long long giveValidMobileNumber();
 userStatus getDetails();
 
 #endif
+<<<<<<< HEAD
 =======
 status getDetails();
 >>>>>>> 9fe6f18 (Finalized the functions.)
 =======
 userStatus getDetails();
 >>>>>>> a75df0e (made the successful changes in login_registration header file.)
+=======
+>>>>>>> f2a6607 (Corrected format of header file)
