@@ -31,7 +31,8 @@ typedef struct Node {
 // Attendee Functions (only attendees can call)
 void registerAttendeeForEvent(Node** head, int eventID, userStatus *user);
 void unregisterAttendee(Node** head, userStatus* user);
-
+bool fetchUserData(int userID, Attendee *a);
+void updateEventsAttended(int userID);
 
 // organizer functions
 void markAttendance(Node* head);
@@ -44,6 +45,5 @@ void searchAttendee(Node* head);
 void saveToFile(Node* head, int eventID);
 void loadFromFile(Node** head, int eventID);
 void freeList(Node* head);
-
 
 #endif

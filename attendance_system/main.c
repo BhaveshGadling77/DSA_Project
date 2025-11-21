@@ -63,6 +63,7 @@ int main(void)
                 case 5:
                     saveToFile(head, eventID);
                     freeList(head);
+                    printf("\nExiting...\n");
                     return 0;
 
                 default:
@@ -87,6 +88,17 @@ int main(void)
                     int chosenEvent;
                     printf("Enter Event ID: ");
                     scanf("%d", &chosenEvent);
+
+
+                    // Load that specific events data
+                    if (chosenEvent != eventID)
+                    {
+                        saveToFile(head, eventID);
+                        freeList(head);
+                        head = NULL;
+                        eventID = chosenEvent;
+                        loadFromFile(&head, eventID);
+                    }   
                     registerAttendeeForEvent(&head, chosenEvent, &currUser);
                     break;
                 }
@@ -102,6 +114,7 @@ int main(void)
                 case 4:
                     saveToFile(head, eventID);
                     freeList(head);
+                    printf("\nExiting...\n");
                     return 0;
 
                 default:

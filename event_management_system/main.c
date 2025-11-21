@@ -1,26 +1,5 @@
 #include <stdio.h>
 #include "events.h"
-#include "venues.h"
-
-int menu() {
-    int choice;
-    printf("Enter the operation to be performed:\n");
-    printf("1.  Add Event\n");
-    printf("2.  Delete Event\n");
-    printf("3.  Modify Event\n");
-    printf("4.  Search Event by ID\n");
-    printf("5.  View All Events\n");
-    printf("6.  Sort Events by Date\n");
-    printf("7.  Sort Events Chronologically\n");
-    printf("8.  Sort Events by ID\n");
-    printf("9.  Clean Past Events\n");
-    printf("10. Test Venue Availability (Manual)\n");
-    printf("11. View All Venues\n");
-    printf("12.  Exit\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
-    return choice;
-}
 
 int main() {
     // Initialize data

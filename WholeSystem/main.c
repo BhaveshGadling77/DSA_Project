@@ -4,6 +4,8 @@
 #include "events.h"
 #include "venues.h"
 #include <stdlib.h>
+
+
 void optionsAtOrganizer() {
 	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
@@ -42,7 +44,7 @@ void optionsAtOrganizer() {
 			int eventId;
 			printf("Enter the Event Id which you want to view.\n");
 			scanf("%d", &eventId);
-			Node *head;
+			Node *head = NULL;
 			loadFromFile(&head, eventId);
 			viewAllAttendees(head, eventId);
 			freeList(head);
@@ -108,15 +110,14 @@ void optionsAtAttendee() {
 		{
 		case 1:
 			/* register for event */
-			printf("\nRegistered for Event.\n");
 			int eventId;
-			Node *head;
+			Node *head = NULL;
 			printf("Enter The Event ID: ");
 			scanf("%d", &eventId);
 			loadFromFile(&head, eventId);
 			registerAttendeeForEvent(&head, eventId, &st);
-			saveToFile(head, eventId);
 			freeList(head);
+			printf("\nRegistered for Event.\n");
 			break;
 		
 		case 2:
