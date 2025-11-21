@@ -16,15 +16,7 @@ void convertToLowerCase(char *s) {
     }
 }
 /*User id of the person.*/
-<<<<<<< HEAD
-<<<<<<< HEAD
 static userStatus st;
-=======
-static status st;
->>>>>>> fc1aba6 (Seperate out the final system in WholeSystem folder.\n)
-=======
-static userStatus st;
->>>>>>> a75df0e (made the successful changes in login_registration header file.)
 /* Validate the email*/
 int validateEmail(char *email) {
  	int n = strlen(email);
@@ -310,13 +302,5 @@ int loginAsUser(int choice) {
 }
 userStatus getDetails() {
 	
-=======
-}
-<<<<<<< HEAD
-status getDetails() {
->>>>>>> fc1aba6 (Seperate out the final system in WholeSystem folder.\n)
-=======
-userStatus getDetails() {
->>>>>>> a75df0e (made the successful changes in login_registration header file.)
 	return st; 
 }
