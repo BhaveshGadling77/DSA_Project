@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "attendee.h"
-#include "../Login_Registration_system/login_registration.h"
+#include "Login_Registration_system/login_registration.h"
 
 int main(void)
 {
