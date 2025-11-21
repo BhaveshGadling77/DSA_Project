@@ -507,7 +507,7 @@ void deleteEvent(void) {
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu,%s\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
