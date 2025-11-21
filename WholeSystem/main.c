@@ -19,24 +19,22 @@ void optionsAtOrganizer() {
 		printf("5. Mark Attendees.\n");
 		printf("6. View Statistics.\n");
 		printf("7. List Your Events\n");
-		printf("8. Logout.\n");
+		printf("8. List All Available veunues.\n");
+		printf("9. Logout.\n");
 		int check = scanf("%d", &choice);
 		switch (choice)
 		{
 		case 1:
 			/* Add events */
 			addEvent();
-			printf("\nAdded the Event.\n");
 			break;
 		
 		case 2:
 			deleteEvent();
-			printf("\nDelete the Event.\n");
 			break;
 		
 		case 3:
 			modifyEvent();
-			printf("\nSuccessfully Modified the Event.\n");
 			break;
 
 		case 4:
@@ -70,10 +68,13 @@ void optionsAtOrganizer() {
 		
 		case 7:
 			listEventsOfOrganizer();
-			printf("list of Your events.\n");
 			break;
-		
+
 		case 8:
+			viewVenues();
+			printf("List of Venues\n");
+			break;
+		case 9:
 			printf("\nLogging out");
 			for (int i = 0; i < 3; i++) {
 				printf(".");
@@ -163,6 +164,7 @@ void optionsAtAttendee() {
 		}
 	}
 }
+
 int main() {
 	int choice, check = 0;
 	printf("What you want to do ?\n");
@@ -204,9 +206,7 @@ int main() {
 				optionsAtAttendee();
 			}
 			
-			// printf("User ID : %d\n",st.userId);
-			// printf("Is Logged In : %s\n", st.status ? " Yes it Logged In": "No it is not logged In");
-			// printf("Organiser Or Attendee : %s\n", st.isOrg ? "Organiser": "Attendee");
+			
 		} else {
 			printf("Thank You for using our system.\n");
 			printf("Exiting The Program");
