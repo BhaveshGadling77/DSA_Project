@@ -161,13 +161,14 @@ void loadEvents(void) {
     while (fgets(line, sizeof(line), file)) {
         struct event e;
         char desc[2048];
-        char dateStr[11], startTimeStr[9], endTimeStr[9];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
+        char dateStr[11], startTimeStr[9], endTimeStr[9], regDue[9];
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
-               dateStr, startTimeStr, endTimeStr, desc);
+               dateStr, startTimeStr, endTimeStr, regDue, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
+        sscanf(regDue,  &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
         strcpy(e.description, desc);
         addToList(e);
@@ -224,15 +225,15 @@ void cleanPastEvents(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,eventDescription\n");
+    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDescription\n");
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
-                e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.endTime.hour, e.endTime.minute, e.endTime.second, e.regDue.hour, e.regDue.minute, e.regDue.second,
                 e.description ? e.description : "");
         curr = curr->next;
     }
@@ -300,13 +301,11 @@ int listToArray(event arr[]) {
     return count;
 }
 
-void updateEventsOrganized(int userID)
-{
+void updateEventsOrganized(int userID) {
     FILE *fp = fopen("../Data/userOrganizer.csv", "r");
     FILE *temp = fopen("../Data/temp.csv", "w");
 
-    if (!fp || !temp)
-    {
+    if (!fp || !temp) {
         printf("Error opening file!\n");
         if (fp) fclose(fp);
         if (temp) fclose(temp);
@@ -314,8 +313,7 @@ void updateEventsOrganized(int userID)
     }
 
     char line[2048];
-    while (fgets(line, sizeof(line), fp))
-    {
+    while (fgets(line, sizeof(line), fp)) {
         
         if (strlen(line) <= 2)
             continue;
@@ -435,11 +433,12 @@ void addEvent(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
         newEvent.eventDate.date, newEvent.eventDate.month, newEvent.eventDate.year,
         newEvent.startTime.hour, newEvent.startTime.minute, newEvent.startTime.second,
         newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second,
+        newEvent.regDue.hour, newEvent.regDue.minute, newEvent.regDue.second,
         newEvent.description ? newEvent.description : "");
     fclose(file);
 
@@ -458,11 +457,12 @@ void addEvent(void) {
     // event details to be added in organiser_<userID>.csv
     sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
     file = fopen(filename, "a");
-    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
         newEvent.eventDate.date, newEvent.eventDate.month, newEvent.eventDate.year,
         newEvent.startTime.hour, newEvent.startTime.minute, newEvent.startTime.second,
         newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second,
+        newEvent.regDue.hour, newEvent.regDue.minute, newEvent.regDue.second,
         newEvent.description ? newEvent.description : "");
     fclose(file);
 }
@@ -503,15 +503,16 @@ void deleteEvent(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,eventDescription\n");
+    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDescription\n");
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
                 e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.regDue.hour, e.regDue.minute, e.regDue.second,
                 e.description ? e.description : "");
         curr = curr->next;
     }
@@ -528,13 +529,14 @@ void listEventsOfOrganizer() {
     while (fgets(line, sizeof(line), fp)) {
         struct event e;
         char desc[2048];
-        char dateStr[11], startTimeStr[11], endTimeStr[11];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
+        char dateStr[11], startTimeStr[11], endTimeStr[11], regDue[9];
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
-               dateStr, startTimeStr, endTimeStr, desc);
+               dateStr, startTimeStr, endTimeStr, regDue, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
+        sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
         strcpy(e.description, desc);
         printf("Event ID: %d\n", e.eventID);
@@ -543,6 +545,7 @@ void listEventsOfOrganizer() {
         printf("Date: %s\n", dateStr);
         printf("Starting Time: %s\n", startTimeStr);
         printf("End Time: %s\n", startTimeStr);
+        printf("Registration Ends at: %s\n", regDue);
         printf("Description: %s\n", desc);
     }
 }
@@ -551,11 +554,10 @@ void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
     sprintf(filename, "Organizer_%d.csv", st.userId);
-    FILE *fp = fopen(filename, "r"); // main file to read data
-    FILE *temp = fopen("../Data/temp.csv", "w");       // temp file to write/update data
+    FILE *fp = fopen(filename, "r");                    // main file to read data
+    FILE *temp = fopen("../Data/temp.csv", "w");        // temp file to write/update data
 
-    if (!fp || !temp)
-    {
+    if (!fp || !temp) {
         printf("Error opening user file!\n");
         return;
     }
@@ -563,29 +565,32 @@ void modifyEventDetailsInOrganizerFile(event modified) {
     while (fgets(line, sizeof(line), fp)) {
         struct event e;
         char desc[2048];
-        char dateStr[11], startTimeStr[9], endTimeStr[9];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
+        char dateStr[11], startTimeStr[9], endTimeStr[9], regDue[9];
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
-               dateStr, startTimeStr, endTimeStr, desc);
+               dateStr, startTimeStr, endTimeStr, regDue, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
+        sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
         strcpy(e.description, desc);
         if (e.eventID == modified.eventID) {
-            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 modified.eventID, modified.eventName, modified.organiserID, modified.venueID,
                 modified.eventDate.date, modified.eventDate.month, modified.eventDate.year,
                 modified.startTime.hour, modified.startTime.minute, modified.startTime.second,
                 modified.endTime.hour, modified.endTime.minute, modified.endTime.second,
+                modified.regDue.hour, modified.regDue.minute, modified.regDue.second,
                 modified.description ? modified.description : "");
                 
         } else {
-            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+            fprintf(temp, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
                 e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.regDue.hour, e.regDue.minute, e.regDue.second,
                 e.description ? e.description : "");
         }
     }
@@ -684,11 +689,12 @@ void modifyEvent(void) {
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
                 e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.regDue.hour, e.regDue.minute, e.regDue.second,
                 e.description ? e.description : "");
         curr = curr->next;
     }
@@ -714,16 +720,17 @@ event* searchEventID(void) {
 // View events (using linked list)
 void viewEvents(void) {
     printf("\nEvents List:\n");
-    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time\n");
+    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time | Registration Due | Event Description\n");
     EventNode *curr = eventList;
     while (curr) {
         event e = curr->evt;
         if (!isPastEvent(e.eventDate)) {
-            printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu\n",
+            printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %s\n",
                    e.eventID, e.eventName, e.organiserID, e.venueID,
                    e.eventDate.date, e.eventDate.month, e.eventDate.year,
                    e.startTime.hour, e.startTime.minute, e.startTime.second,
-                   e.endTime.hour, e.endTime.minute, e.endTime.second);
+                   e.endTime.hour, e.endTime.minute, e.endTime.second,
+                   e.regDue.hour, e.regDue.minute, e.regDue.second, e.description);
         }
         curr = curr->next;
     }
@@ -735,14 +742,15 @@ void sortEventByTime(void) {
     int count = listToArray(arr);
     quickSort(arr, 0, count - 1, compareByDate);
     printf("\nEvents Sorted by Date:\n");
-    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time\n");
+    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time | Registration Due | Event Description\n");
     for (int i = 0; i < count; i++) {
         event e = arr[i];
-        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu\n",
+        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %s\n",
                e.eventID, e.eventName, e.organiserID, e.venueID,
                e.eventDate.date, e.eventDate.month, e.eventDate.year,
                e.startTime.hour, e.startTime.minute, e.startTime.second,
-               e.endTime.hour, e.endTime.minute, e.endTime.second);
+               e.endTime.hour, e.endTime.minute, e.endTime.second,
+               e.regDue.hour, e.regDue.minute, e.regDue.second, e.description);
     }
 }
 
@@ -752,14 +760,15 @@ void sortEventChronological(void) {
     int count = listToArray(arr);
     quickSort(arr, 0, count - 1, compareChronological);
     printf("\nEvents Sorted Chronologically:\n");
-    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time\n");
+    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time | Registration Due | Event Description\n");
     for (int i = 0; i < count; i++) {
         event e = arr[i];
-        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu\n",
+        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %s\n",
                e.eventID, e.eventName, e.organiserID, e.venueID,
                e.eventDate.date, e.eventDate.month, e.eventDate.year,
                e.startTime.hour, e.startTime.minute, e.startTime.second,
-               e.endTime.hour, e.endTime.minute, e.endTime.second);
+               e.endTime.hour, e.endTime.minute, e.endTime.second,
+               e.regDue.hour, e.regDue.minute, e.regDue.second, e.description);
     }
 }
 
@@ -769,14 +778,15 @@ void sortEventByID(void) {
     int count = listToArray(arr);
     quickSort(arr, 0, count - 1, compareByID);
     printf("\nEvents Sorted by ID:\n");
-    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time\n");
+    printf("ID | Name | Organiser ID | Venue ID | Date | Start Time | End Time | Registration Due | Event Description\n");
     for (int i = 0; i < count; i++) {
         event e = arr[i];
-        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu\n",
+        printf("%d | %s | %d | %d | %02hd-%02hd-%04hd | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu | %02hu:%02hu:%02hu |%s\n",
                e.eventID, e.eventName, e.organiserID, e.venueID,
                e.eventDate.date, e.eventDate.month, e.eventDate.year,
                e.startTime.hour, e.startTime.minute, e.startTime.second,
-               e.endTime.hour, e.endTime.minute, e.endTime.second);
+               e.endTime.hour, e.endTime.minute, e.endTime.second,
+               e.regDue.hour, e.regDue.minute, e.regDue.second, e.description);
     }
 }
 

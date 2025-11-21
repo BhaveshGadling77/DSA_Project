@@ -16,8 +16,7 @@ int checkValidTime(Time regEndtime, Time startTime, Time endTime) {
             printf("Invalid start time of event\n");
             return 0;
         }
-    if (endTime.hour >= 24 || endTime.hour < 0 || endTime.minute >= 60 || endTime.minute < 0 ||
-        endTime.second >= 60 || endTime.second < 0) {
+    if (endTime.hour >= 24 || endTime.minute >= 60 || endTime.second >= 60) {
             printf("Invalid end time of the event\n");
             return 0;
     }
@@ -39,13 +38,44 @@ int checkValidTime(Time regEndtime, Time startTime, Time endTime) {
     return 1;
 }
 
+// Function to check if the provided date is valid or not
 int checkValidDate(date d) {
     if (d.month > 12 || d.month <= 0 || d.date <= 0 || d.date > 31 || d.year <= 0 || d.year >= 2050) {
         printf("Invalid date of event\n");
         return 0;
     }
-    
+    if ((d.month == 4 || d.month == 6 || d.month == 9 || d.month == 11) && d.date > 30) {
+        printf("Invalid date: This month has only 30 days\n");
+        return 0;
+    }
+    if (d.month == 2) {
+        // Check for leap year
+        int isLeapYear = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
+        if (isLeapYear && d.date > 29) {
+            printf("Invalid date: February has only 29 days in leap year\n");
+            return 0;
+        }
+        if (!isLeapYear && d.date > 28) {
+            printf("Invalid date: February has only 28 days\n");
+            return 0;
+        }
+    }
+    date today = getCurrentDate();
+    if (d.year < today.year) {
+        printf("Invalid date: past date provided\n");
+        return 0;
+    }
+    if (d.year == today.year && d.month < today.month) {
+        printf("Invalid date: past date provided\n");
+        return 0;
+    }
+    if (d.year == today.year && d.month == today.month && d.date < today.date) {
+        printf("Invalid date: past date provided\n");
+        return 0;
+    }
+    return 1;
 }
+
 // Function to create new BST node
 EventBST* newBSTNode(event e) {
     EventBST* node = (EventBST*)malloc(sizeof(EventBST));
@@ -126,18 +156,20 @@ void loadEvents(void) {
         perror("Error opening events.csv");
         return;
     }
-    char line[256];
+    char line[2048];
     fgets(line, sizeof(line), file);        // Skip header
     while (fgets(line, sizeof(line), file)) {
         struct event e;
+        char desc[2048];
         char dateStr[11], startTimeStr[9], endTimeStr[9];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,]",
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
-               dateStr, startTimeStr, endTimeStr);
+               dateStr, startTimeStr, endTimeStr, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
-
+        e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
+        strcpy(e.description, desc);
         addToList(e);
         eventTree = insertBST(eventTree, e);
     }
@@ -192,15 +224,16 @@ void cleanPastEvents(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
+    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,eventDescription\n");
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
-                e.endTime.hour, e.endTime.minute, e.endTime.second);
+                e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.description ? e.description : "");
         curr = curr->next;
     }
     fclose(file);
@@ -335,10 +368,9 @@ void addEvent(void) {
     getchar();
     printf("Enter the description of the event (Upto 2000 characters)\n");
     while(i <= 2047 && scanf("%c", &c) && c != '\n') {
-        desc[i++] = c;
+        newEvent.description[i++] = c;
     }
-    desc[i] = '\0';
-
+    newEvent.description[i] = '\0';
     sscanf(dateStr, "%hd-%hd-%hd", &newEvent.eventDate.date, &newEvent.eventDate.month, &newEvent.eventDate.year);
     sscanf(startTimeStr, "%hu:%hu:%hu", &newEvent.startTime.hour, &newEvent.startTime.minute, &newEvent.startTime.second);
     sscanf(endTimeStr, "%hu:%hu:%hu", &newEvent.endTime.hour, &newEvent.endTime.minute, &newEvent.endTime.second);
@@ -373,11 +405,12 @@ void addEvent(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu\n",
-            newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
-            newEvent.eventDate.date, newEvent.eventDate.month, newEvent.eventDate.year,
-            newEvent.startTime.hour, newEvent.startTime.minute, newEvent.startTime.second,
-            newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second);
+    fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
+        newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
+        newEvent.eventDate.date, newEvent.eventDate.month, newEvent.eventDate.year,
+        newEvent.startTime.hour, newEvent.startTime.minute, newEvent.startTime.second,
+        newEvent.endTime.hour, newEvent.endTime.minute, newEvent.endTime.second,
+        newEvent.description ? newEvent.description : "");
     fclose(file);
 
     updateEventsOrganized(newEvent.organiserID);
@@ -440,15 +473,16 @@ void deleteEvent(void) {
         perror("Error opening events.csv");
         return;
     }
-    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
+    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,eventDescription\n");
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
-                e.endTime.hour, e.endTime.minute, e.endTime.second);
+                e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.description ? e.description : "");
         curr = curr->next;
     }
     fclose(file);
@@ -467,8 +501,10 @@ void modifyEvent(void) {
     EventBST* node = searchBST(eventTree, eventID);
     if (!node) {
         printf("Event ID not found.\n");
+        free(desc);
         return;
     }
+    event originalEvent = node->evt;
 
     char dateStr[11], startTimeStr[9], endTimeStr[9];
     printf("Enter new Event Name: ");
@@ -489,6 +525,7 @@ void modifyEvent(void) {
         desc[i++] = c;
     }
     desc[i] = '\0';
+    strcpy(node->evt.description, desc);
     sscanf(dateStr, "%hd-%hd-%hd", &node->evt.eventDate.date, &node->evt.eventDate.month, &node->evt.eventDate.year);
     sscanf(startTimeStr, "%hu:%hu:%hu", &node->evt.startTime.hour, &node->evt.startTime.minute, &node->evt.startTime.second);
     sscanf(endTimeStr, "%hu:%hu:%hu", &node->evt.endTime.hour, &node->evt.endTime.minute, &node->evt.endTime.second);
@@ -509,10 +546,14 @@ void modifyEvent(void) {
     // Validate venue
     if (!getVenueByID(node->evt.venueID)) {
         printf("Error: Invalid Venue ID.\n");
+        node->evt = originalEvent;
+        free(desc);
         return;
     }
     if (!checkVenueAvailability(node->evt.venueID, node->evt.eventDate, node->evt.startTime, node->evt.endTime)) {
         printf("Error: Venue not available.\n");
+        node->evt = originalEvent;
+        free(desc);
         return;
     }
 
@@ -530,20 +571,23 @@ void modifyEvent(void) {
     FILE *file = fopen("../Data/events.csv", "w");
     if (!file) {
         perror("Error opening events.csv");
+        free(desc);
         return;
     }
-    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime\n");
+    fprintf(file, "eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,eventDescription\n");
     curr = eventList;
     while (curr) {
         event e = curr->evt;
-        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu\n",
+        fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
                 e.eventID, e.eventName, e.organiserID, e.venueID,
                 e.eventDate.date, e.eventDate.month, e.eventDate.year,
                 e.startTime.hour, e.startTime.minute, e.startTime.second,
-                e.endTime.hour, e.endTime.minute, e.endTime.second);
+                e.endTime.hour, e.endTime.minute, e.endTime.second,
+                e.description ? e.description : "");
         curr = curr->next;
     }
     fclose(file);
+    free(desc);
     printf("Event modified!\n");
 }
 
@@ -626,4 +670,25 @@ void sortEventByID(void) {
                e.startTime.hour, e.startTime.minute, e.startTime.second,
                e.endTime.hour, e.endTime.minute, e.endTime.second);
     }
+}
+
+// Function to generate a unique event ID
+int generateEventID() {
+    FILE* file = fopen("../Data/events.csv", "r");
+    if (!file) {
+        perror("Error opening events.csv");
+        return 2000;
+    }
+    int id = 0;
+    char line[256];
+    fgets(line, sizeof(line), file);        // Skipping the header line
+    while (fgets(line, sizeof(line), file)) {
+        int currID;
+        sscanf(line, "%d,", &currID);
+        if (currID > id) {
+            id = currID;                    // Just in case file isn't sorted according to eventID
+        }
+    }
+    fclose(file);
+    return id + 1;
 }
