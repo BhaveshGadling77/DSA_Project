@@ -1,4 +1,4 @@
-#include <stdio.h>
+    #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -299,45 +299,75 @@ int listToArray(event arr[]) {
     }
     return count;
 }
+
 void updateEventsOrganized(int userID)
 {
-    FILE *fp = fopen("../Data/userOrganizer.csv", "r"); // main file to read data
-    FILE *temp = fopen("../Data/temp.csv", "w");       // temp file to write/update data
+    FILE *fp = fopen("../Data/userOrganizer.csv", "r");
+    FILE *temp = fopen("../Data/temp.csv", "w");
 
     if (!fp || !temp)
     {
-        printf("Error opening user file!\n");
+        printf("Error opening file!\n");
+        if (fp) fclose(fp);
+        if (temp) fclose(temp);
         return;
     }
 
-    char buffer[2048];
-    fgets(buffer, sizeof(buffer), fp); // skip header & take into buffer
-    fprintf(temp, "%s", buffer);       // paste buffer into temp
-
-    int OrgId, eventsOrganized;
-    unsigned long phone;
-    char name[100], email[100];
-
-    while (fscanf(fp, "%d,%[^,],%d,%lu,%s\n",
-                  &OrgId, name, &eventsOrganized, &phone, email) == 5)
+    char line[2048];
+    while (fgets(line, sizeof(line), fp))
     {
-        if (OrgId == userID)
-        {
-            eventsOrganized++;
-        }
+        
+        if (strlen(line) <= 2)
+            continue;
 
-        // curr orgaizer data into temp file
-        fprintf(temp, "%d,%s,%d,%lu,%d,%s\n",
+        line[strcspn(line, "\r\n")] = '\0';
+
+        char *token;
+        int OrgId, eventsOrganized;
+        long long phone;
+        char name[200], email[200];
+
+        token = strtok(line, ",");
+        if (!token) continue;
+        OrgId = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strcpy(name, token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        eventsOrganized = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        phone = atol(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strcpy(email, token);
+
+        if (OrgId == userID)
+            eventsOrganized++;
+
+        fprintf(temp, "%d,%s,%d,%ld,%s\n",
                 OrgId, name, eventsOrganized, phone, email);
     }
 
     fclose(fp);
     fclose(temp);
 
-    // replace old file with new file
-    remove("../Data/userOrganizer.csv");
-    rename("../Data/temp.csv", "../Data/userOrganizer.csv");
+    if (remove("../Data/userOrganizer.csv") != 0) {
+        printf("Error deleting original file!\n");
+        return;
+    }
+
+    if (rename("../Data/temp.csv", "../Data/userOrganizer.csv") != 0) {
+        printf("Error renaming temporary file!\n");
+        return;
+    }
 }
+
 // Add event
 void addEvent(void) {
     event newEvent;

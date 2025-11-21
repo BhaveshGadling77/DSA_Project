@@ -22,4 +22,5 @@ int giveUserDetails(char *email, int id, FILE *fp, char *givenName);
 int userValidation(user *a, int choice);
 long long giveValidMobileNumber();
 userStatus getDetails();
-#endif LOGIN_REGISTRATION_H
+
+#endif

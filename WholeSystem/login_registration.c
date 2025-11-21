@@ -135,7 +135,7 @@ int registerAsUser(int choice) {
 	st.status = true;
 	printf("Enter Your Phone Number:- ");
 	att->mobileNumber = giveValidMobileNumber();
-	printf("%lld", att->mobileNumber);
+	// printf("%lld", att->mobileNumber);
 	printf("Enter Your Email :- ");
 	while(scanf("%s", (att->email)) == 1) {
 		// printf("%s", att->email);
@@ -193,7 +193,7 @@ int registerAsUser(int choice) {
 		fclose(fp1);
 	}
 	printf("Your UserId is :- %d\n", att->userId);
-	fprintf(fp, "%d,%s,%lld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
+	fprintf(fp, "%d,%s,%u,%lld,%s\n", att->userId, att->name, att->noOfEventsAttended, att->mobileNumber,att->email);
 	fclose(fp);
 	free(att);
 	return 1;
