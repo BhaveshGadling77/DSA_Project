@@ -4,6 +4,8 @@
 #include "events.h"
 #include "venues.h"
 #include <stdlib.h>
+
+
 void optionsAtOrganizer() {
 	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
