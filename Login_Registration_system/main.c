@@ -15,8 +15,8 @@ int main() {
 			if (choice == 1) {
 				fflush(stdout);
 				registerAsUser(1);
+				registerAsUser(1);
 			} else {
-				registerAsUser(2);
 				registerAsUser(2);
 				printf("Registering As Attendee.\n");
 			}
