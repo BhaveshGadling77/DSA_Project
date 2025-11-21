@@ -358,6 +358,7 @@ void saveToFile(Node *head, int eventId)
 
 void loadFromFile(Node **head, int eventID)
 {
+    if (head) *head = NULL; // reset head always to avoid garbage value
     char filename[100];
     sprintf(filename, "../Data/event_%d.csv", eventID);
 
