@@ -27,61 +27,23 @@ void updateEventsAttended(int userID)
     // char buffer[500];
     // fgets(buffer, sizeof(buffer), fp);
     // fprintf(temp, "%s", buffer);
+    // char buffer[500];
+    // fgets(buffer, sizeof(buffer), fp);
+    // fprintf(temp, "%s", buffer);
 
     int id, eventsAttended;
     unsigned long long phone;
     char name[100], email[100];
 
-    // while (fscanf(fp, "%d,%[^,],%llu,%d,%[^,]\n",
-    //               &id, name, &phone, &eventsAttended, email) == 5)
-    // {
-    //     if (id == userID)
-    //     {
-    //         eventsAttended++;
-    //         printf("Event Incremented\n");
-    //     }
-    //     printf("%d,%s,%llu,%d,%s\n",
-    //             id, name, phone, eventsAttended, email);
-    //     fprintf(temp, "%d,%s,%llu,%d,%s\n",
-    //             id, name, phone, eventsAttended, email);
-    // }
-    char line[2048];
-    while (fgets(line, sizeof(line), fp)) {
-        char *p = line;
-        char *token;
-        
-        // AttendeeID
-        token = strtok(p, ",");
-        if (!token) 
-            continue;
-    
-        id = atoi(token);
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        strcpy(name, token);
-        
-        //no of events attended
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        eventsAttended = atoi(token);
-        if (id == userID) {
+    while (fscanf(fp, "%d,%[^,],%d,%lu,%[^,\n]\n",
+              &id, name, &eventsAttended, &phone, email) == 5)
+    {
+        if (id == userID)
+        {
             eventsAttended++;
         }
-        // Phone
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        phone = strtoul(token, NULL, 10);
-
-        // Email
-        token = strtok(NULL, ",\n");
-        if (!token) continue;
-        strncpy(email, token, sizeof(email)-1);
-
-        printf("%d,%s,%llu,%d,%s\n",
-                id, name, phone, eventsAttended, email);
-        fprintf(temp, "%d,%s,%d,%llu,%s\n",
+        fprintf(temp, "%d,%s,%d,%lu,%s\n",
                 id, name, eventsAttended, phone, email);
-
     }
 
     fclose(fp);
@@ -101,14 +63,14 @@ bool fetchUserData(int userID, Attendee *a)
     }
 
     // char buffer[500];
-    // fgets(buffer, sizeof(buffer), fp); 
+    // fgets(buffer, sizeof(buffer), fp);
 
     int id, eventsAttended;
     char name[100], email[100];
     unsigned long phone;
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n", 
-                  &id, name, &phone, &eventsAttended, email))
+    while (fscanf(fp, "%d,%[^,],%d,%lu,%[^,\n]\n",
+              &id, name, &eventsAttended, &phone, email) == 5)
     {
         if (id == userID)
         {
@@ -119,8 +81,7 @@ bool fetchUserData(int userID, Attendee *a)
             return true;
         }
     }
-
-
+    
     fclose(fp);
     return false;
 }
@@ -293,7 +254,7 @@ void viewAllAttendees(Node *head, int eventID)
                temp->data.phoneNo, temp->data.status);
 
         // Write same line to file
-        fprintf(fp, "%-5d,%-20s,%-25s,%-15lu,%-12s\n",
+        fprintf(fp, "%-5d %-20s %-25s %-15lu %-12s\n",
                 temp->data.attendeeID, temp->data.name, temp->data.email,
                 temp->data.phoneNo, temp->data.status);
 
@@ -401,7 +362,6 @@ void saveToFile(Node *head, int eventId)
 
 void loadFromFile(Node **head, int eventID)
 {
-    if (head) *head = NULL; // reset head always to avoid garbage value
     char filename[100];
     sprintf(filename, "../Data/event_%d.csv", eventID);
 
