@@ -2,7 +2,10 @@
 #include <stdio.h>
 #ifndef LOGIN_REGISTRATION_H
 #define LOGIN_REGISTRATION_H
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7791260 (Resolved conflicts)
 typedef struct user {
 	int userId;
 	char name[64];
@@ -23,5 +26,9 @@ int giveUserDetails(char *email, int id, FILE *fp, char *givenName);
 int userValidation(user *a, int choice);
 long long giveValidMobileNumber();
 userStatus getDetails();
+<<<<<<< HEAD
 
 #endif
+=======
+#endif LOGIN_REGISTRATION_H
+>>>>>>> 7791260 (Resolved conflicts)

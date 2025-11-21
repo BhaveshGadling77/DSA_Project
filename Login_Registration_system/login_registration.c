@@ -113,7 +113,7 @@ int userValidation(user *a, int choice) {
 	return -1;
 }
 /*Register as Both organiser and attendee based on the choice.*/
-void registerAsUser(int choice) {
+int registerAsUser(int choice) {
 	user *att = (user *)malloc(sizeof(user));
 	att->userId = 0;
 	FILE *fp;
@@ -141,6 +141,7 @@ void registerAsUser(int choice) {
 			if (userValidation(att, choice) == 1) {
 				printf("Failed to save the because user already Exist.\n");
 				isUserExist = true;
+				return 0;
 				break;
 			} else {
 				break;
@@ -153,7 +154,7 @@ void registerAsUser(int choice) {
 	}
 	if (isUserExist) {
 		printf("Please Try to login.\n");
-		return ;
+		return 0;
 	}
 	if (choice == 2) {
 		fp = fopen("../Data/userAttendee.csv", "r+");
@@ -191,6 +192,7 @@ void registerAsUser(int choice) {
 	fprintf(fp, "%d,%s,%lld,%u,%s\n", att->userId, att->name, att->mobileNumber, att->noOfEventsAttended, att->email);
 	fclose(fp);
 	free(att);
+	return 1;
 }
 int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
 	char buffer[2048];
@@ -244,7 +246,7 @@ int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
 	fclose(fp);
 	return -1;
 }
-void loginAsUser(int choice) {
+int loginAsUser(int choice) {
 	FILE *fp;
 	int id;
 	char email[200], str[200];
@@ -269,7 +271,7 @@ void loginAsUser(int choice) {
 	str[i] = '\0';
 	printf("Enter Your Registration ID : ");
 	if(scanf("%d", &id) == -1) {
-		return;
+		return 0;
 	}
 	printf("Enter Your Email Address : ");
 	while(scanf("%s", (email)) == 1) {
@@ -289,6 +291,7 @@ void loginAsUser(int choice) {
 			printf("Please Enter Your Email Again:- ");
 		}
 	}
+	return 1;
 }
 userStatus getDetails() {
 	return st; 
