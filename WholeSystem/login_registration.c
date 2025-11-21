@@ -304,3 +304,9 @@ userStatus getDetails() {
 	
 	return st; 
 }
+
+void logout() {
+	st.userId = 0;
+	st.isOrg = false;
+	st.status = false;
+}

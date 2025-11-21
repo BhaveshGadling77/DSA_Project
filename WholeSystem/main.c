@@ -4,14 +4,12 @@
 #include "events.h"
 #include "venues.h"
 #include <stdlib.h>
-
+#include <unistd.h>
 
 void optionsAtOrganizer() {
 	userStatus st = getDetails();
 	printf("Organiser Id : %d\n", st.userId);
-	loadEvents();
-	loadVenues();
-	cleanPastEvents();
+
 	int choice, check = 1;
 	while (check != -1) {
 		printf("1. Add Event.\n");
@@ -168,6 +166,9 @@ void optionsAtAttendee() {
 
 int main() {
 	int choice, check = 0;
+	loadEvents();
+	loadVenues();
+	cleanPastEvents();
 	printf("What you want to do ?\n");
 	while (check != -1) {
 		printf("1. Register\n");
@@ -181,13 +182,22 @@ int main() {
 			scanf("%d", &choice);
 			if (choice == 1) {
 				fflush(stdout);
-				registerAsUser(1);
+				userStatus st =  getDetails();
+				while(st.userId == 0) {
+					loginAsUser(1);
+					st = getDetails();
+				}
 				printf("Logged in As Organiser.\n");
 				optionsAtOrganizer();
 			} else {
-				registerAsUser(2);
+				userStatus st =  getDetails();
+				while(st.userId == 0) {
+					loginAsUser(2);
+					st = getDetails();
+				}
 				printf("Logged in As Attendee.\n");
 				optionsAtAttendee();
+				logout();
 			}
 			printf("Please Login now.\n");
 			
@@ -198,15 +208,23 @@ int main() {
 			scanf("%d", &choice);
 			if (choice == 1) {
 				fflush(stdout);
-				loginAsUser(1);
+				userStatus st = getDetails();
+				while(st.userId == 0) {
+					registerAsUser(1);
+					st = getDetails();
+				}
 				printf("Logged in As Organizer.\n");
 				optionsAtOrganizer();
 			} else {
-				loginAsUser(2);
+				userStatus st =  getDetails();
+				while(st.userId == 0) {
+					registerAsUser(2);
+					st = getDetails();
+				}
 				printf("Logged in As Attendee.\n");
 				optionsAtAttendee();
 			}
-			
+			logout();
 			
 		} else {
 			printf("Thank You for using our system.\n");
@@ -216,6 +234,7 @@ int main() {
 				sleep(1);
 				fflush(stdout);
 			}
+			logout();
 			printf("\n");
 			exit(0);
 		}

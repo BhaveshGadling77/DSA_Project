@@ -1,4 +1,4 @@
-    #include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -348,7 +348,7 @@ void updateEventsOrganized(int userID) {
         if (OrgId == userID)
             eventsOrganized++;
 
-        fprintf(temp, "%d,%s,%d,%ld,%s\n",
+        fprintf(temp, "%d,%s,%d,%lld,%s\n",
                 OrgId, name, eventsOrganized, phone, email);
     }
 
@@ -453,6 +453,7 @@ void addEvent(void) {
         fclose(file);
     else
         printf("%s file could not be created\n", filename);
+    fclose(file);
 
     // event details to be added in organiser_<userID>.csv
     sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
@@ -530,15 +531,13 @@ void listEventsOfOrganizer() {
         struct event e;
         char desc[2048];
         char dateStr[11], startTimeStr[11], endTimeStr[11], regDue[9];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^\n]",
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^,]\n",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
                dateStr, startTimeStr, endTimeStr, regDue, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
         sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
-        e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
-        strcpy(e.description, desc);
         printf("Event ID: %d\n", e.eventID);
         printf("Event Name: %s", e.eventName);
         printf("Venue ID: %d\n", e.venueID);
