@@ -16,7 +16,11 @@ void convertToLowerCase(char *s) {
     }
 }
 /*User id of the person.*/
+<<<<<<< HEAD
 static userStatus st;
+=======
+static status st;
+>>>>>>> 9fe6f18 (Finalized the functions.)
 /* Validate the email*/
 int validateEmail(char *email) {
  	int n = strlen(email);
@@ -131,8 +135,11 @@ void registerAsUser(int choice) {
 	}
 	str[i] = '\0';
 	strcpy(att->name, str);
+<<<<<<< HEAD
 	strcpy(st.name, att->name);
 	st.status = true;
+=======
+>>>>>>> 9fe6f18 (Finalized the functions.)
 	printf("Enter Your Phone Number:- ");
 	att->mobileNumber = giveValidMobileNumber();
 	printf("%lld", att->mobileNumber);
@@ -159,10 +166,16 @@ void registerAsUser(int choice) {
 	}
 	if (choice == 2) {
 		fp = fopen("../Data/userAttendee.csv", "r+");
+<<<<<<< HEAD
 		st.isOrg = false;
 	} else {
 		st.isOrg = true;
 		fp = fopen("../Data/userOrganizer.csv", "r+");
+=======
+	} else {
+		fp = fopen("../Data/userOrganizer.csv", "r+");
+		
+>>>>>>> 9fe6f18 (Finalized the functions.)
 	}
 	if (fp == NULL) {
 		printf("This is error.\n");
@@ -182,9 +195,14 @@ void registerAsUser(int choice) {
 		newAttId = atoi(strtok(buffer, ","));
 	}
 	att->userId = ++newAttId;
+<<<<<<< HEAD
 	st.userId = att->userId;
 	if (choice == 1) {
 		char filename[128], num[16];
+=======
+	if (choice == 1) {
+		char filename[128], num[15];
+>>>>>>> 9fe6f18 (Finalized the functions.)
 		sprintf(num,"%d.csv", att->userId);
 		strcpy(filename, "../Data/Organizer_");
 		strcat(filename, num);
@@ -255,15 +273,25 @@ void loginAsUser(int choice) {
 	if (choice == 1) {
 		// this is the choice for the organiser.
 		fp = fopen("../Data/userOrganizer.csv", "r");
+<<<<<<< HEAD
 		st.isOrg = true;
 
 	} else {
 		// this is the choice for the attendee.
 		st.isOrg = false;
+=======
+
+	} else {
+		// this is the choice for the attendee.
+>>>>>>> 9fe6f18 (Finalized the functions.)
 		fp = fopen("../Data/userAttendee.csv", "r");
 	}
 	printf("For login you need to have the your Registration id and email\n");
 	printf("Enter Your Name : ");
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 9fe6f18 (Finalized the functions.)
 	char ch;
 	getchar();
 	int i = 0;
@@ -272,8 +300,11 @@ void loginAsUser(int choice) {
 		str[i++] = ch;
 	}
 	str[i] = '\0';
+<<<<<<< HEAD
 	strcpy(st.name, str);
 	printf("%s", st.name);
+=======
+>>>>>>> 9fe6f18 (Finalized the functions.)
 	printf("Enter Your Registration ID : ");
 	if(scanf("%d", &id) == -1) {
 		return;
@@ -297,7 +328,11 @@ void loginAsUser(int choice) {
 		}
 	}
 }
+<<<<<<< HEAD
 userStatus getDetails() {
 	
+=======
+status getDetails() {
+>>>>>>> 9fe6f18 (Finalized the functions.)
 	return st; 
 }
