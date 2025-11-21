@@ -1,33 +1,32 @@
-/* Only Logic of the functions should be here.*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include "attendee.h"
 
-// get current date & time function
 void getCurrentDateTime(char *buffer)
 {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     sprintf(buffer, "%02d-%02d-%d %02d:%02d", t->tm_mday, t->tm_mon + 1, t->tm_year + 1900, t->tm_hour, t->tm_min);
-    // example format
-    // 26-10-2024 14:30
 }
+
 void updateEventsAttended(int userID)
 {
-    FILE *fp = fopen("../Data/userAttendee.csv", "r"); // main file to read data
-    FILE *temp = fopen("../Data/temp.csv", "w");       // temp file to write/update data
+    FILE *fp = fopen("../Data/userAttendee.csv", "r");
+    FILE *temp = fopen("../Data/temp.csv", "w");
 
     if (!fp || !temp)
     {
         printf("Error opening user file!\n");
+        if(fp) fclose(fp);
+        if(temp) fclose(temp);
         return;
     }
 
     char buffer[500];
-    fgets(buffer, sizeof(buffer), fp); // skip header & take into buffer
-    fprintf(temp, "%s", buffer);       // paste buffer into temp
+    fgets(buffer, sizeof(buffer), fp);
+    fprintf(temp, "%s", buffer);
 
     int id, eventsAttended;
     unsigned long phone;
@@ -40,8 +39,6 @@ void updateEventsAttended(int userID)
         {
             eventsAttended++;
         }
-
-        // curr user data into temp file
         fprintf(temp, "%d,%s,%lu,%d,%s\n",
                 id, name, phone, eventsAttended, email);
     }
@@ -49,36 +46,31 @@ void updateEventsAttended(int userID)
     fclose(fp);
     fclose(temp);
 
-    // replace old file with new file
     remove("../Data/userAttendee.csv");
     rename("../Data/temp.csv", "../Data/userAttendee.csv");
 }
+
 bool fetchUserData(int userID, Attendee *a)
 {
-    FILE *fp;
-    fp = fopen("../Data/userAttendee.csv", "r"); // open in read mode
+    FILE *fp = fopen("../Data/userAttendee.csv", "r");
     if (!fp)
     {
-        printf("Error, User databases not found!\n");
+        printf("Error: User database not found!\n");
         return false;
     }
 
-    // to skip header i.e userId, name, phone no., noOfEventsAttended, email
     char buffer[500];
     fgets(buffer, sizeof(buffer), fp);
 
-    // search for user
-    int id;
-    char name[100];
-    char email[100];
-    int eventsAttended;
+    int id, eventsAttended;
+    char name[100], email[100];
     unsigned long phone;
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,]\n", &id, name, &phone, &eventsAttended, email) == 5)
+    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n", 
+                  &id, name, &phone, &eventsAttended, email) == 5)
     {
         if (id == userID)
         {
-            // found user, now into event registration details
             strcpy(a->name, name);
             strcpy(a->email, email);
             a->phoneNo = phone;
@@ -86,60 +78,61 @@ bool fetchUserData(int userID, Attendee *a)
             return true;
         }
     }
+    
     fclose(fp);
-    return false; // user not found
+    return false;
 }
+
 void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 {
     if (!user->status)
-    { // logged in or not status
-        printf("\nError, Please login first !\n");
+    {
+        printf("\nError: Please login first!\n");
+        return;
+    }
+    // Organizers cannot register as attendees
+    if (user->isOrg)
+    {
+        printf("\nError: Organizers cannot register as attendees!\n");
         return;
     }
 
-    // check if user is organizer (cuz organizers shouldn't register as attendee)
-    if (user->isOrg)
-    {
-        printf("\nError, Organizer cannot register as attendees!\n");
-        return;
-    }
-    // check if already registered
+    // Check if already registered
     Node *temp = *head;
     while (temp != NULL)
     {
         if (temp->data.attendeeID == user->userId)
         {
-            printf("\n You're already registered for this event!\n");
+            printf("\nYou're already registered for this event!\n");
             return;
         }
         temp = temp->next;
     }
 
-    // else register new attendee
-    // fetch user data from userAttendee.csv
+    // Fetch user data
     Attendee a;
     if (!fetchUserData(user->userId, &a))
     {
-        printf("\n Error, Couldn't fetch user data!\n");
+        printf("\nError: Couldn't fetch user data!\n");
         return;
     }
 
-    // set attendee specific data
+    // Set attendee data
     a.attendeeID = user->userId;
     a.eventID = eventID;
     strcpy(a.status, "Registered");
     getCurrentDateTime(a.registrationDate);
 
-    // create node & insert in linked list
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->data = a;
-    node->next = *head;
-    *head = node;
+    // Create and insert node
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = a;
+    newNode->next = *head;
+    *head = newNode;
 
-    // save attendee to event file
+    // save to file too
     saveToFile(*head, eventID);
 
-    // update no. of events attended
+    // Update events attended by attendee
     updateEventsAttended(user->userId);
 
     printf("\nSuccessfully registered for event %d!\n", eventID);
@@ -147,6 +140,12 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 
 void unregisterAttendee(Node **head, userStatus *user)
 {
+    if (*head == NULL)
+    {
+        printf("\nNo registrations found.\n");
+        return;
+    }
+
     Node *temp = *head, *prev = NULL;
 
     while (temp != NULL && temp->data.attendeeID != user->userId)
@@ -154,42 +153,61 @@ void unregisterAttendee(Node **head, userStatus *user)
         prev = temp;
         temp = temp->next;
     }
+
     if (temp == NULL)
     {
-        printf("\n Attendee Not Found.\n");
+        printf("\nYou are not registered for any event.\n");
         return;
     }
 
+    int eventID = temp->data.eventID;
+    
+    // Unlink node
     if (prev == NULL)
-        *head = temp->next; // temp is not null
+        *head = temp->next;
     else
         prev->next = temp->next;
 
-    saveToFile(*head, temp->data.eventID);
-    printf("\n Unregistered: %s\n", temp->data.name);
+    printf("\nUnregistered: %s from event %d\n", temp->data.name, eventID);
+    
+    // Free the node
     free(temp);
+    
+    // Save updated list
+    saveToFile(*head, eventID);
 }
 
 void markAttendance(Node *head)
 {
+    if (head == NULL)
+    {
+        printf("\nNo attendees registered.\n");
+        return;
+    }
+
     int id;
-    printf("\nAttendee ID: ");
+    printf("\nEnter Attendee ID: ");
     scanf("%d", &id);
 
     Node *temp = head;
-
     while (temp != NULL)
     {
         if (temp->data.attendeeID == id)
         {
+            if (strcmp(temp->data.status, "Present") == 0)
+            {
+                printf("\nAlready marked present: %s\n", temp->data.name);
+                return;
+            }
+            
             strcpy(temp->data.status, "Present");
             saveToFile(head, temp->data.eventID);
-            printf("\n Marked Present: %s\n", temp->data.name);
+            printf("\nMarked Present: %s\n", temp->data.name);
             return;
         }
         temp = temp->next;
     }
-    printf("\n Id Not Found.\n");
+    printf("\nAttendee ID not found.\n");
 }
 
 void viewAllAttendees(Node *head, int eventID)
@@ -245,8 +263,14 @@ void viewAllAttendees(Node *head, int eventID)
 
 void searchAttendee(Node *head)
 {
+    if (head == NULL)
+    {
+        printf("\nNo attendees to search.\n");
+        return;
+    }
+
     int id;
-    printf("\n Attendee ID: ");
+    printf("\nEnter Attendee ID: ");
     scanf("%d", &id);
 
     Node *temp = head;
@@ -254,21 +278,29 @@ void searchAttendee(Node *head)
     {
         if (temp->data.attendeeID == id)
         {
-            printf("\n--- Attendee Details ---");
+            printf("\n--- Attendee Details ---\n");
             printf("ID: %d\n", temp->data.attendeeID);
             printf("Name: %s\n", temp->data.name);
             printf("Email: %s\n", temp->data.email);
             printf("Phone: %lu\n", temp->data.phoneNo);
+            printf("Event ID: %d\n", temp->data.eventID);
             printf("Status: %s\n", temp->data.status);
-            printf("Registered on: %s\n", temp->data.registrationDate);
+            printf("Registered: %s\n", temp->data.registrationDate);
             return;
         }
         temp = temp->next;
     }
-    printf("\n Not Found\n");
+    printf("\nAttendee not found.\n");
 }
+
 void viewStatistics(Node *head)
 {
+    if (head == NULL)
+    {
+        printf("\nNo data to generate statistics.\n");
+        return;
+    }
+
     int total = 0, present = 0;
     Node *temp = head;
 
@@ -279,70 +311,80 @@ void viewStatistics(Node *head)
             present++;
         temp = temp->next;
     }
-    printf("\n--- Statistics---");
+
+    printf("\n--- Statistics ---\n");
     printf("Total Registered: %d\n", total);
     printf("Present: %d\n", present);
     printf("Absent: %d\n", total - present);
+    
     if (total > 0)
     {
-        // attendance percentage
-        // %% to show % symbol
         printf("Attendance: %.2f%%\n", (float)present / total * 100);
     }
 }
+
 void saveToFile(Node *head, int eventId)
 {
     char filename[100];
-
-    // sprintf function use to write to the file
     sprintf(filename, "../Data/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
     {
-        printf("Couldn't create file.\n");
+        printf("Error: Couldn't create file, check if folder exists.%s\n", filename);
         return;
     }
-    // header line
-    fprintf(fp, "AttendeeID,Name,Email,Phone,EventId,Status,RegistrationDate\n");
+
+    // Write header
+    fprintf(fp, "AttendeeID,Name,Email,Phone,EventID,Status,RegistrationDate\n");
 
     Node *temp = head;
     while (temp != NULL)
     {
         fprintf(fp, "%d,%s,%s,%lu,%d,%s,%s\n",
-                temp->data.attendeeID, temp->data.name, temp->data.email, temp->data.phoneNo, temp->data.eventID,
-                temp->data.status, temp->data.registrationDate);
+                temp->data.attendeeID, 
+                temp->data.name, 
+                temp->data.email, 
+                temp->data.phoneNo, 
+                temp->data.eventID,
+                temp->data.status, 
+                temp->data.registrationDate);
         temp = temp->next;
     }
+    
     fclose(fp);
-    printf("File '../Data/event_%d.csv' has been saved.", eventId);
+    printf("Data saved to %s\n", filename);
 }
+
 void loadFromFile(Node **head, int eventID)
 {
     char filename[100];
-    sprintf(filename, "../Data/event_%d.csv", eventID); //  loads file
+    sprintf(filename, "../Data/event_%d.csv", eventID);
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
+    {
         return;
+    }
 
+    // Skip header
     char buffer[500];
-    fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
-    // as we've wrote header line before saving file.
+    fgets(buffer, sizeof(buffer), fp);
 
     Attendee a;
-    // delimiters are handled.
     while (fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n",
-                  &a.attendeeID, a.name, a.email, &a.phoneNo, &a.eventID,
-                  a.status, a.registrationDate) == 7)
+                  &a.attendeeID, a.name, a.email, &a.phoneNo, 
+                  &a.eventID, a.status, a.registrationDate) == 7)
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
     }
+    
     fclose(fp);
 }
+
 void freeList(Node *head)
 {
     Node *temp;
