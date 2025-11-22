@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 *.exe
 *.out
-*.o
+*.o 
