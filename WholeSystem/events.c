@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -169,7 +168,6 @@ void loadEvents(void) {
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
-        sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
         strcpy(e.description, desc);
