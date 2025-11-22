@@ -5,7 +5,6 @@
 #include "venues.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <unistd.h>
 
 void optionsAtOrganizer() {
     userStatus st = getDetails();
@@ -40,26 +39,6 @@ void optionsAtOrganizer() {
 
         case 4:
             printf("\n View All Attendees.\n");
-            int eventId;
-            printf("Enter the Event Id which you want to view.\n");
-            scanf("%d", &eventId);
-            Node *head = NULL;
-            loadFromFile(&head, eventId);
-            viewAllAttendees(head, eventId);
-            freeList(head);
-            break;
-        case 4:
-            printf("\n View All Attendees.\n");
-            int eventId;
-            printf("Enter the Event Id which you want to view.\n");
-            scanf("%d", &eventId);
-            Node *head = NULL;
-            loadFromFile(&head, eventId);
-            viewAllAttendees(head, eventId);
-            freeList(head);
-            break;
-        case 4:
-            printf("\n View All Attendees.\n");
             printf("Enter the Event Id which you want to view.\n");
             scanf("%d", &eventId);
             if (!isYourEvent(eventId)) {
@@ -72,22 +51,6 @@ void optionsAtOrganizer() {
             freeList(head);
             break;
 
-        case 5:
-            printf("\nMark All Attendees.\n");
-            printf("Enter the Event Id which you want to mark Attendee.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            markAttendance(head);
-            freeList(head);
-            break;
-        case 5:
-            printf("\nMark All Attendees.\n");
-            printf("Enter the Event Id which you want to mark Attendee.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            markAttendance(head);
-            freeList(head);
-            break;
         case 5:
             printf("\nMark All Attendees.\n");
             printf("Enter the Event Id which you want to mark Attendee.\n");
@@ -119,30 +82,6 @@ void optionsAtOrganizer() {
         case 7:
             listEventsOfOrganizer();
             break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
 
         case 8:
             viewVenues();
@@ -157,25 +96,7 @@ void optionsAtOrganizer() {
             }
             printf("\n");
             return;
-        case 8:
-            viewVenues();
-            printf("List of Venues\n");
-            break;
-        case 9:
-            printf("\nLogging out");
-            for (int i = 0; i < 3; i++) {
-                printf(".");
-                fflush(stdout);
-                sleep(1);
-            }
-            printf("\n");
-            return;
 
-        default:
-            printf("\nInvalid Options.\n");
-            break;
-        }
-    }
         default:
             printf("\nInvalid Options.\n");
             break;
@@ -224,10 +145,6 @@ void optionsAtAttendee() {
             sortEventChronological();
             printf("\nSorted the Events by There chronological order.\n");
             break;
-        case 3:
-            sortEventChronological();
-            printf("\nSorted the Events by There chronological order.\n");
-            break;
 
         case 4:
             sortEventByID();
@@ -252,35 +169,7 @@ void optionsAtAttendee() {
             }
             printf("\n");
             return;
-        case 4:
-            sortEventByID();
-            printf("\nSorted the Events by There IDs.\n");
-            break;
-        
-        case 5:
-            sortEventByTime();
-            printf("\nSorted the Events by there Timings.\n");
-            break;
-        
-        case 6:
-            viewEvents();
-            printf("\nList All the Events.\n");
-            break;
-        case 7:
-            printf("\nLogging out");
-            for (int i = 0; i < 3; i++) {
-                printf(".");
-                fflush(stdout);
-                sleep(1);
-            }
-            printf("\n");
-            return;
 
-        default:
-            printf("\nInvalid Options.\n");
-            break;
-        }
-    }
         default:
             printf("\nInvalid Options.\n");
             break;
