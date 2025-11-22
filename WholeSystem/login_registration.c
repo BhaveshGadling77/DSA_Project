@@ -114,89 +114,88 @@ int userValidation(user *a, int choice) {
 }
 /*Register as Both organiser and attendee based on the choice.*/
 int registerAsUser(int choice) {
-	user *att = (user *)malloc(sizeof(user));
-	att->userId = 0;
-	FILE *fp;
-	att->noOfEventsAttended = 0;
-	char str[64];
-	int newAttId;
-	bool isUserExist = false;
-	printf("Enter Your Name : ");
-	char ch;
-	getchar();
-	int i = 0;
-	/* Taking the name input of person. */
-	while ((scanf("%c", &ch) != -1) && ch != '\n') {
-		str[i++] = ch;
-	}
-	str[i] = '\0';
-	strcpy(att->name, str);
-	strcpy(st.name, att->name);
-	st.status = true;
-	printf("Enter Your Phone Number:- ");
-	att->mobileNumber = giveValidMobileNumber();
-	// printf("%lld", att->mobileNumber);
-	printf("Enter Your Email :- ");
-	while(scanf("%s", (att->email)) == 1) {
-		// printf("%s", att->email);
-		if (validateEmail(att->email)) {
-			if (userValidation(att, choice) == 1) {
-				printf("Failed to save the because user already Exist.\n");
-				isUserExist = true;
-				return 0;
-				break;
-			} else {
-				break;
-			}
-		} else {
-			/*Continue the Loop */
-			printf("Email Should be valid.\n");
-			printf("Please Enter Your Email Again:- ");
-		}
-	}
-	if (isUserExist) {
-		printf("Please Try to login.\n");
-		return 0;
-	}
-	if (choice == 2) {
-		fp = fopen("../Data/userAttendee.csv", "r+");
-		st.isOrg = false;
-	} else {
-		st.isOrg = true;
-		fp = fopen("../Data/userOrganizer.csv", "r+");
-	}
-	if (fp == NULL) {
-		printf("This is error.\n");
-		perror("Error in opening userAttendee.csv!\n");
-		exit(1);
-	}
-	fseek(fp, 0, SEEK_END);
-	if (ftell(fp) == 0) {
-		printf("this is empty file.\n");
-		att->userId = 0;
-	} else {
-		fseek(fp, 0, SEEK_SET);
-		char buffer[2048];
-		while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-			;
-		}
-		newAttId = atoi(strtok(buffer, ","));
-	}
-	att->userId = ++newAttId;
-	st.userId = att->userId;
-	if (choice == 1) {
-		char filename[128], num[16];
-		sprintf(num,"%d.csv", att->userId);
-		strcpy(filename, "../Data/Organizer_");
-		strcat(filename, num);
-		FILE *fp1 = fopen(filename, "w");
-		fclose(fp1);
-	}
-	printf("Your UserId is :- %d\n", att->userId);
-	fprintf(fp, "%d,%s,%u,%lld,%s\n", att->userId, att->name, att->noOfEventsAttended, att->mobileNumber,att->email);
-	fclose(fp);
-	free(att);
-	return 1;
+    user *att = (user *)malloc(sizeof(user));
+    att->userId = 0;
+    FILE *fp;
+    att->noOfEventsAttended = 0;
+    char str[64];
+    int newAttId;
+    bool isUserExist = false;
+    printf("Enter Your Name : ");
+    char ch;
+    getchar();
+    int i = 0;
+    /* Taking the name input of person. */
+    while ((scanf("%c", &ch) != -1) && ch != '\n') {
+        str[i++] = ch;
+    }
+    str[i] = '\0';
+    strcpy(att->name, str);
+    strcpy(st.name, att->name);
+    st.status = true;
+    printf("Enter Your Phone Number:- ");
+    att->mobileNumber = giveValidMobileNumber();
+    // printf("%lld", att->mobileNumber);
+    printf("Enter Your Email :- ");
+    while(scanf("%s", (att->email)) == 1) {
+        // printf("%s", att->email);
+        if (validateEmail(att->email)) {
+            if (userValidation(att, choice) == 1) {
+                printf("Failed to save the because user already Exist.\n");
+                isUserExist = true;
+                return 0;
+                break;
+            } else {
+                break;
+            }
+        } else {
+            /*Continue the Loop */
+            printf("Email Should be valid.\n");
+            printf("Please Enter Your Email Again:- ");
+        }
+    }
+    if (isUserExist) {
+        printf("Please Try to login.\n");
+        return 0;
+    }
+    if (choice == 2) {
+        fp = fopen("../Data/userAttendee.csv", "r+");
+        st.isOrg = false;
+    } else {
+        st.isOrg = true;
+        fp = fopen("../Data/userOrganizer.csv", "r+");
+    }
+    if (fp == NULL) {
+        printf("This is error.\n");
+        perror("Error in opening userAttendee.csv!\n");
+        exit(1);
+    }
+    fseek(fp, 0, SEEK_END);
+    if (ftell(fp) == 0) {
+        printf("this is empty file.\n");
+        att->userId = 0;
+    } else {
+        fseek(fp, 0, SEEK_SET);
+        char buffer[2048];
+        while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+            ;
+        }
+        newAttId = atoi(strtok(buffer, ","));
+    }
+    att->userId = ++newAttId;
+    st.userId = att->userId;
+    if (choice == 1) {
+        char filename[128];
+        /* fixed: properly build filename */
+        sprintf(filename,"../Data/Organizer_%d.csv", att->userId);
+        FILE *fp1 = fopen(filename, "w");
+        if (fp1) fclose(fp1);
+    }
+    printf("Your UserId is :- %d\n", att->userId);
+    fprintf(fp, "%d,%s,%u,%lld,%s\n", att->userId, att->name, att->noOfEventsAttended, att->mobileNumber,att->email);
+    fclose(fp);
+    free(att);
+    return 1;
 }
 int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
 	char buffer[2048];
@@ -245,6 +244,7 @@ int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
 		} else if (strcmp(emailF, email) == 0 && strcmp(name, givenName) == 0) {
 			printf("Names and Email Details are correct but userId is wrong.\n");
 		}
+		memset(buffer, 0, 2048);
 	}
 	printf("Failed to Logged in User Dosen't exist.\n");
 	fclose(fp);
@@ -275,7 +275,7 @@ int loginAsUser(int choice) {
 	}
 	str[i] = '\0';
 	strcpy(st.name, str);
-	printf("%s", st.name);
+	// printf("%s", st.name);
 	printf("Enter Your Registration ID : ");
 	if(scanf("%d", &id) == -1) {
 		return 0;

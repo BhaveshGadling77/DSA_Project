@@ -4,8 +4,8 @@
 #include <time.h>
 #include "events.h"
 #include "venues.h"
+#include "login_registration.h"
 #include <errno.h>
-#include "../WholeSystem/login_registration.h"
 
 EventNode *eventList = NULL;                            // Linked list for sequential access
 EventBST *eventTree = NULL;                             // BST for fast search/delete by ID
@@ -168,7 +168,7 @@ void loadEvents(void) {
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
-        sscanf(regDue,  &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
+        sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
         e.description = (char*)malloc(sizeof(char) * (strlen(desc) + 1));
         strcpy(e.description, desc);
         addToList(e);
@@ -371,7 +371,8 @@ void addEvent(void) {
     event newEvent;
     int i = 0;
     char dateStr[11], startTimeStr[9], endTimeStr[9], c, regDue[9];
-    (newEvent.description) = (char*)malloc(sizeof(char) * 2048);
+    /* allocate one extra byte for terminating NUL */
+    (newEvent.description) = (char*)malloc(sizeof(char) * 2049);
     userStatus user = getDetails();
     /*
     printf("Enter Event ID: ");
@@ -395,7 +396,8 @@ void addEvent(void) {
     scanf("%8s", regDue);
     getchar();
     printf("Enter the description of the event (Upto 2000 characters)\n");
-    while(i <= 2047 && scanf("%c", &c) && c != '\n') {
+    /* prevent overflow: allow at most 2048 chars, leave room for NUL */
+    while (i < 2048 && scanf("%c", &c) == 1 && c != '\n') {
         newEvent.description[i++] = c;
     }
     newEvent.description[i] = '\0';
@@ -449,11 +451,11 @@ void addEvent(void) {
     char filename[32];
     sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
-    if (file)
+    if (file) {
         fclose(file);
-    else
+    } else {
         printf("%s file could not be created\n", filename);
-    fclose(file);
+    }
 
     // event details to be added in organiser_<userID>.csv
     sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
@@ -523,32 +525,38 @@ void deleteEvent(void) {
 void listEventsOfOrganizer() {
     userStatus st = getDetails();
     char line[2048];
-    char filename[32];
-    sprintf(filename, "Organizer_%d", st.userId);
+    char filename[64];
+    
+    sprintf(filename, "../Data/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");
+    if (!fp) {
+        printf("No organizer file found for user %d\n", st.userId);
+        return;
+    }
     printf("List of Events organised:- \n\n");
-    while (fgets(line, sizeof(line), fp)) {
+    while (fgets(line, sizeof(line), fp) != NULL) {
         struct event e;
         char desc[2048];
         char dateStr[11], startTimeStr[11], endTimeStr[11], regDue[9];
-        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^,]\n",
+        sscanf(line, "%d,%31[^,],%d,%d,%10[^,],%8[^,],%8[^,],%8[^,],%2047[^\n]",
                &e.eventID, e.eventName, &e.organiserID, &e.venueID,
                dateStr, startTimeStr, endTimeStr, regDue, desc);
         sscanf(dateStr, "%hd-%hd-%hd", &e.eventDate.date, &e.eventDate.month, &e.eventDate.year);
         sscanf(startTimeStr, "%hu:%hu:%hu", &e.startTime.hour, &e.startTime.minute, &e.startTime.second);
         sscanf(endTimeStr, "%hu:%hu:%hu", &e.endTime.hour, &e.endTime.minute, &e.endTime.second);
         sscanf(regDue, "%hu:%hu:%hu", &e.regDue.hour, &e.regDue.minute, &e.regDue.second);
-        printf("Event ID: %d\n", e.eventID);
-        printf("Event Name: %s", e.eventName);
+        printf("\nEvent ID: %d\n", e.eventID);
+        printf("Event Name: %s\n", e.eventName);
         printf("Venue ID: %d\n", e.venueID);
         printf("Date: %s\n", dateStr);
         printf("Starting Time: %s\n", startTimeStr);
-        printf("End Time: %s\n", startTimeStr);
+        printf("End Time: %s\n", endTimeStr);
         printf("Registration Ends at: %s\n", regDue);
         printf("Description: %s\n", desc);
     }
+    fclose(fp);
 }
-// modify the event details organizer_<userId>.csv
+// modify the event details organizer_<UserId>.csv
 void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
@@ -561,7 +569,7 @@ void modifyEventDetailsInOrganizerFile(event modified) {
         return;
     }
     char line[4084];
-    while (fgets(line, sizeof(line), fp)) {
+    while (fgets(line, sizeof(line), fp) != NULL) {
         struct event e;
         char desc[2048];
         char dateStr[11], startTimeStr[9], endTimeStr[9], regDue[9];
@@ -603,7 +611,8 @@ void modifyEventDetailsInOrganizerFile(event modified) {
 void modifyEvent(void) {
     int eventID, i = 0;
     char regDue[9], c;
-    char *desc = (char*)malloc(sizeof(char) * 2048);
+    /* allocate one extra byte for terminating NUL */
+    char *desc = (char*)malloc(sizeof(char) * 2049);
     printf("Enter Event ID to modify: ");
     scanf("%d", &eventID);
     userStatus user = getDetails();
@@ -618,8 +627,9 @@ void modifyEvent(void) {
 
     char dateStr[11], startTimeStr[9], endTimeStr[9];
     printf("Enter new Event Name: ");
-    scanf("%s[^\n]", node->evt.eventName);
+    scanf(" %31[^\n]", node->evt.eventName);   // fixed pattern
     node->evt.organiserID = user.userId;
+    printf("Enter Venue ID: ");
     scanf("%d", &node->evt.venueID);
     printf("Enter new Event Date (DD-MM-YYYY): ");
     scanf("%10s", dateStr);
@@ -631,10 +641,17 @@ void modifyEvent(void) {
     scanf("%8s", regDue);
     getchar();
     printf("Enter the description of the event (Upto 2000 characters)\n");
-    while(i <= 2047 && scanf("%c", &c) && c != '\n') {
+    /* prevent overflow: allow at most 2048 chars, leave room for NUL */
+    while (i < 2048 && scanf("%c", &c) == 1 && c != '\n') {
         desc[i++] = c;
     }
     desc[i] = '\0';
+
+    /* replace old description buffer safely */
+    if (node->evt.description) {
+        free(node->evt.description);
+    }
+    node->evt.description = (char*)malloc(strlen(desc) + 1);
     strcpy(node->evt.description, desc);
     sscanf(dateStr, "%hd-%hd-%hd", &node->evt.eventDate.date, &node->evt.eventDate.month, &node->evt.eventDate.year);
     sscanf(startTimeStr, "%hu:%hu:%hu", &node->evt.startTime.hour, &node->evt.startTime.minute, &node->evt.startTime.second);
