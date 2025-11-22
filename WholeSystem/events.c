@@ -350,6 +350,7 @@ void updateEventsOrganized(int userID) {
 
         fprintf(temp, "%d,%s,%d,%lld,%s\n",
                 OrgId, name, eventsOrganized, phone, email);
+        memset(line, 0, sizeof(line));
     }
 
     fclose(fp);
@@ -434,6 +435,7 @@ void addEvent(void) {
     if (!file) {
         perror("Error opening events.csv");
         return;
+
     }
     fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
@@ -560,6 +562,7 @@ void listEventsOfOrganizer() {
         printf("End Time: %s\n", endTimeStr);
         printf("Registration Ends at: %s\n", regDue);
         printf("Description: %s\n", desc);
+        memset(line, 0, sizeof(line));
     }
     fclose(fp);
 }
@@ -607,6 +610,7 @@ void modifyEventDetailsInOrganizerFile(event modified) {
                 e.regDue.hour, e.regDue.minute, e.regDue.second,
                 e.description ? e.description : "");
         }
+        memset(line, 0, sizeof(line));
     }
     fclose(fp);
     fclose(temp);
@@ -831,6 +835,7 @@ int generateEventID() {
         if (currID > id) {
             id = currID;                    // Just in case file isn't sorted according to eventID
         }
+        
     }
     fclose(file);
     return id + 1;

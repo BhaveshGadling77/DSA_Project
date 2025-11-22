@@ -15,6 +15,7 @@ void convertToLowerCase(char *s) {
         s[i] = tolower(s[i]);
     }
 }
+
 /*User id of the person.*/
 static userStatus st;
 /* Validate the email*/
