@@ -5,8 +5,6 @@
 #include <time.h>
 #include "events.h"
 #include "venues.h"
-#include <errno.h>
-
 #include "login_registration.h"
 #include <errno.h>
 
@@ -789,7 +787,7 @@ void sortEventByTime(void) {
 
 // Function to sort the events chronologically
 void sortEventChronological(void) {
-    event arr[2048];
+    event arr[200];
     int count = listToArray(arr);
     quickSort(arr, 0, count - 1, compareChronological);
     printf("\nEvents Sorted Chronologically:\n");
