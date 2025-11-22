@@ -1,3 +1,6 @@
 AttendeeID,Name,Email,Phone,EventID,Status,RegistrationDate
+<<<<<<< HEAD
 7,eiuirgei,yreiur@8fere.com,0,3,Registered,21-11-2025 16:46
+=======
+>>>>>>> 3687b7c (Changes made)
 6,bhavesh,bhau@gmail.com,0,3,Registered,21-11-2025 16:40

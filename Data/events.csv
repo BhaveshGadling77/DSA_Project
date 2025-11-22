@@ -1,4 +1,5 @@
 eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDescription
+<<<<<<< HEAD
 3,Startup Meet 129,9,92,04-08-2029,23:21:20,07:21:20,00:784:00,
 4,Startup Meet 181,37,79,19-12-2030,12:07:19,20:07:19,00:784:00,
 6,Sports Meet 274,31,19,08-12-2030,12:20:41,20:20:41,00:784:00,
@@ -136,3 +137,145 @@ eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDe
 160,Tech Fest 229,1,22,24-10-2027,21:59:02,05:59:02,00:784:00,
 162,Cultural Night 60,4,22,04-06-2028,12:59:40,20:59:40,00:784:00,
 165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,00:784:00,
+=======
+3,Startup Meet 129,9,92,04-08-2029,23:21:20,07:21:20,21:21:20,Networking event for entrepreneurs
+4,Startup Meet 181,37,79,19-12-2030,12:07:19,20:07:19,10:07:19,Pitch competition for new startups
+6,Sports Meet 274,31,19,08-12-2030,12:20:41,20:20:41,10:20:41,Annual inter-college sports tournament
+7,Music Fest 298,44,68,24-12-2029,01:00:19,09:00:19,23:00:19,Live music performances festival
+8,Seminar 39,22,76,15-06-2027,03:26:53,11:26:53,01:26:53,Industry expert seminar series
+10,Sports Meet 286,28,41,04-05-2028,22:54:48,06:54:48,20:54:48,Track and field championship
+11,Seminar 176,22,81,08-11-2027,05:45:56,13:45:56,03:45:56,Research methodology workshop
+13,Music Fest 248,38,30,27-03-2028,16:10:27,00:10:27,14:10:27,Spring music celebration
+14,Music Fest 155,38,72,12-10-2029,23:48:08,07:48:08,21:48:08,Jazz and blues festival
+15,Tech Fest 247,9,81,03-05-2027,18:37:17,02:37:17,16:37:17,Technology innovation showcase
+16,AI Workshop 17,24,70,08-05-2028,19:13:06,03:13:06,17:13:06,Deep learning practical workshop
+17,Hackathon 136,1,32,26-09-2029,15:40:25,23:40:25,13:40:25,24-hour coding challenge
+18,AI Workshop 87,21,95,09-05-2029,12:58:28,20:58:28,10:58:28,Natural language processing workshop
+19,Seminar 149,34,65,22-09-2029,22:38:42,06:38:42,20:38:42,Leadership development seminar
+21,Music Fest 13,46,64,04-07-2030,16:54:06,00:54:06,14:54:06,Summer music extravaganza
+22,Seminar 226,32,47,20-05-2029,10:44:23,18:44:23,08:44:23,Business strategy seminar
+23,AI Workshop 106,34,60,17-03-2027,07:44:52,15:44:52,05:44:52,Computer vision techniques
+24,Robotics Expo 151,10,82,03-07-2026,18:40:00,02:40:00,16:40:00,Autonomous systems exhibition
+25,Music Fest 233,3,46,22-11-2028,19:52:39,03:52:39,17:52:39,Classical music concert series
+28,Seminar 15,10,17,13-02-2029,22:27:41,06:27:41,20:27:41,Career development workshop
+29,Tech Fest 115,35,13,17-11-2028,15:09:52,23:09:52,13:09:52,Technology and society conference
+31,Sports Meet 147,19,2,05-11-2030,00:23:27,08:23:27,22:23:27,Basketball tournament finals
+32,Hackathon 136,31,67,18-10-2029,16:03:55,00:03:55,14:03:55,AI innovation hackathon
+33,Sports Meet 126,39,5,07-12-2026,10:36:08,18:36:08,08:36:08,Cricket championship match
+35,Tech Fest 204,33,59,12-03-2030,21:34:04,05:34:04,19:34:04,Emerging technologies expo
+36,Cultural Night 36,24,68,23-01-2026,06:40:02,14:40:02,04:40:02,International cultural celebration
+37,Seminar 211,34,20,26-02-2027,16:51:57,00:51:57,14:51:57,Digital marketing strategies
+39,Tech Fest 16,50,19,04-08-2028,05:44:56,13:44:56,03:44:56,Cybersecurity conference
+40,Seminar 207,14,85,05-01-2027,15:36:37,23:36:37,13:36:37,Financial planning workshop
+41,Tech Fest 32,3,21,18-02-2028,07:19:30,15:19:30,05:19:30,Blockchain technology summit
+42,Sports Meet 48,20,28,07-10-2028,12:41:40,20:41:40,10:41:40,Football league finals
+43,AI Workshop 133,8,63,12-06-2027,01:48:17,09:48:17,23:48:17,Reinforcement learning workshop
+44,Startup Meet 153,50,83,25-10-2026,10:49:33,18:49:33,08:49:33,Scale-up strategy session
+45,Robotics Expo 206,4,1,07-08-2027,09:58:42,17:58:42,07:58:42,Industrial robotics showcase
+46,AI Workshop 127,16,95,26-07-2030,08:29:43,16:29:43,06:29:43,Neural networks fundamentals
+48,Cultural Night 234,42,82,17-12-2029,19:11:40,03:11:40,17:11:40,Traditional arts showcase
+49,Music Fest 164,43,62,08-12-2027,23:26:49,07:26:49,21:26:49,Indie music festival
+50,Robotics Expo 202,42,32,11-12-2027,10:25:15,18:25:15,08:25:15,Medical robotics exhibition
+51,Sports Meet 250,9,22,24-06-2028,09:34:39,17:34:39,07:34:39,Tennis championship
+52,Sports Meet 12,9,19,03-08-2026,04:35:41,12:35:41,02:35:41,Volleyball tournament
+53,Cultural Night 26,7,29,24-09-2029,14:07:15,22:07:15,12:07:15,Folk dance competition
+56,Hackathon 241,14,45,25-12-2028,02:01:12,10:01:12,00:01:12,Web development challenge
+58,Seminar 152,11,40,12-02-2029,07:48:17,15:48:17,05:48:17,Project management certification
+60,Hackathon 234,31,15,13-02-2026,05:19:11,13:19:11,03:19:11,Game development jam
+61,AI Workshop 228,46,21,04-11-2030,09:10:10,17:10:10,07:10:10,AI ethics and governance
+62,Seminar 195,43,78,09-08-2026,22:21:01,06:21:01,20:21:01,Sustainability in business
+63,Music Fest 193,17,28,10-07-2026,03:22:31,11:22:31,01:22:31,World music festival
+64,Sports Meet 149,31,47,08-05-2030,01:15:21,09:15:21,23:15:21,Badminton championship
+65,Seminar 118,23,61,28-02-2027,14:53:49,22:53:49,12:53:49,Communication skills workshop
+66,Tech Fest 24,46,66,16-01-2028,12:59:46,20:59:46,10:59:46,Cloud computing conference
+67,Startup Meet 244,29,92,01-12-2029,20:31:11,04:31:11,18:31:11,Product launch event
+68,Startup Meet 260,21,53,26-10-2027,14:26:35,22:26:35,12:26:35,Growth hacking workshop
+69,Robotics Expo 225,43,58,21-02-2030,23:29:00,07:29:00,21:29:00,Drone technology showcase
+70,Seminar 283,20,83,11-03-2028,19:45:21,03:45:21,17:45:21,Innovation management seminar
+71,Music Fest 74,14,75,17-09-2030,16:32:51,00:32:51,14:32:51,Country music festival
+72,Seminar 201,48,11,22-12-2027,00:55:14,08:55:14,22:55:14,Time management workshop
+74,Hackathon 116,5,6,23-07-2029,08:10:45,16:10:45,06:10:45,Blockchain development challenge
+75,Tech Fest 219,38,15,16-04-2028,05:29:22,13:29:22,03:29:22,Quantum computing symposium
+76,Seminar 128,11,27,15-07-2027,23:46:16,07:46:16,21:46:16,Negotiation skills training
+77,Tech Fest 282,27,18,13-01-2028,19:17:05,03:17:05,17:17:05,5G technology conference
+78,Tech Fest 229,9,40,08-12-2026,18:33:20,02:33:20,16:33:20,Virtual reality expo
+79,Tech Fest 198,14,66,05-11-2026,16:33:15,00:33:15,14:33:15,Augmented reality showcase
+80,Sports Meet 253,38,16,26-06-2027,04:49:58,12:49:58,02:49:58,Table tennis tournament
+81,Seminar 257,7,7,15-09-2028,15:36:16,23:36:16,13:36:16,Conflict resolution workshop
+82,Tech Fest 16,32,56,15-03-2026,08:01:56,16:01:56,06:01:56,Artificial intelligence summit
+83,Seminar 175,14,82,01-10-2029,06:16:18,14:16:18,04:16:18,Team building workshop
+84,Cultural Night 276,48,4,12-01-2030,04:34:33,12:34:33,02:34:33,Theatre and drama festival
+85,Sports Meet 29,35,93,03-06-2028,07:34:39,15:34:39,05:34:39,Hockey championship
+86,Robotics Expo 31,18,35,18-12-2025,17:20:27,01:20:27,15:20:27,Home automation showcase
+87,Startup Meet 269,27,45,11-06-2029,23:06:25,07:06:25,21:06:25,Fundraising masterclass
+88,Music Fest 137,43,45,11-08-2030,07:46:17,15:46:17,05:46:17,Reggae music festival
+89,Tech Fest 231,10,33,09-10-2028,21:24:19,05:24:19,19:24:19,Green technology summit
+90,Hackathon 77,39,84,03-03-2026,03:35:16,11:35:16,01:35:16,Data science challenge
+91,Seminar 206,9,49,23-02-2027,02:19:03,10:19:03,00:19:03,Critical thinking workshop
+92,Tech Fest 292,2,97,15-06-2027,09:25:47,17:25:47,07:25:47,Nanotechnology conference
+93,Cultural Night 209,41,24,24-08-2030,18:58:49,02:58:49,16:58:49,Poetry and literature night
+94,Sports Meet 140,13,16,17-08-2030,17:52:57,01:52:57,15:52:57,Athletics championship
+95,Sports Meet 245,4,44,02-11-2030,07:25:11,15:25:11,05:25:11,Boxing tournament
+96,Music Fest 175,18,98,27-03-2028,03:13:01,11:13:01,01:13:01,Opera performance series
+97,Hackathon 173,47,99,22-07-2028,23:00:23,07:00:23,21:00:23,Hardware innovation challenge
+98,Startup Meet 55,17,92,19-12-2029,10:44:16,18:44:16,08:44:16,Business model workshop
+100,Seminar 268,36,43,14-11-2026,07:04:04,15:04:04,05:04:04,Professional ethics seminar
+101,Robotics Expo 198,29,78,02-05-2027,00:05:39,08:05:39,22:05:39,Surgical robotics demonstration
+102,Robotics Expo 253,2,26,15-04-2028,01:27:49,09:27:49,23:27:49,Agricultural robotics fair
+103,Music Fest 2,17,7,07-04-2027,03:39:19,11:39:19,01:39:19,Acoustic music evening
+104,Cultural Night 55,10,47,19-04-2026,13:25:16,21:25:16,11:25:16,Fashion show extravaganza
+105,AI Workshop 167,20,77,28-02-2026,02:19:51,10:19:51,00:19:51,Predictive analytics workshop
+106,AI Workshop 130,10,34,17-07-2026,03:21:01,11:21:01,01:21:01,AI in healthcare seminar
+107,Music Fest 173,14,36,12-05-2029,06:06:58,14:06:58,04:06:58,Metal music concert
+108,Robotics Expo 141,9,29,10-08-2030,09:27:34,17:27:34,07:27:34,Space robotics exhibition
+109,Sports Meet 209,27,58,14-04-2030,12:06:00,20:06:00,10:06:00,Wrestling championship
+110,Robotics Expo 42,19,37,13-04-2028,13:52:12,21:52:12,11:52:12,Manufacturing automation expo
+111,Startup Meet 192,50,13,15-11-2027,22:56:39,06:56:39,20:56:39,Exit strategy planning
+112,Seminar 238,48,29,01-10-2026,14:38:46,22:38:46,12:38:46,Crisis management workshop
+113,Robotics Expo 231,32,8,16-01-2028,18:00:36,02:00:36,16:00:36,Rescue robotics demonstration
+114,Music Fest 279,43,61,24-06-2028,05:40:59,13:40:59,03:40:59,Soul music festival
+115,Cultural Night 169,45,42,22-11-2028,18:25:07,02:25:07,16:25:07,Photography exhibition
+116,Startup Meet 298,4,31,10-08-2027,22:53:12,06:53:12,20:53:12,Lean startup methodology
+118,Music Fest 196,34,15,21-02-2026,22:40:49,06:40:49,20:40:49,Pop music concert
+119,Cultural Night 145,40,60,26-08-2026,04:45:47,12:45:47,02:45:47,Film screening festival
+120,AI Workshop 23,9,11,22-09-2030,14:59:11,22:59:11,12:59:11,AI model optimization
+121,AI Workshop 224,40,2,24-02-2026,16:07:05,00:07:05,14:07:05,Transfer learning techniques
+122,Sports Meet 205,44,74,01-04-2028,05:50:02,13:50:02,03:50:02,Cycling race championship
+123,Hackathon 30,2,28,12-02-2030,13:35:40,21:35:40,11:35:40,Social impact hackathon
+124,Cultural Night 51,43,93,04-12-2029,09:10:30,17:10:30,07:10:30,Art gallery exhibition
+125,Sports Meet 243,44,41,08-03-2027,03:36:00,11:36:00,01:36:00,Martial arts tournament
+126,Sports Meet 144,24,67,12-02-2026,21:29:27,05:29:27,19:29:27,Gymnastics championship
+127,Startup Meet 80,50,10,28-08-2029,00:39:59,08:39:59,22:39:59,Customer acquisition strategies
+128,Music Fest 176,12,19,15-01-2026,07:21:52,15:21:52,05:21:52,Blues music festival
+129,Music Fest 187,49,8,14-08-2028,01:17:10,09:17:10,23:17:10,Folk music gathering
+130,Sports Meet 24,32,63,21-06-2030,21:35:20,05:35:20,19:35:20,Archery competition
+131,Hackathon 40,30,33,01-07-2030,01:20:51,09:20:51,23:20:51,Green tech hackathon
+132,Tech Fest 73,27,4,25-01-2026,00:48:53,08:48:53,22:48:53,Smart city solutions expo
+133,Sports Meet 150,7,42,12-02-2027,21:54:56,05:54:56,19:54:56,Weightlifting championship
+134,Hackathon 122,8,2,10-05-2027,06:54:01,14:54:01,04:54:01,FinTech innovation challenge
+135,Music Fest 276,22,45,28-03-2027,23:50:07,07:50:07,21:50:07,Punk rock festival
+136,Startup Meet 97,14,48,22-11-2028,15:52:28,23:52:28,13:52:28,Market validation workshop
+137,Seminar 39,38,55,19-10-2028,03:04:05,11:04:05,01:04:05,Risk management seminar
+139,Cultural Night 233,11,81,10-03-2029,16:45:53,00:45:53,14:45:53,Cultural diversity celebration
+140,Tech Fest 1,48,82,17-10-2030,13:45:01,21:45:01,11:45:01,Future of work symposium
+141,Robotics Expo 274,16,78,26-09-2030,15:09:05,23:09:05,13:09:05,AI robotics integration
+142,Tech Fest 128,30,19,12-09-2029,03:41:03,11:41:03,01:41:03,Software engineering summit
+143,Tech Fest 176,15,58,07-05-2029,18:45:39,02:45:39,16:45:39,DevOps best practices
+144,Sports Meet 41,46,73,24-01-2030,09:14:56,17:14:56,07:14:56,Rugby championship finals
+145,Sports Meet 250,10,30,06-11-2029,09:07:10,17:07:10,07:07:10,Golf tournament
+146,Music Fest 75,36,58,15-12-2029,18:35:29,02:35:29,16:35:29,Symphony orchestra performance
+147,Tech Fest 123,10,31,18-01-2027,14:56:19,22:56:19,12:56:19,Startup ecosystem conference
+148,Hackathon 71,35,94,11-10-2028,00:30:30,08:30:30,22:30:30,EdTech innovation challenge
+149,Seminar 119,13,40,01-11-2026,11:28:40,19:28:40,09:28:40,Supply chain management
+150,AI Workshop 4,8,5,01-01-2030,23:11:36,07:11:36,21:11:36,Generative AI applications
+151,Hackathon 131,30,69,06-03-2029,08:20:17,16:20:17,06:20:17,HealthTech hackathon
+155,Music Fest 200,21,69,12-02-2027,18:28:44,02:28:44,16:28:44,Alternative rock concert
+156,Sports Meet 28,21,63,14-01-2027,02:38:11,10:38:11,00:38:11,Squash championship
+157,Startup Meet 248,6,18,04-08-2027,03:57:06,11:57:06,01:57:06,Bootstrapping strategies
+158,Startup Meet 291,18,79,16-06-2030,11:38:48,19:38:48,09:38:48,Corporate innovation program
+159,Seminar 271,14,69,16-02-2027,20:22:21,04:22:21,18:22:21,Emotional intelligence workshop
+160,Tech Fest 229,1,22,24-10-2027,21:59:02,05:59:02,19:59:02,3D printing revolution
+162,Cultural Night 60,4,22,04-06-2028,12:59:40,20:59:40,10:59:40,Stand-up comedy night
+164,Music Fest 58,10,27,05-11-2027,01:24:23,09:24:23,23:24:23,Chamber music recital
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,15:11:38,AI security and privacy
+>>>>>>> 3687b7c (Changes made)
