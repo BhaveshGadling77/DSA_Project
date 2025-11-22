@@ -5,3 +5,5 @@ https://www.geeksforgeeks.org/cpp/fseek-in-c-with-example/
 https://stackoverflow.com/questions/17802302/does-fscanf-moves-the-passed-file-pointer-ahead
 https://stackoverflow.com/questions/13566082/how-to-check-if-a-file-has-content-or-not-using-c
 https://www.geeksforgeeks.org/c/c-file-pointer/
+https://www.geeksforgeeks.org/c/memset-c-example/
+https://www.geeksforgeeks.org/c/fgets-function-in-c/

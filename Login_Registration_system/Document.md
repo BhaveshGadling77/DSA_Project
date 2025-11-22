@@ -80,3 +80,12 @@ I had completed the part of Login functions and made a status struct which will 
 so today i had started the integrating the whole system and doing the integration of the functions of piyush and sumit. we had brainstorm how the system will flow and
 and many more discussion.
 
+### Date : 20th Nov 2025
+We had found the bug in the other functions like markAttendees() and so more functions.
+
+### Date : 21st Nov 2025 
+tried to resolve most of the bugs in the code but stills bugs left in the code and we tried to resolve all bugs in the code but still  bugs are left. 
+
+### Date: 22nd Nov 2025 
+We had tried to make the all functions works and resolve the bugs in the codes it takes around 3 hours on meet and 3 hours for me to resolve the bugs. In the code of my teammate.
+
