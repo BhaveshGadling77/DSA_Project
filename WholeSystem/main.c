@@ -6,25 +6,34 @@
 #include <stdlib.h>
 #include <unistd.h>
 int isYourEvent(int eventId) {
-    char filename[32];
+    char filename[64];
     userStatus user = getDetails();
-    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    snprintf(filename, sizeof(filename), "../Data/Organizer_%d.csv", user.userId);
     FILE *fp = fopen(filename, "r");
-    char line[2024];
-    while (fgets(line, sizeof(line), fp)) {
+    if (fp == NULL) {
+        return 0; 
+    }
+    char line[2048];
+    while (fgets(line, 2048, fp) != NULL) {
         char *token = strtok(line, ",");
+        if (token == NULL) continue;
         int id = atoi(token);
         if (id == eventId) {
-            return true;
+            fclose(fp);
+            return 1;
         }
     }
-    return false;
+    fclose(fp);
+    return 0;
 }
 void optionsAtOrganizer() {
     userStatus st = getDetails();
     printf("Organiser Id : %d\n", st.userId);
 
     int choice, check = 1;
+    int eventId;            // moved declaration here
+    Node *head = NULL;      // moved + initialized here
+
     while (check != -1) {
         printf("1. Add Event.\n");
         printf("2. Delete Event.\n");
@@ -35,7 +44,7 @@ void optionsAtOrganizer() {
         printf("7. List Your Events\n");
         printf("8. List All Available veunues.\n");
         printf("9. Logout.\n");
-        check = scanf("%d", &choice);   // removed shadowed 'int' declaration
+        check = scanf("%d", &choice);
         switch (choice)
         {
         case 1:
@@ -53,10 +62,13 @@ void optionsAtOrganizer() {
 
         case 4:
             printf("\n View All Attendees.\n");
-            int eventId;
             printf("Enter the Event Id which you want to view.\n");
             scanf("%d", &eventId);
-            Node *head = NULL;
+            if (!isYourEvent(eventId)) {
+                printf("You haven't organised this Event.\n");
+                break;
+            }
+            head = NULL;                     // ensure initialized
             loadFromFile(&head, eventId);
             viewAllAttendees(head, eventId);
             freeList(head);
@@ -66,10 +78,11 @@ void optionsAtOrganizer() {
             printf("\nMark All Attendees.\n");
             printf("Enter the Event Id which you want to mark Attendee.\n");
             scanf("%d", &eventId);
-            while (isYourEvent(eventId) == 0) {
+            if (!isYourEvent(eventId)) {
                 printf("You haven't organised this Event.\n");
                 break;
             }
+            head = NULL;                     // ensure initialized
             loadFromFile(&head, eventId);
             markAttendance(head);
             freeList(head);
@@ -78,6 +91,11 @@ void optionsAtOrganizer() {
         case 6:
             printf("Enter the Event Id which you want to View Statistics.\n");
             scanf("%d", &eventId);
+            if (!isYourEvent(eventId)) {
+                printf("You haven't organised this Event.\n");
+                break;
+            }
+            head = NULL;
             loadFromFile(&head, eventId);
             viewStatistics(head);
             freeList(head);
