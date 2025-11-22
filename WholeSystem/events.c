@@ -473,9 +473,10 @@ void addEvent(void) {
 // Delete event (using BST)
 void deleteEvent(void) {
     int eventID;
+    userStatus user = getDetails();
     printf("Enter Event ID to delete: ");
     scanf("%d", &eventID);
-
+    
     EventBST* node = searchBST(eventTree, eventID);
     if (!node) {
         printf("Event ID not found.\n");
@@ -487,7 +488,7 @@ void deleteEvent(void) {
     // Remove from list
     EventNode* curr = eventList, *prev = NULL;
     while (curr) {
-        if (curr->evt.eventID == eventID) {
+        if (curr->evt.eventID == eventID && curr->evt.organiserID == user.userId) {
             if (prev == NULL) {
                 eventList = curr->next;
             } else {
@@ -495,6 +496,9 @@ void deleteEvent(void) {
             }
             free(curr);
             break;
+        } else if (curr->evt.eventID == eventID && curr->evt.organiserID != user.userId) {
+            printf("You haven't organized this Event.\n");
+            return;
         }
         prev = curr;
         curr = curr->next;
@@ -686,13 +690,15 @@ void modifyEvent(void) {
         free(desc);
         return;
     }
-
     // Update linked list
     EventNode *curr = eventList;
     while (curr) {
-        if (curr->evt.eventID == eventID) {
+        if (curr->evt.eventID == eventID && user.userId == curr->evt.organiserID) {
             curr->evt = node->evt;
             break;
+        } else if (curr->evt.eventID == eventID && user.userId != curr->evt.organiserID){
+            printf("You haven't Organised This Event.\n");
+            return;
         }
         curr = curr->next;
     }

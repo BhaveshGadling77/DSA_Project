@@ -2,13 +2,13 @@
 #define ATTENDEE_H
 
 #include <stdbool.h>
-#include "../Login_Registration_system/login_registration.h"
+#include "login_registration.h"
 // Attendee structure
 typedef struct Attendee {
     int attendeeID;
     char name[50];
     char email[50];
-    unsigned long phoneNo;
+    unsigned long long phoneNo;
     int eventID;
     char status[15];           // present, absent or only registered
     char registrationDate[30];

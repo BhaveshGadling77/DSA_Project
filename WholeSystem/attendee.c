@@ -13,7 +13,7 @@ void getCurrentDateTime(char *buffer)
 
 void updateEventsAttended(int userID)
 {
-    FILE *fp = fopen("../Data/userAttendee.csv", "r");
+    FILE *fp = fopen("../Data/userAttendee.csv", "r+");
     FILE *temp = fopen("../Data/temp.csv", "w");
 
     if (!fp || !temp)
@@ -24,30 +24,71 @@ void updateEventsAttended(int userID)
         return;
     }
 
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp);
-    fprintf(temp, "%s", buffer);
+    // char buffer[500];
+    // fgets(buffer, sizeof(buffer), fp);
+    // fprintf(temp, "%s", buffer);
 
     int id, eventsAttended;
-    unsigned long phone;
+    unsigned long long phone;
     char name[100], email[100];
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n",
-                  &id, name, &phone, &eventsAttended, email) == 5)
-    {
-        if (id == userID)
-        {
+    // while (fscanf(fp, "%d,%[^,],%llu,%d,%[^,]\n",
+    //               &id, name, &phone, &eventsAttended, email) == 5)
+    // {
+    //     if (id == userID)
+    //     {
+    //         eventsAttended++;
+    //         printf("Event Incremented\n");
+    //     }
+    //     printf("%d,%s,%llu,%d,%s\n",
+    //             id, name, phone, eventsAttended, email);
+    //     fprintf(temp, "%d,%s,%llu,%d,%s\n",
+    //             id, name, phone, eventsAttended, email);
+    // }
+    char line[2048];
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        char *token;
+        
+        // AttendeeID
+        token = strtok(p, ",");
+        if (!token) 
+            continue;
+    
+        id = atoi(token);
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strcpy(name, token);
+        
+        //no of events attended
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        eventsAttended = atoi(token);
+        if (id == userID) {
             eventsAttended++;
         }
-        fprintf(temp, "%d,%s,%lu,%d,%s\n",
+        // Phone
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        phone = strtoul(token, NULL, 10);
+
+        // Email
+        token = strtok(NULL, ",\n");
+        if (!token) continue;
+        strncpy(email, token, sizeof(email)-1);
+
+        printf("%d,%s,%llu,%d,%s\n",
                 id, name, phone, eventsAttended, email);
+        fprintf(temp, "%d,%s,%d,%llu,%s\n",
+                id, name, eventsAttended, phone, email);
+
     }
 
     fclose(fp);
     fclose(temp);
 
-    remove("../Data/userAttendee.csv");
-    rename("../Data/temp.csv", "../Data/userAttendee.csv");
+    // remove("../Data/userAttendee.csv");
+    // rename("../Data/temp.csv", "../Data/userAttendee.csv");
 }
 
 bool fetchUserData(int userID, Attendee *a)
@@ -59,26 +100,48 @@ bool fetchUserData(int userID, Attendee *a)
         return false;
     }
 
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp);
+    // char buffer[500];
+    // fgets(buffer, sizeof(buffer), fp);
 
     int id, eventsAttended;
     char name[100], email[100];
-    unsigned long phone;
+    unsigned long long phone;
+    char line[2048];
 
-    while (fscanf(fp, "%d,%[^,],%d,%lld,%[^,\n]\n", 
-                  &id, name, &eventsAttended, &phone,email) == 5)
-    {
-        if (id == userID)
-        {
-            strcpy(a->name, name);
-            strcpy(a->email, email);
-            a->phoneNo = phone;
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        char *token;
+        printf("%s\n", line);
+        // AttendeeID
+        token = strtok(p, ",");
+        if (!token) continue;
+        id = atoi(token);
+        printf("Id = %d\n userId = %d\n", id, userID);
+        if (id == userID) {
+            // Name
+            token = strtok(NULL, ",");
+            if (!token) continue;
+            strcpy(a->name, token);
+
+            //no of events attended
+            token = strtok(NULL, ",");
+            if (!token) continue;
+            id = atoi(token);
+            printf("%d\n", id);
+            // Phone
+            token = strtok(NULL, ",");
+            if (!token) continue;
+            a->phoneNo = strtoul(token, NULL, 10);
+
+            // Email
+            token = strtok(NULL, "\n");
+            if (!token) continue;
+            strcpy(a->email, token);
             fclose(fp);
             return true;
         }
     }
-    
+
     fclose(fp);
     return false;
 }
@@ -111,6 +174,7 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 
     // Fetch user data
     Attendee a;
+    printf("your userId is :- %d\n", user->userId);
     if (!fetchUserData(user->userId, &a))
     {
         printf("\nError: Couldn't fetch user data!\n");
@@ -245,12 +309,12 @@ void viewAllAttendees(Node *head, int eventID)
     while (temp != NULL)
     {
         // Print to terminal
-        printf("%-5d %-20s %-25s %-15lu %-12s\n",
+        printf("%-5d %-20s %-25s %-15llu %-12s\n",
                temp->data.attendeeID, temp->data.name, temp->data.email,
                temp->data.phoneNo, temp->data.status);
 
         // Write same line to file
-        fprintf(fp, "%-5d %-20s %-25s %-15lu %-12s\n",
+        fprintf(fp, "%-5d %-20s %-25s %-15llu %-12s\n",
                 temp->data.attendeeID, temp->data.name, temp->data.email,
                 temp->data.phoneNo, temp->data.status);
 
@@ -282,7 +346,7 @@ void searchAttendee(Node *head)
             printf("ID: %d\n", temp->data.attendeeID);
             printf("Name: %s\n", temp->data.name);
             printf("Email: %s\n", temp->data.email);
-            printf("Phone: %lu\n", temp->data.phoneNo);
+            printf("Phone: %llu\n", temp->data.phoneNo);
             printf("Event ID: %d\n", temp->data.eventID);
             printf("Status: %s\n", temp->data.status);
             printf("Registered: %s\n", temp->data.registrationDate);
@@ -341,7 +405,7 @@ void saveToFile(Node *head, int eventId)
     Node *temp = head;
     while (temp != NULL)
     {
-        fprintf(fp, "%d,%s,%s,%lu,%d,%s,%s\n",
+        fprintf(fp, "%d,%s,%s,%llu,%d,%s,%s\n",
                 temp->data.attendeeID, 
                 temp->data.name, 
                 temp->data.email, 

@@ -144,3 +144,4 @@ eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDe
 168,loggdf,12,15,12-02-2026,09:00:00,12:00:00,08:00:00,this is lobby for the people in our club
 169,techfest,12,24,11-12-2026,12:00:00,18:00:00,10:00:00,this is twaht the 
 170,mufaza,8,15,12-12-2026,20:00:00,23:00:00,12:00:00,this is description of event
+171,logs,15,19,12-12-2027,12:00:00,14:00:00,09:00:00,this is the event.
