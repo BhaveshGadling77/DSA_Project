@@ -5,7 +5,21 @@
 #include "venues.h"
 #include <stdlib.h>
 #include <unistd.h>
-
+int isYourEvent(int eventId) {
+    char filename[32];
+    userStatus user = getDetails();
+    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    FILE *fp = fopen(filename, "r");
+    char line[2024];
+    while (fgets(line, sizeof(line), fp)) {
+        char *token = strtok(line, ",");
+        int id = atoi(token);
+        if (id == eventId) {
+            return true;
+        }
+    }
+    return false;
+}
 void optionsAtOrganizer() {
     userStatus st = getDetails();
     printf("Organiser Id : %d\n", st.userId);
@@ -52,6 +66,10 @@ void optionsAtOrganizer() {
             printf("\nMark All Attendees.\n");
             printf("Enter the Event Id which you want to mark Attendee.\n");
             scanf("%d", &eventId);
+            while (isYourEvent(eventId) == 0) {
+                printf("You haven't organised this Event.\n");
+                break;
+            }
             loadFromFile(&head, eventId);
             markAttendance(head);
             freeList(head);
