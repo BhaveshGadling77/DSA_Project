@@ -94,6 +94,10 @@ void optionsAtOrganizer() {
                 printf("No attendees registered for this event yet.\n");
                 break;
             }
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             viewAllAttendees(head, eventId);
             freeList(head);
             break;
@@ -106,9 +110,13 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
-
             head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
+            markAttendance(&head);
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -138,68 +146,7 @@ void optionsAtOrganizer() {
         case 7:
             listEventsOfOrganizer();
             break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
-        case 6:
-            printf("Enter the Event Id which you want to View Statistics.\n");
-            scanf("%d", &eventId);
-            loadFromFile(&head, eventId);
-            viewStatistics(head);
-            freeList(head);
-            printf("\nView Statistics.\n");
-            break;
-        
-        case 7:
-            listEventsOfOrganizer();
-            break;
 
-        case 8:
-            viewVenues();
-            printf("List of Venues\n");
-            break;
-        case 9:
-            printf("\nLogging out");
-            for (int i = 0; i < 3; i++) {
-                printf(".");
-                fflush(stdout);
-                sleep(1);
-            }
-            printf("\n");
-            return;
         case 8:
             viewVenues();
             printf("List of Venues\n");
