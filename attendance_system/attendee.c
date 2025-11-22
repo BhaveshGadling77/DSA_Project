@@ -66,8 +66,8 @@ bool fetchUserData(int userID, Attendee *a)
     char name[100], email[100];
     unsigned long phone;
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n", 
-                  &id, name, &phone, &eventsAttended, email) == 5)
+    while (fscanf(fp, "%d,%[^,],%d,%lld,%[^,\n]\n", 
+                  &id, name, &eventsAttended, &phone,email) == 5)
     {
         if (id == userID)
         {
@@ -216,7 +216,7 @@ void viewAllAttendees(Node *head, int eventID)
     char filePath[100];
 
     // write file path in filePath variable
-    sprintf(filePath, "data/attendees/eventDetails_%d.txt", eventID);
+    sprintf(filePath, "../Data/attendees/eventDetails_%d.txt", eventID);
 
     // Open file for writing
     fp = fopen(filePath, "w");
@@ -358,6 +358,7 @@ void saveToFile(Node *head, int eventId)
 
 void loadFromFile(Node **head, int eventID)
 {
+    if (head) *head = NULL; // reset head always to avoid garbage value
     char filename[100];
     sprintf(filename, "../Data/event_%d.csv", eventID);
 
@@ -367,21 +368,66 @@ void loadFromFile(Node **head, int eventID)
         return;
     }
 
-    // Skip header
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp);
+    char line[1024];
+    if (!fgets(line, sizeof(line), fp)) {
+        fclose(fp);
+        return;
+    }
 
-    Attendee a;
-    while (fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n",
-                  &a.attendeeID, a.name, a.email, &a.phoneNo, 
-                  &a.eventID, a.status, a.registrationDate) == 7)
-    {
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        char *token;
+
+        Attendee a;
+        memset(&a, 0, sizeof(a));
+
+        // AttendeeID
+        token = strtok(p, ",");
+        if (!token) continue;
+        a.attendeeID = atoi(token);
+
+        // Name
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(a.name, token, sizeof(a.name)-1);
+
+        // Email
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(a.email, token, sizeof(a.email)-1);
+
+        // Phone
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        a.phoneNo = strtoul(token, NULL, 10);
+
+        // EventID
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        a.eventID = atoi(token);
+
+        // Status
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(a.status, token, sizeof(a.status)-1);
+
+        // RegistrationDate (rest of line)
+        token = strtok(NULL, "\n");
+        if (token) {
+            strncpy(a.registrationDate, token, sizeof(a.registrationDate)-1);
+        }
+
+        // create node
         Node *newNode = (Node *)malloc(sizeof(Node));
+        if (!newNode) {
+            // handle malloc failure gracefully
+            break;
+        }
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
     }
-    
+
     fclose(fp);
 }
 
