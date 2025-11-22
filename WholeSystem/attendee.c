@@ -241,9 +241,9 @@ void unregisterAttendee(Node **head, userStatus *user)
     saveToFile(*head, eventID);
 }
 
-void markAttendance(Node *head)
+void markAttendance(Node **head)
 {
-    if (head == NULL)
+    if (*head == NULL)
     {
         printf("\nNo attendees registered.\n");
         return;
@@ -253,7 +253,7 @@ void markAttendance(Node *head)
     printf("\nEnter Attendee ID: ");
     scanf("%d", &id);
 
-    Node *temp = head;
+    Node *temp = *head;
     while (temp != NULL)
     {
         if (temp->data.attendeeID == id)
@@ -265,7 +265,7 @@ void markAttendance(Node *head)
             }
             
             strcpy(temp->data.status, "Present");
-            saveToFile(head, temp->data.eventID);
+            saveToFile(*head, temp->data.eventID);
             printf("\nMarked Present: %s\n", temp->data.name);
             return;
         }

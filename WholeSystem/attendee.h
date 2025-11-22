@@ -29,7 +29,7 @@ bool fetchUserData(int userID, Attendee *a);
 void updateEventsAttended(int userID);
 
 // organizer functions
-void markAttendance(Node* head);
+void markAttendance(Node** head);
 void viewAllAttendees(Node* head, int eventID);
 void viewStatistics(Node *head);
 

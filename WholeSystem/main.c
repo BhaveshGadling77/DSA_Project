@@ -70,6 +70,10 @@ void optionsAtOrganizer() {
             }
             head = NULL;                     // ensure initialized
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             viewAllAttendees(head, eventId);
             freeList(head);
             break;
@@ -82,9 +86,13 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
-            head = NULL;                     // ensure initialized
+            head = NULL;
             loadFromFile(&head, eventId);
-            markAttendance(head);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
+            markAttendance(&head);
             freeList(head);
             break;
 
@@ -97,6 +105,10 @@ void optionsAtOrganizer() {
             }
             head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             viewStatistics(head);
             freeList(head);
             printf("\nView Statistics.\n");
