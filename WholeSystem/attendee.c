@@ -66,8 +66,8 @@ bool fetchUserData(int userID, Attendee *a)
     char name[100], email[100];
     unsigned long phone;
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n", 
-                  &id, name, &phone, &eventsAttended, email) == 5)
+    while (fscanf(fp, "%d,%[^,],%d,%lld,%[^,\n]\n", 
+                  &id, name, &eventsAttended, &phone,email) == 5)
     {
         if (id == userID)
         {

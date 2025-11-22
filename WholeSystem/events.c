@@ -521,6 +521,9 @@ void deleteEvent(void) {
     }
     fclose(file);
     printf("Event deleted!\n");
+    char filename[64];
+    sprintf(filename, "event_%d.csv", eventID);
+    remove(filename);
 }
 void listEventsOfOrganizer() {
     userStatus st = getDetails();
