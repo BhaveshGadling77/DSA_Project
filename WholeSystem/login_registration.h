@@ -11,7 +11,7 @@ typedef struct user {
 } user;
 
 typedef struct userStatus {
-    int userId;
+    int userId; // 0 if no user logged in and any number if user logged in.
 	char name[64];
     bool status; // true = logged in, false = not logged in
     bool isOrg; //if org = true, else  false;
