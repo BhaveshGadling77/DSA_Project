@@ -15,6 +15,8 @@ int isYourEvent(int eventId) {
     }
     char line[2048];
     while (fgets(line, 2048, fp) != NULL) {
+        printf("%s\n", line);
+        memset(line, 0, 2048);
         char *token = strtok(line, ",");
         if (token == NULL) continue;
         int id = atoi(token);
@@ -86,6 +88,7 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
+
             head = NULL;
             loadFromFile(&head, eventId);
             if (head == NULL) {

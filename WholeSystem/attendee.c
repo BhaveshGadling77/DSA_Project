@@ -81,6 +81,7 @@ void updateEventsAttended(int userID)
                 id, name, phone, eventsAttended, email);
         fprintf(temp, "%d,%s,%d,%llu,%s\n",
                 id, name, eventsAttended, phone, email);
+        memset(line, 0, sizeof(line));
 
     }
 
@@ -140,6 +141,7 @@ bool fetchUserData(int userID, Attendee *a)
             fclose(fp);
             return true;
         }
+        memset(line, 0, sizeof(line));
     }
 
     fclose(fp);
@@ -254,8 +256,7 @@ void markAttendance(Node **head)
     scanf("%d", &id);
 
     Node *temp = *head;
-    while (temp != NULL)
-    {
+    while (temp != NULL) {
         if (temp->data.attendeeID == id)
         {
             if (strcmp(temp->data.status, "Present") == 0)
@@ -490,6 +491,7 @@ void loadFromFile(Node **head, int eventID)
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
+        memset(line, 0, sizeof(line));
     }
 
     fclose(fp);
