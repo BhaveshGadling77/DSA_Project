@@ -9,8 +9,9 @@ Working on Attendance Management System
 Working on Events and venues
 
 
-### Tasks
+### Tasks to be done before 4th Dec.
 - [ ] Piyush Technical documentation is remaining.
-- [ ] Try To improve the UI
-- [ ] Make a Report
-- [ ] Make a Pointer diagram
+- [ ] Try To improve the UI.
+- [ ] Make a Report.
+- [ ] Make a Pointer diagram.
+- [ ] GitHub Readme of project.
