@@ -1,4 +1,4 @@
-## Attendee Management System - Technical Documentation
+## Login and Registration System - Technical Documentation
 
 ### Let's get started
 So, hey guys! This document provides a comprehensive overview of the Login and Registration System (LRS), developed as part of a Event Management System project. The focus here is on the technical implementation, functional descriptions, and the  logic behind choosing specific data structures.
