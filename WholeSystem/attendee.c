@@ -13,140 +13,67 @@ void getCurrentDateTime(char *buffer)
 
 void updateEventsAttended(int userID)
 {
-    FILE *fp = fopen("../Data/userAttendee.csv", "r+");
+    FILE *fp = fopen("../Data/userAttendee.csv", "r");
     FILE *temp = fopen("../Data/temp.csv", "w");
 
-    if (!fp || !temp)
-    {
-        printf("Error opening user file!\n");
-        if(fp) fclose(fp);
-        if(temp) fclose(temp);
-        return;
-    }
-
-    // char buffer[500];
-    // fgets(buffer, sizeof(buffer), fp);
-    // fprintf(temp, "%s", buffer);
-
-    int id, eventsAttended;
+    int id, events;
     unsigned long long phone;
     char name[100], email[100];
 
-    // while (fscanf(fp, "%d,%[^,],%llu,%d,%[^,]\n",
-    //               &id, name, &phone, &eventsAttended, email) == 5)
-    // {
-    //     if (id == userID)
-    //     {
-    //         eventsAttended++;
-    //         printf("Event Incremented\n");
-    //     }
-    //     printf("%d,%s,%llu,%d,%s\n",
-    //             id, name, phone, eventsAttended, email);
-    //     fprintf(temp, "%d,%s,%llu,%d,%s\n",
-    //             id, name, phone, eventsAttended, email);
-    // }
-    char line[2048];
-    while (fgets(line, sizeof(line), fp)) {
-        char *p = line;
-        char *token;
-        
-        // AttendeeID
-        token = strtok(p, ",");
-        if (!token) 
-            continue;
-    
-        id = atoi(token);
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        strcpy(name, token);
-        
-        //no of events attended
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        eventsAttended = atoi(token);
-        if (id == userID) {
-            eventsAttended++;
-        }
-        // Phone
-        token = strtok(NULL, ",");
-        if (!token) continue;
-        phone = strtoul(token, NULL, 10);
+    while (fscanf(fp, "%d,%[^,],%d,%llu,%s",
+                  &id, name, &events, &phone, email) == 5)
+    {
+        if (id == userID) events++;
 
-        // Email
-        token = strtok(NULL, ",\n");
-        if (!token) continue;
-        strncpy(email, token, sizeof(email)-1);
-
-        printf("%d,%s,%llu,%d,%s\n",
-                id, name, phone, eventsAttended, email);
         fprintf(temp, "%d,%s,%d,%llu,%s\n",
-                id, name, eventsAttended, phone, email);
-        memset(line, 0, sizeof(line));
-
+                id, name, events, phone, email);
     }
 
     fclose(fp);
     fclose(temp);
 
-    // remove("../Data/userAttendee.csv");
-    // rename("../Data/temp.csv", "../Data/userAttendee.csv");
+    remove("../Data/userAttendee.csv");
+    rename("../Data/temp.csv", "../Data/userAttendee.csv");
 }
+
 
 bool fetchUserData(int userID, Attendee *a)
 {
     FILE *fp = fopen("../Data/userAttendee.csv", "r");
-    if (!fp)
-    {
-        printf("Error: User database not found!\n");
-        return false;
-    }
+    if (!fp) return false;
 
-    // char buffer[500];
-    // fgets(buffer, sizeof(buffer), fp);
-
-    int id, eventsAttended;
-    char name[100], email[100];
-    unsigned long long phone;
     char line[2048];
-
     while (fgets(line, sizeof(line), fp)) {
-        char *p = line;
-        char *token;
-        printf("%s\n", line);
-        // AttendeeID
-        token = strtok(p, ",");
+        char *token = strtok(line, ",");
         if (!token) continue;
-        id = atoi(token);
-        printf("Id = %d\n userId = %d\n", id, userID);
-        if (id == userID) {
-            // Name
-            token = strtok(NULL, ",");
-            if (!token) continue;
-            strcpy(a->name, token);
 
-            //no of events attended
-            token = strtok(NULL, ",");
-            if (!token) continue;
-            id = atoi(token);
-            printf("%d\n", id);
-            // Phone
-            token = strtok(NULL, ",");
-            if (!token) continue;
-            a->phoneNo = strtoul(token, NULL, 10);
+        int id = atoi(token);
+        if (id != userID) continue;
 
-            // Email
-            token = strtok(NULL, "\n");
-            if (!token) continue;
-            strcpy(a->email, token);
-            fclose(fp);
-            return true;
-        }
-        memset(line, 0, sizeof(line));
+        // name
+        token = strtok(NULL, ",");
+        strcpy(a->name, token);
+
+        // events attended (ignore if not needed)
+        token = strtok(NULL, ",");
+        a->eventID = atoi(token);
+
+        // phone
+        token = strtok(NULL, ",");
+        a->phoneNo = strtoull(token, NULL, 10);
+
+        // email
+        token = strtok(NULL, "\n");
+        strcpy(a->email, token);
+
+        fclose(fp);
+        return true;
     }
 
     fclose(fp);
     return false;
 }
+
 
 void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 {

@@ -1,8 +1,4 @@
 eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDescription
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> de78d21 (Made modifications)
 3,Startup Meet 129,9,92,04-08-2029,23:21:20,07:21:20,00:784:00,
 4,Startup Meet 181,37,79,19-12-2030,12:07:19,20:07:19,00:784:00,
 6,Sports Meet 274,31,19,08-12-2030,12:20:41,20:20:41,00:784:00,
@@ -140,8 +136,8 @@ eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDe
 160,Tech Fest 229,1,22,24-10-2027,21:59:02,05:59:02,00:784:00,
 162,Cultural Night 60,4,22,04-06-2028,12:59:40,20:59:40,00:784:00,
 165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,00:784:00,
-<<<<<<< HEAD
-=======
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,00:784:00,
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,00:784:00,
 3,Startup Meet 129,9,92,04-08-2029,23:21:20,07:21:20,21:21:20,Networking event for entrepreneurs
 4,Startup Meet 181,37,79,19-12-2030,12:07:19,20:07:19,10:07:19,Pitch competition for new startups
 6,Sports Meet 274,31,19,08-12-2030,12:20:41,20:20:41,10:20:41,Annual inter-college sports tournament
@@ -282,6 +278,6 @@ eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDe
 162,Cultural Night 60,4,22,04-06-2028,12:59:40,20:59:40,10:59:40,Stand-up comedy night
 164,Music Fest 58,10,27,05-11-2027,01:24:23,09:24:23,23:24:23,Chamber music recital
 165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,15:11:38,AI security and privacy
->>>>>>> 3687b7c (Changes made)
-=======
->>>>>>> de78d21 (Made modifications)
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,15:11:38,AI security and privacy
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,15:11:38,AI security and privacy
+165,AI Workshop 254,23,85,07-11-2027,17:11:38,01:11:38,15:11:38,AI security and privacy
