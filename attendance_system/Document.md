@@ -61,125 +61,302 @@ typedef struct Node {
 } Node;
 ```
 
+**Why Linked List Over Array?**
+
+Arrays require fixed size allocation, waste memory, and have expensive insertion/deletion operations. Linked lists grow dynamically and handle these operations more efficiently. For our use case where the number of attendees is unpredictable, linked list is the optimal choice.
+
 ---
 In attendee.c file I've implemented functions to:
 
-1. Register for Event.
-2. Unregister from Event.
-3. Mark Attendance.
-4. View All Attendees.
-5. Search Attendee.
-6. View Statistics.
-7. Save data to file.
-8. Load data from a file.
+1. Fetch User Data
+2. Register for Event.
+3. Unregister from Event.
+4. Mark Attendance.
+5. View All Attendees.
+6. Search Attendee.
+7. View Statistics.
+8. Save data to file.
+9. Load data from a file.
+
 
 ---
 
 ### Function Implementations:
-#### 1.Register Attendee
 
-Purpose: Add a new attendee to the event.
+#### 9. Fetch User Data
 
-Algorithm:
-1. Collect user input (name, email, phone)
-2. Generate unique attendee ID
-3. Set initial status as Registered
-4. Store current timestamp
-5. Allocate memory for new node
-6. Insert at head of linked list
-7. Save to the file
+**Purpose:** Retrieve user information from the user database (userAttendee.csv) to populate attendee details during event registration.
 
-Time Complexity: O(1) for insertion at head
+**Algorithm:**
+1. Open userAttendee.csv file in read mode
+2. Read file line by line using `fgets()`
+3. Parse each line using `strtok()` with comma delimiter
+4. Extract fields: userId, name, eventsAttended, phone, email
+5. Compare userId with the requested userID
+6. If match found, populate Attendee structure with user data
+7. Return true if found, false otherwise
 
-#### 2.Unregister Attendee
+**Implementation Details:**
+```c
+bool fetchUserData(int userID, Attendee *a)
+{
+    FILE *fp = fopen("../Data/userAttendee.csv", "r");
+    if (!fp) {
+        printf("Error: User database not found!\n");
+        return false;
+    }
+
+    int id, eventsAttended;
+    char name[100], email[100];
+    unsigned long long phone;
+    char line[2048];
+
+    // Read line by line
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        char *token;
+        
+        // Parse userId
+        token = strtok(p, ",");
+        if (!token) continue;
+        id = atoi(token);
+        
+        // Check if this is the user we're looking for
+        if (id == userID) {
+            // Parse name
+            token = strtok(NULL, ",");
+            if (!token) continue;
+            strcpy(a->name, token);
+
+            // Skip eventsAttended field
+            token = strtok(NULL, ",");
+            
+            // Parse phone
+            token = strtok(NULL, ",");
+            if (!token) continue;
+            a->phoneNo = strtoul(token, NULL, 10);
+
+            // Parse email
+            token = strtok(NULL, "\n");
+            if (!token) continue;
+            strcpy(a->email, token);
+            
+            fclose(fp);
+            return true;
+        }
+        memset(line, 0, sizeof(line));
+    }
+
+    fclose(fp);
+    return false;  // User not found
+}
+```
+
+**Why strtok()?**
+The `strtok()` function is used instead of `fscanf()` because CSV files can have irregular formatting, empty fields, or fields containing unexpected characters. Using `strtok()` provides more robust parsing by handling these edge cases gracefully.
+
+**Time Complexity:** O(n) where n is the number of users in the database
+
+---
+
+#### 2.Register Attendee
+
+Purpose: Register a logged-in attendee for a specific event by fetching their data from the user database and adding them to the event's attendee list.
+
+**Algorithm:**
+1. Validate user is logged in (check status)
+2. Verify user is not an organizer (organizers cannot register as attendees)
+3. Check if user is already registered for this event (traverse linked list)
+4. **Fetch user data** from userAttendee.csv using `fetchUserData()`
+5. Set event-specific data (attendeeID, eventID, status, registration date)
+6. Create new node and insert at head of linked list
+7. Save updated list to event CSV file
+8. Update the user's events attended count using `updateEventsAttended()`
+
+**Implementation Details:**
+```c
+void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
+{
+    // Validation checks
+    if (!user->status) {
+        printf("\nError: Please login first!\n");
+        return;
+    }
+    
+    if (user->isOrg) {
+        printf("\nError: Organizers cannot register as attendees!\n");
+        return;
+    }
+
+    // Check for duplicate registration
+    Node *temp = *head;
+    while (temp != NULL) {
+        if (temp->data.attendeeID == user->userId) {
+            printf("\nYou're already registered for this event!\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    // Fetch user data from database
+    Attendee a;
+    if (!fetchUserData(user->userId, &a)) {
+        printf("\nError: Couldn't fetch user data!\n");
+        return;
+    }
+
+    // Populate event-specific fields
+    a.attendeeID = user->userId;
+    a.eventID = eventID;
+    strcpy(a.status, "Registered");
+    getCurrentDateTime(a.registrationDate);
+
+    // Create node and insert at head
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = a;
+    newNode->next = *head;
+    *head = newNode;
+
+    // Persist to file
+    saveToFile(*head, eventID);
+
+    // Update user's event count
+    updateEventsAttended(user->userId);
+
+    printf("\nSuccessfully registered for event %d!\n", eventID);
+}
+```
+
+**Key Design Decision:** 
+Instead of asking the attendee to re-enter their name, email, and phone number during registration, we fetch this information from the central user database. This provides:
+- **Data Consistency:** All modules use the same user information
+- **Better User Experience:** No redundant data entry
+- **Single Source of Truth:** User information maintained in one place
+- **Integration with Login Module:** Seamless connection between authentication and attendance
+
+**Time Complexity:** O(n) due to duplicate check and fetchUserData()
+
+---
+
+#### 3.Unregister Attendee
 
 Purpose: Remove an attendee who wants to unregister.
 
-Algorithm:
-1. Search for an attendee by ID
-2. Maintain previous pointer during traversal
-3. delete node (prev->next = curr->next)
-4. Free deleted node (demallocate it)
-5. Update file
+**Algorithm:**
+1. Check if list is empty
+2. Search for attendee by userID
+3. Maintain previous pointer during traversal
+4. Delete node using pointer manipulation (prev->next = curr->next)
+5. Free deleted node memory
+6. Update file
 
-Time Complexity: O(n) due to linear search
+**Time Complexity:** O(n) due to linear search
 
-#### 3.Mark Attencance
+---
 
-Purpose: Update attendance status when attendee arrives.
+#### 4. Mark Attendance
 
-Algorithm:
-1. Take attendee ID as input
-2. Traverse list to find matching ID
-3. If found, Update status field to "Present"
-4. Save changes to file
+**Purpose:** Update attendance status when attendee arrives at the event.
 
-Time Complexity: O(n) for linear search
+**Algorithm:**
+1. Check if list is empty
+2. Take attendee ID as input
+3. Traverse list to find matching ID
+4. Check if already marked present (avoid duplicates)
+5. If found, update status field to "Present"
+6. Save changes to file
 
-#### 4. View All Attendees
+**Time Complexity:** O(n) for linear search
 
-Purpose: Display complete list of registered attendees.
+---
 
-Algorithm:
-1. Traverse entire linked list
-2. Print current attendee data i.e struct attributes
-3. Continue till NULL is reached
+#### 5. View All Attendees
 
-Time Complexity: O(n) as every node must be visited.
+**Purpose:** Display complete list of registered attendees for an event.
 
-#### 5. Search Attendee
+**Algorithm:**
+1. Create output file for storing attendee details
+2. Check if list is empty
+3. Print header row (ID, Name, Email, Phone, Status)
+4. Traverse entire linked list
+5. Print and write each attendee's data to file
+6. Continue till NULL is reached
 
-Purpose: Find specific attendee by ID.
+**Time Complexity:** O(n) as every node must be visited
 
-Algorithm:
-1. Take search ID as input
-2. Traverse through linked list 
-3. Return & display details if found
-4. else convey attendee doesn't exist
+---
 
-Time Complexity: O(n) worst case
+#### 6. Search Attendee
 
-#### 6. View Statistics
+**Purpose:** Find specific attendee by ID and display their complete details.
 
-Purpose: Generate attendance report.
+**Algorithm:**
+1. Check if list is empty
+2. Take search ID as input
+3. Traverse through linked list
+4. Compare each attendee ID with search ID
+5. Return and display complete details if found
+6. Otherwise convey attendee doesn't exist
 
-Algorithm:
-1. Initialize counters 
-2. Traverse through list
-3. Count total registrations & present attendees
-4. Calculate attendance percentage
-5. Display formatted report
+**Time Complexity:** O(n) worst case
 
-Time Complexity: O(n) with single traversal
+---
 
-#### 7. Save To A File
+
+#### 7. View Statistics
+
+**Purpose:** Generate attendance report with percentage calculations.
+
+**Algorithm:**
+1. Check if list is empty
+2. Initialize counters (total, present)
+3. Traverse through list once
+4. Count total registrations and present attendees
+5. Calculate attendance percentage: (present/total) × 100
+6. Display formatted report
+
+**Output Format:**
+```
+--- Statistics ---
+Total Registered: 25
+Present: 18
+Absent: 7
+Attendance: 72.00%
+```
+
+**Time Complexity:** O(n) with single traversal
+
+---
+
+#### 8. Save To A File
 
 Purpose: To save data to the csv file.
 
 ```
-void saveToFile(Node *head, int eventId){
+void saveToFile(Node *head, int eventId)
+{
     char filename[100];
-
-    // sprintf function use to write to the file
-    sprintf(filename, "data/event_%d.csv", eventId);
+    sprintf(filename, "../Data/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
-    if(fp == NULL){
-        printf("Couldn't create file.\n");
+    if(fp == NULL) {
+        printf("Error: Couldn't create file\n");
         return;
     }
-    // header line
-    fprintf(fp, "AttendeeID,Name,Email,Phone,EventId,Status,RegistrationDate"); 
+    
+    // Write header
+    fprintf(fp, "AttendeeID,Name,Email,Phone,EventID,Status,RegistrationDate\n");
 
     Node *temp = head;
-    while(temp != NULL){
-        fprintf(fp, "%d,%s,%s,%lu,%d,%s,%s\n",
-            temp->data.attendeeID, temp->data.name, temp->data.email, temp->data.phoneNo, temp->data.eventID,
-        temp->data.status, temp->data.registrationDate);
+    while(temp != NULL) {
+        fprintf(fp, "%d,%s,%s,%llu,%d,%s,%s\n",
+                temp->data.attendeeID, temp->data.name, 
+                temp->data.email, temp->data.phoneNo, 
+                temp->data.eventID, temp->data.status, 
+                temp->data.registrationDate);
         temp = temp->next;
     }
     fclose(fp);
-    printf("File 'data/event_%d.csv' has been saved.", eventId);
 }
 ```
 
@@ -189,28 +366,42 @@ Data would be stored in CSV (Comma Seprated Value) format:
 102,Priya Singh,priya@email.com,9123456789,1,Registered,26-11-2024 14:25
 ```
 
-#### 8. Load From A File
+#### 9. Load From A File
 
 Purpose: To load csv file & access attendees data to perform operation on them.
 
 ```
-void loadFromFile(Node **head, int eventID){
+void loadFromFile(Node **head, int eventID)
+{
+    if (head) *head = NULL; // Reset to avoid garbage
+    
     char filename[100];
-    sprintf(filename, "data/event_%d.csv", eventID); //  loads file
+    sprintf(filename, "../Data/event_%d.csv", eventID);
 
     FILE *fp = fopen(filename, "r");
-    if(fp == NULL) return;
+    if (fp == NULL) return; // File doesn't exist yet
 
-    char buffer[500]; 
-    fgets(buffer, sizeof(buffer), fp); // to skip header line while reading data from file
-    // as we've wrote header line before saving file.
+    char line[1024];
+    fgets(line, sizeof(line), fp); // Skip header
 
-    Attendee a;
-    // delimiters are handled.
-    while(fscanf(fp, "%d,%[^,],%[^,],%lu,%d,%[^,],%[^\n]\n", 
-        &a.attendeeID, a.name, a.email, &a.phoneNo, &a.eventID, 
-    a.status, a.registrationDate) == 7){
-        Node *newNode = (Node *) malloc(sizeof(Node));
+    while (fgets(line, sizeof(line), fp)) {
+        Attendee a;
+        char *token;
+        
+        // Parse AttendeeID
+        token = strtok(line, ",");
+        if (!token) continue;
+        a.attendeeID = atoi(token);
+        
+        // Parse Name
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(a.name, token, sizeof(a.name)-1);
+        
+        // ... (parse remaining fields)
+        
+        // Create node
+        Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
@@ -221,7 +412,62 @@ void loadFromFile(Node **head, int eventID){
 
 What is does: Reads file line by line, handles delimiters (comma here), and reconstructs the linked list in memory.
 
-#### 9. FreeList
+---
+
+#### 10. Update Events Attended
+
+**Purpose:** Increment the event count for a user after successful registration.
+
+**Algorithm:**
+1. Open userAttendee.csv in read mode
+2. Create temporary file for writing updates
+3. Read each line and parse user data
+4. If userId matches, increment eventsAttended counter
+5. Write all records (updated and unchanged) to temp file
+6. Replace original file with updated temp file
+
+**Implementation:**
+```c
+void updateEventsAttended(int userID)
+{
+    FILE *fp = fopen("../Data/userAttendee.csv", "r+");
+    FILE *temp = fopen("../Data/temp.csv", "w");
+
+    if (!fp || !temp) {
+        printf("Error opening user file!\n");
+        return;
+    }
+
+    char line[2048];
+    while (fgets(line, sizeof(line), fp)) {
+        // Parse line
+        int id, eventsAttended;
+        // ... parse other fields
+        
+        if (id == userID) {
+            eventsAttended++;  // Increment counter
+        }
+        
+        // Write to temp file
+        fprintf(temp, "%d,%s,%d,%llu,%s\n",
+                id, name, eventsAttended, phone, email);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    // Atomic update
+    remove("../Data/userAttendee.csv");
+    rename("../Data/temp.csv", "../Data/userAttendee.csv");
+}
+```
+
+**Why Temp File?**
+Using a temporary file ensures atomic updates. If the program crashes mid-write, the original file remains intact.
+
+---
+
+#### 10. FreeList
 
 Purpose: Frees allocated memory to avoid memory leaks.
 
