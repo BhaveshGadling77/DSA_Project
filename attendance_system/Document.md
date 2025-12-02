@@ -3,11 +3,11 @@
 ### Let's get started
 So, hey guys! This document provides a comprehensive overview of the Attendee Management System (AMS), developed as part of a Event Management System project. The focus here is on the technical implementation, functional descriptions, and the  logic behind choosing specific data structures.
 
----
+
 ### Why Event Management System
 Management systems provides an ideal opportunity to work with multiple data structures meaningfully. The project requirement was to use at least three data structures, but more importantly, to use them where they actually solve problems rather than forcing them in artificially.
 
----
+
 ### A bit of description of our project
 Our team developed an Event Management System that allows organizers to create and manage events while enabling attendees to register and track their participation. The system consists of three modules:
 
@@ -15,9 +15,9 @@ Our team developed an Event Management System that allows organizers to create a
 2. Event Management Module - Creates, modifies, and manages events.
 3. Attendee Management Module - Tracks atendee registration and their attendance (my responsibility)
 
----
 Now let's move to Attendee Management System...
 
+---
 ### Why attendee management system
 The Attendee Management System needed to:
 
@@ -30,7 +30,7 @@ The Attendee Management System needed to:
 7. Minimize memory wastage
 8. Enable efficient search and updates
 
----
+
 ### Techincal Approach:
 1. Data Structure Selection
 2. The Attendee Structure
@@ -50,7 +50,6 @@ typedef struct Attendee {
 } Attendee;
 ```
 
----
 #### Data Structure used to store attendee data:
 The primary data structure is a singly linked list, defined as:
 
@@ -65,7 +64,6 @@ typedef struct Node {
 
 Arrays require fixed size allocation, waste memory, and have expensive insertion/deletion operations. Linked lists grow dynamically and handle these operations more efficiently. For our use case where the number of attendees is unpredictable, linked list is the optimal choice.
 
----
 In attendee.c file I've implemented functions to:
 
 1. Fetch User Data
@@ -83,7 +81,7 @@ In attendee.c file I've implemented functions to:
 
 ### Function Implementations:
 
-#### 9. Fetch User Data
+#### 1. Fetch User Data
 
 **Purpose:** Retrieve user information from the user database (userAttendee.csv) to populate attendee details during event registration.
 
@@ -467,7 +465,7 @@ Using a temporary file ensures atomic updates. If the program crashes mid-write,
 
 ---
 
-#### 10. FreeList
+#### 11. FreeList
 
 Purpose: Frees allocated memory to avoid memory leaks.
 
