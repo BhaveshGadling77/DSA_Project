@@ -10,6 +10,41 @@
 EventNode *eventList = NULL;                            // Linked list for sequential access
 EventBST *eventTree = NULL;                             // BST for fast search/delete by ID
 
+// Function to give the height of a node
+int height(EventBST *n) {
+    return n ? n->height : 0;
+}
+
+// Function to find max of two nums
+int maximum(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+// Function to check if the node is balanced or not
+int getBalance(EventBST *n) {
+    return n ? height(n->left) - height(n->right) : 0;
+}
+
+// Function to rotate right
+EventBST *rightRotate(EventBST *y) {
+    EventBST *x = y->left;
+    EventBST *T2 = x->right;
+    x->right = y; y->left = T2;
+    y->height = maximum(height(y->left), height(y->right)) + 1;
+    x->height = maximum(height(x->left), height(x->right)) + 1;
+    return x;
+}
+
+// Function to rotate left
+EventBST *leftRotate(EventBST *x) {
+    EventBST *y = x->right;
+    EventBST *T2 = y->left;
+    y->left = x; x->right = T2;
+    x->height = maximum(height(x->left), height(x->right)) + 1;
+    y->height = maximum(height(y->left), height(y->right)) + 1;
+    return y;
+}
+
 // Function to check if the provided time is valid or not
 int checkValidTime(Time regEndtime, Time startTime, Time endTime) {
     if (startTime.hour >= 24 || startTime.minute >= 60 ||  startTime.second >= 60) {
@@ -80,18 +115,42 @@ int checkValidDate(date d) {
 EventBST* newBSTNode(event e) {
     EventBST* node = (EventBST*)malloc(sizeof(EventBST));
     node->evt = e;
+    node->height = 1;
     node->left = node->right = NULL;
     return node;
 }
 
 // Insert into BST by eventID
-EventBST* insertBST(EventBST* root, event e) {
-    if (root == NULL) return newBSTNode(e);
-    if (e.eventID < root->evt.eventID)
-        root->left = insertBST(root->left, e);
-    else if (e.eventID > root->evt.eventID)
-        root->right = insertBST(root->right, e);
-    return root;
+EventBST* insertBST(EventBST* node, event e) {
+    if (node == NULL) return newBSTNode(e);
+
+    if (e.eventID < node->evt.eventID)
+        node->left = insertBST(node->left, e);
+    else if (e.eventID > node->evt.eventID)
+        node->right = insertBST(node->right, e);
+    else
+        return node;  // duplicate
+
+    node->height = 1 + maximum(height(node->left), height(node->right));
+    int balance = getBalance(node);
+
+    // Left Left
+    if (balance > 1 && e.eventID < node->left->evt.eventID)
+        return rightRotate(node);
+    // Right Right
+    if (balance < -1 && e.eventID > node->right->evt.eventID)
+        return leftRotate(node);
+    // Left Right
+    if (balance > 1 && e.eventID > node->left->evt.eventID) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+    // Right Left
+    if (balance < -1 && e.eventID < node->right->evt.eventID) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+    return node;
 }
 
 // Search in BST by eventID
@@ -110,8 +169,10 @@ EventBST* minValueNode(EventBST* node) {
 }
 
 // Delete from BST
+// AVL-balanced delete
 EventBST* deleteBST(EventBST* root, int eventID) {
-    if (root == NULL) return root;
+    if (root == NULL)
+        return root;
     if (eventID < root->evt.eventID)
         root->left = deleteBST(root->left, eventID);
     else if (eventID > root->evt.eventID)
@@ -130,6 +191,32 @@ EventBST* deleteBST(EventBST* root, int eventID) {
         root->evt = temp->evt;
         root->right = deleteBST(root->right, temp->evt.eventID);
     }
+    if (root == NULL)
+        return root;
+    // Update height
+    root->height = 1 + maximum(height(root->left), height(root->right));
+    // Get balance factor
+    int balance = getBalance(root);
+    // Left Heavy
+    if (balance > 1) {
+        if (getBalance(root->left) >= 0)
+            return rightRotate(root);           // LL
+        else {
+            root->left = leftRotate(root->left);
+            return rightRotate(root);           // LR
+        }
+    }
+
+    // Right Heavy
+    if (balance < -1) {
+        if (getBalance(root->right) <= 0)
+            return leftRotate(root);            // RR
+        else {
+            root->right = rightRotate(root->right);
+            return leftRotate(root);            // RL
+        }
+    }
+
     return root;
 }
 
