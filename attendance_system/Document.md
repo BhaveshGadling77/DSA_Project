@@ -13,7 +13,7 @@ Our team developed an Event Management System that allows organizers to create a
 
 1. Login Authentication Module - Handles user authentication and role management (organizer/attendee).
 2. Event Management Module - Creates, modifies, and manages events.
-3. Attendee Management Module - Tracks registrations and atendees & thier attendance (my responsibility)
+3. Attendee Management Module - Tracks atendee registration and their attendance (my responsibility)
 
 ---
 Now let's move to Attendee Management System...
@@ -43,7 +43,7 @@ typedef struct Attendee {
     int attendeeID;
     char name[50];
     char email[50];
-    unsigned long phoneNo;
+    unsigned long long phoneNo; // to support 10 digit numbers
     int eventID;
     char status[15];           // present, absent or only registered
     char registrationDate[30];

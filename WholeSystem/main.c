@@ -15,6 +15,8 @@ int isYourEvent(int eventId) {
     }
     char line[2048];
     while (fgets(line, 2048, fp) != NULL) {
+        printf("%s\n", line);
+        memset(line, 0, 2048);
         char *token = strtok(line, ",");
         if (token == NULL) continue;
         int id = atoi(token);
@@ -62,26 +64,6 @@ void optionsAtOrganizer() {
 
         case 4:
             printf("\n View All Attendees.\n");
-            int eventId;
-            printf("Enter the Event Id which you want to view.\n");
-            scanf("%d", &eventId);
-            Node *head = NULL;
-            loadFromFile(&head, eventId);
-            viewAllAttendees(head, eventId);
-            freeList(head);
-            break;
-        case 4:
-            printf("\n View All Attendees.\n");
-            int eventId;
-            printf("Enter the Event Id which you want to view.\n");
-            scanf("%d", &eventId);
-            Node *head = NULL;
-            loadFromFile(&head, eventId);
-            viewAllAttendees(head, eventId);
-            freeList(head);
-            break;
-        case 4:
-            printf("\n View All Attendees.\n");
             printf("Enter the Event Id which you want to view.\n");
             scanf("%d", &eventId);
             if (!isYourEvent(eventId)) {
@@ -90,10 +72,6 @@ void optionsAtOrganizer() {
             }
             head = NULL;                     // ensure initialized
             loadFromFile(&head, eventId);
-            if (head == NULL) {
-                printf("No attendees registered for this event yet.\n");
-                break;
-            }
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -110,13 +88,9 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
+
             head = NULL;
             loadFromFile(&head, eventId);
-            if (head == NULL) {
-                printf("No attendees registered for this event yet.\n");
-                break;
-            }
-            markAttendance(&head);
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -166,11 +140,6 @@ void optionsAtOrganizer() {
             break;
         }
     }
-        default:
-            printf("\nInvalid Options.\n");
-            break;
-        }
-    }
 }
 void optionsAtAttendee() {
     userStatus st = getDetails();
@@ -214,10 +183,6 @@ void optionsAtAttendee() {
             sortEventChronological();
             printf("\nSorted the Events by There chronological order.\n");
             break;
-        case 3:
-            sortEventChronological();
-            printf("\nSorted the Events by There chronological order.\n");
-            break;
 
         case 4:
             sortEventByID();
@@ -242,35 +207,7 @@ void optionsAtAttendee() {
             }
             printf("\n");
             return;
-        case 4:
-            sortEventByID();
-            printf("\nSorted the Events by There IDs.\n");
-            break;
-        
-        case 5:
-            sortEventByTime();
-            printf("\nSorted the Events by there Timings.\n");
-            break;
-        
-        case 6:
-            viewEvents();
-            printf("\nList All the Events.\n");
-            break;
-        case 7:
-            printf("\nLogging out");
-            for (int i = 0; i < 3; i++) {
-                printf(".");
-                fflush(stdout);
-                sleep(1);
-            }
-            printf("\n");
-            return;
 
-        default:
-            printf("\nInvalid Options.\n");
-            break;
-        }
-    }
         default:
             printf("\nInvalid Options.\n");
             break;

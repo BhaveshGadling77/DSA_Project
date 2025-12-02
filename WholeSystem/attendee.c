@@ -81,6 +81,7 @@ void updateEventsAttended(int userID)
                 id, name, phone, eventsAttended, email);
         fprintf(temp, "%d,%s,%d,%llu,%s\n",
                 id, name, eventsAttended, phone, email);
+        memset(line, 0, sizeof(line));
 
     }
 
@@ -243,9 +244,7 @@ void unregisterAttendee(Node **head, userStatus *user)
 }
 
 void markAttendance(Node **head)
-void markAttendance(Node **head)
 {
-    if (*head == NULL)
     if (*head == NULL)
     {
         printf("\nNo attendees registered.\n");
@@ -257,8 +256,7 @@ void markAttendance(Node **head)
     scanf("%d", &id);
 
     Node *temp = *head;
-    while (temp != NULL)
-    {
+    while (temp != NULL) {
         if (temp->data.attendeeID == id)
         {
             if (strcmp(temp->data.status, "Present") == 0)
@@ -268,7 +266,6 @@ void markAttendance(Node **head)
             }
             
             strcpy(temp->data.status, "Present");
-            saveToFile(*head, temp->data.eventID);
             saveToFile(*head, temp->data.eventID);
             printf("\nMarked Present: %s\n", temp->data.name);
             return;
