@@ -548,8 +548,8 @@ void addEvent(void) {
     printf("Event added!\n");
 
     // Creation of a file to store the attendees of that event
-    char filename[32];
-    sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
+    char filename[64];
+    sprintf(filename, "../Data/events/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
     if (file) {
         fclose(file);
@@ -558,7 +558,7 @@ void addEvent(void) {
     }
 
     // event details to be added in organiser_<userID>.csv
-    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", user.userId);
     file = fopen(filename, "a");
     fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
@@ -634,7 +634,7 @@ void listEventsOfOrganizer() {
     char line[2048];
     char filename[64];
     
-    sprintf(filename, "../Data/Organizer_%d.csv", st.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         printf("No organizer file found for user %d\n", st.userId);
@@ -668,7 +668,7 @@ void listEventsOfOrganizer() {
 void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
-    sprintf(filename, "../Data/Organizer_%d.csv", st.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");                    // main file to read data
     FILE *temp = fopen("../Data/temp.csv", "w");        // temp file to write/update data
 

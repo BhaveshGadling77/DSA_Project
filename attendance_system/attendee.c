@@ -326,7 +326,7 @@ void viewStatistics(Node *head)
 void saveToFile(Node *head, int eventId)
 {
     char filename[100];
-    sprintf(filename, "../Data/event_%d.csv", eventId);
+    sprintf(filename, "../Data/events/event_%d.csv", eventId);
 
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
@@ -360,7 +360,7 @@ void loadFromFile(Node **head, int eventID)
 {
     if (head) *head = NULL; // reset head always to avoid garbage value
     char filename[100];
-    sprintf(filename, "../Data/event_%d.csv", eventID);
+    sprintf(filename, "../Data/events/event_%d.csv", eventID);
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)

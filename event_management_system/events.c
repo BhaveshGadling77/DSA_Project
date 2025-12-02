@@ -418,7 +418,7 @@ void addEvent(void) {
 
     // Creation of a file to store the attendees of that event
     char filename[16];
-    sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
+    sprintf(filename, "../Data/events/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
     if (file)
         fclose(file);
@@ -426,7 +426,7 @@ void addEvent(void) {
         printf("%s file could not be created\n", filename);
 
     // event details to be added in organiser_<userID>.csv
-    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", user.userId);
     file = fopen(filename, "a");
     fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,

@@ -10,6 +10,7 @@ typedef struct Attendee {
     char email[50];
     unsigned long long phoneNo;
     int eventID;
+    int eventsRegistered;
     char status[15];           // present, absent or only registered
     char registrationDate[30];
 } Attendee;
@@ -24,7 +25,7 @@ typedef struct Node {
 
 // Attendee Functions (only attendees can call)
 void registerAttendeeForEvent(Node** head, int eventID, userStatus *user);
-void unregisterAttendee(Node** head, userStatus* user);
+bool unregisterAttendee(Node** head, userStatus* user);
 bool fetchUserData(int userID, Attendee *a);
 void updateEventsAttended(int userID);
 

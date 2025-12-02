@@ -88,8 +88,8 @@ void updateEventsAttended(int userID)
     fclose(fp);
     fclose(temp);
 
-    // remove("../Data/userAttendee.csv");
-    // rename("../Data/temp.csv", "../Data/userAttendee.csv");
+    remove("../Data/userAttendee.csv");
+    rename("../Data/temp.csv", "../Data/userAttendee.csv");
 }
 
 bool fetchUserData(int userID, Attendee *a)
@@ -127,7 +127,8 @@ bool fetchUserData(int userID, Attendee *a)
             //no of events attended
             token = strtok(NULL, ",");
             if (!token) continue;
-            id = atoi(token);
+            a->eventsRegistered = atoi(token);
+            
             printf("%d\n", id);
             // Phone
             token = strtok(NULL, ",");
@@ -204,12 +205,13 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
     printf("\nSuccessfully registered for event %d!\n", eventID);
 }
 
-void unregisterAttendee(Node **head, userStatus *user)
+bool unregisterAttendee(Node **head, userStatus *user)
 {
+
     if (*head == NULL)
     {
         printf("\nNo registrations found.\n");
-        return;
+        return false;
     }
 
     Node *temp = *head, *prev = NULL;
@@ -240,7 +242,8 @@ void unregisterAttendee(Node **head, userStatus *user)
     free(temp);
     
     // Save updated list
-    saveToFile(*head, eventID);
+    // saveToFile(*head, eventID);
+    return true;
 }
 
 void markAttendance(Node **head)
@@ -390,9 +393,10 @@ void viewStatistics(Node *head)
 
 void saveToFile(Node *head, int eventId)
 {
+    
     char filename[100];
-    sprintf(filename, "../Data/event_%d.csv", eventId);
 
+    sprintf(filename, "../Data/events/event_%d.csv", eventId);
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
     {
@@ -425,7 +429,7 @@ void loadFromFile(Node **head, int eventID)
 {
     if (head) *head = NULL; // reset head always to avoid garbage value
     char filename[100];
-    sprintf(filename, "../Data/event_%d.csv", eventID);
+    sprintf(filename, "../Data/events/event_%d.csv", eventID);
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)

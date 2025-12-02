@@ -8,7 +8,7 @@
 int isYourEvent(int eventId) {
     char filename[64];
     userStatus user = getDetails();
-    snprintf(filename, sizeof(filename), "../Data/Organizer_%d.csv", user.userId);
+    snprintf(filename, sizeof(filename), "../Data/organizers/Organizer_%d.csv", user.userId);
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
         return 0; 
@@ -151,9 +151,8 @@ void optionsAtAttendee() {
         printf("2. unregister for Event.\n");
         printf("3. Sort Events by Chronological Order.\n");
         printf("4. Sort Events by There IDs.\n");
-        printf("5. Sort Events by there Timings.\n");
-        printf("6. List All the Events.\n");
-        printf("7. Logout\n");
+        printf("5. List All the Events.\n");
+        printf("6. Logout\n");
         check = scanf("%d", &choice);   // removed shadowed 'int' declaration
         switch (choice)
         {
@@ -173,10 +172,11 @@ void optionsAtAttendee() {
             printf("Enter the Event ID: ");
             scanf("%d", &eventId);
             loadFromFile(&head, eventId);
-            unregisterAttendee(&head, &st);
-            saveToFile(head, eventId);
+            if(unregisterAttendee(&head, &st)) {
+                saveToFile(head, eventId);
+                printf("\nUnregistered for Event.\n");
+            }
             freeList(head);
-            printf("\nunRegistered for Event.\n");
             break;
 
         case 3:
@@ -190,15 +190,10 @@ void optionsAtAttendee() {
             break;
         
         case 5:
-            sortEventByTime();
-            printf("\nSorted the Events by there Timings.\n");
-            break;
-        
-        case 6:
             viewEvents();
             printf("\nList All the Events.\n");
             break;
-        case 7:
+        case 6:
             printf("\nLogging out");
             for (int i = 0; i < 3; i++) {
                 printf(".");
