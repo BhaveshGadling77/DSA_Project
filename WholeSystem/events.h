@@ -73,6 +73,7 @@ void modifyEventDetailsInOrganizerFile(event modified); // modify's the event de
 int height(EventBST *n);
 int maximum(int a, int b);
 int getBalance(EventBST *n);
+void calculateCost(event e);                            
 EventBST *rightRotate(EventBST* y);
 EventBST *leftRotate(EventBST *x);
 #endif

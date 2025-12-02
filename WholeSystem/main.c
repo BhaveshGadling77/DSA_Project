@@ -15,8 +15,7 @@ int isYourEvent(int eventId) {
     }
     char line[2048];
     while (fgets(line, 2048, fp) != NULL) {
-        printf("%s\n", line);
-        memset(line, 0, 2048);
+        // printf("%s\n", line);
         char *token = strtok(line, ",");
         if (token == NULL) continue;
         int id = atoi(token);
@@ -24,6 +23,7 @@ int isYourEvent(int eventId) {
             fclose(fp);
             return 1;
         }
+        memset(line, 0, 2048);
     }
     fclose(fp);
     return 0;

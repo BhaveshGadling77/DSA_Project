@@ -454,6 +454,16 @@ void updateEventsOrganized(int userID) {
     }
 }
 
+// calculate and print the cost of venue.
+void calculateCost(event e) {
+    // calculate total rental cost.
+    unsigned long t = (e.endTime.hour - e.startTime.hour) * 3600 + 
+            (e.endTime.minute - e.startTime.minute) * 60 + 
+            (e.endTime.second - e.startTime.second);
+    Venue *v = getVenueByID(e.venueID);
+    double cost = (t * (v->rentalCostPerHour)) / 3600.f;
+    printf("Total Cost for for renting the venue :- %.2lf\n", cost);
+}
 // Add event
 void addEvent(void) {
     event newEvent;
@@ -513,7 +523,8 @@ void addEvent(void) {
         printf("Error: Event ID already exists.\n");
         return;
     }
-
+    
+    calculateCost(newEvent);
     addToList(newEvent);
     eventTree = insertBST(eventTree, newEvent);
 
@@ -657,7 +668,7 @@ void listEventsOfOrganizer() {
 void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
-    sprintf(filename, "Organizer_%d.csv", st.userId);
+    sprintf(filename, "../Data/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");                    // main file to read data
     FILE *temp = fopen("../Data/temp.csv", "w");        // temp file to write/update data
 
@@ -699,11 +710,12 @@ void modifyEventDetailsInOrganizerFile(event modified) {
         }
         memset(line, 0, sizeof(line));
     }
-    fclose(fp);
-    fclose(temp);
     // replace old file with new file
     remove(filename);
     rename("../Data/temp.csv", filename);
+    
+    fclose(fp);
+    fclose(temp);
 }
 // Modify event (using BST)
 void modifyEvent(void) {
@@ -781,6 +793,7 @@ void modifyEvent(void) {
         free(desc);
         return;
     }
+    calculateCost(node->evt);
     // Update linked list
     EventNode *curr = eventList;
     while (curr) {
