@@ -570,6 +570,33 @@ void addEvent(void) {
     fclose(file);
 }
 
+// Delete the entry At Organizer_%d.csv file
+
+void deleteEntry(int userId, int eventId) {
+    FILE *fp, *temp;
+    char line[2048];
+    char filename[64];
+    
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", userId);
+    fp = fopen(filename, "r");
+    temp = fopen("../Data/organizers/temp.csv", "w");
+    while (fgets(line, 2048, fp) != NULL) 
+    {
+        char *token = strtok(line, ",");
+        int obEventId = atoi(token);
+        if (obEventId == eventId) {
+            continue;
+        }
+        fprintf(temp, "%d,", obEventId);
+        int len = strlen(line);
+        fwrite(line, sizeof(char), len, temp);
+    }
+    fclose(temp);
+    fclose(fp);
+    remove(filename);
+    rename("../Data/organizers/temp.csv", filename);
+}
+
 // Delete event (using BST)
 void deleteEvent(void) {
     int eventID;
@@ -627,6 +654,7 @@ void deleteEvent(void) {
     printf("Event deleted!\n");
     char filename[64];
     sprintf(filename, "event_%d.csv", eventID);
+    deleteEntry(user.userId, eventID);
     remove(filename);
 }
 void listEventsOfOrganizer() {
@@ -640,7 +668,7 @@ void listEventsOfOrganizer() {
         printf("No organizer file found for user %d\n", st.userId);
         return;
     }
-    printf("List of Events organised:- \n\n");
+    printf("List of Events organised:- \n");
     while (fgets(line, sizeof(line), fp) != NULL) {
         struct event e;
         char desc[2048];
@@ -659,7 +687,7 @@ void listEventsOfOrganizer() {
         printf("Starting Time: %s\n", startTimeStr);
         printf("End Time: %s\n", endTimeStr);
         printf("Registration Ends at: %s\n", regDue);
-        printf("Description: %s\n", desc);
+        printf("Description: %s\n\n", desc);
         memset(line, 0, sizeof(line));
     }
     fclose(fp);

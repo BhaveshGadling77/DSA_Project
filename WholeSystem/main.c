@@ -5,6 +5,7 @@
 #include "venues.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 int isYourEvent(int eventId) {
     char filename[64];
     userStatus user = getDetails();
@@ -17,8 +18,13 @@ int isYourEvent(int eventId) {
     while (fgets(line, 2048, fp) != NULL) {
         // printf("%s\n", line);
         char *token = strtok(line, ",");
-        if (token == NULL) continue;
+        // printf("%s\n", token);
+        if (token == NULL){ 
+            printf("Error in the tokens.\n");    
+            continue;
+        }
         int id = atoi(token);
+        // printf("id = %d\n", id);
         if (id == eventId) {
             fclose(fp);
             return 1;
@@ -44,7 +50,7 @@ void optionsAtOrganizer() {
         printf("5. Mark Attendees.\n");
         printf("6. View Statistics.\n");
         printf("7. List Your Events\n");
-        printf("8. List All Available veunues.\n");
+        printf("8. List All Available Venues.\n");
         printf("9. Logout.\n");
         check = scanf("%d", &choice);
         switch (choice)
@@ -70,7 +76,7 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
-            head = NULL;                     // ensure initialized
+            head = NULL;
             loadFromFile(&head, eventId);
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
@@ -163,7 +169,7 @@ void optionsAtAttendee() {
             printf("Enter The Event ID: ");
             scanf("%d", &eventId);
             loadFromFile(&head, eventId);
-            registerAttendeeForEvent(&head, eventId, &st);
+            registerAttendeeForEvent(&head, eventId, &st); 
             freeList(head);
             printf("\nRegistered for Event.\n");
             break;

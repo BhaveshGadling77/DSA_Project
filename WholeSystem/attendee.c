@@ -11,7 +11,7 @@ void getCurrentDateTime(char *buffer)
     sprintf(buffer, "%02d-%02d-%d %02d:%02d", t->tm_mday, t->tm_mon + 1, t->tm_year + 1900, t->tm_hour, t->tm_min);
 }
 
-void updateEventsAttended(int userID)
+void updateEventsAttended(int userID, int choice)
 {
     FILE *fp = fopen("../Data/userAttendee.csv", "r+");
     FILE *temp = fopen("../Data/temp.csv", "w");
@@ -64,8 +64,10 @@ void updateEventsAttended(int userID)
         token = strtok(NULL, ",");
         if (!token) continue;
         eventsAttended = atoi(token);
-        if (id == userID) {
+        if (id == userID && choice == INCREASE) {
             eventsAttended++;
+        } else if (id == userID && choice == DECREASE) {
+            eventsAttended--;
         }
         // Phone
         token = strtok(NULL, ",");
@@ -77,8 +79,8 @@ void updateEventsAttended(int userID)
         if (!token) continue;
         strncpy(email, token, sizeof(email)-1);
 
-        printf("%d,%s,%llu,%d,%s\n",
-                id, name, phone, eventsAttended, email);
+        // printf("%d,%s,%llu,%d,%s\n",
+        //         id, name, phone, eventsAttended, email);
         fprintf(temp, "%d,%s,%d,%llu,%s\n",
                 id, name, eventsAttended, phone, email);
         memset(line, 0, sizeof(line));
@@ -112,12 +114,12 @@ bool fetchUserData(int userID, Attendee *a)
     while (fgets(line, sizeof(line), fp)) {
         char *p = line;
         char *token;
-        printf("%s\n", line);
+        // printf("%s\n", line);
         // AttendeeID
         token = strtok(p, ",");
         if (!token) continue;
         id = atoi(token);
-        printf("Id = %d\n userId = %d\n", id, userID);
+        // printf("Id = %d\n userId = %d\n", id, userID);
         if (id == userID) {
             // Name
             token = strtok(NULL, ",");
@@ -129,7 +131,7 @@ bool fetchUserData(int userID, Attendee *a)
             if (!token) continue;
             a->eventsRegistered = atoi(token);
             
-            printf("%d\n", id);
+            // printf("%d\n", id);
             // Phone
             token = strtok(NULL, ",");
             if (!token) continue;
@@ -200,7 +202,7 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
     saveToFile(*head, eventID);
 
     // Update events attended by attendee
-    updateEventsAttended(user->userId);
+    updateEventsAttended(user->userId, INCREASE);
 
     printf("\nSuccessfully registered for event %d!\n", eventID);
 }
@@ -225,7 +227,7 @@ bool unregisterAttendee(Node **head, userStatus *user)
     if (temp == NULL)
     {
         printf("\nYou are not registered for any event.\n");
-        return;
+        return 0;
     }
 
     int eventID = temp->data.eventID;
@@ -240,9 +242,9 @@ bool unregisterAttendee(Node **head, userStatus *user)
     
     // Free the node
     free(temp);
-    
+    updateEventsAttended(user->userId, DECREASE);
     // Save updated list
-    // saveToFile(*head, eventID);
+    saveToFile(*head, eventID);
     return true;
 }
 
