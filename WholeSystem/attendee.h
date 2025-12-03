@@ -6,8 +6,8 @@
 // Attendee structure
 typedef struct Attendee {
     int attendeeID;
-    char name[50];
-    char email[50];
+    char name[64];
+    char email[128];
     unsigned long long phoneNo;
     int eventID;
     int eventsRegistered;
