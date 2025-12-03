@@ -1,0 +1,13 @@
+AttendeeID,Name,Email,Phone,EventID,Status,RegistrationDate
+42,User42,user42@gmail.com,8188332531,129,Registered,2025-11-06
+21,User21,user21@gmail.com,8139027119,129,Attended,2025-09-23
+15,User15,user15@gmail.com,8963764597,129,Registered,2025-10-27
+51,User51,user51@gmail.com,7154739678,129,Attended,2025-09-04
+22,User22,user22@gmail.com,8498981529,129,Attended,2025-11-17
+61,User61,user61@gmail.com,9665720874,129,Registered,2025-09-13
+48,User48,user48@gmail.com,7041531046,129,Cancelled,2025-11-02
+52,User52,user52@gmail.com,9501859536,129,Cancelled,2025-11-12
+39,User39,user39@gmail.com,9098228320,129,Attended,2025-09-23
+96,User96,user96@gmail.com,9950028965,129,Registered,2025-09-23
+34,User34,user34@gmail.com,8169726681,129,Attended,2025-11-21
+77,User77,user77@gmail.com,8711398352,129,Registered,2025-11-18

@@ -143,4 +143,34 @@ eventID,eventName,organiserID,venueID,eventDate,startTime,endTime,regDue,eventDe
 167,sumit's third date.,17,90,13-05-2028,15:00:00,17:00:00,13:00:00,sumit's third date.
 168,dinner party.,17,53,19-12-2028,15:00:00,18:00:00,12:00:00,sumit is hungry.
 169,sumit's dinner party,17,35,25-12-2025,18:00:00,22:00:00,17:00:00,Inviting peoples to his christmas party.
-170,something,18,18,12-12-2028,14:00:00,15:00:00,10:00:00,something is there 
+170,something,18,18,12-12-2028,14:00:00,15:00:00,10:00:00,something is there
+171,Music Fest 26,8,32,04-07-2027,04:47:06,14:47:06,22:47:06,Classical music concert series
+172,Cultural Night 33,0,12,15-06-2027,07:32:38,09:32:38,19:32:38,Research methodology workshop
+173,Startup Meet 430,7,58,14-02-2028,00:48:51,04:48:51,03:48:51,Leadership development seminar
+174,Seminar 285,4,28,10-10-2028,03:05:24,06:05:24,04:05:24,Cybersecurity conference
+175,Seminar 619,8,6,25-02-2030,17:07:59,01:07:59,11:07:59,Autonomous systems exhibition
+176,AI Workshop 850,20,80,21-01-2029,18:12:45,21:12:45,15:12:45,Basketball tournament finals
+177,Hackathon 792,9,11,12-08-2027,03:24:17,12:24:17,10:24:17,Digital marketing strategies
+178,Seminar 167,11,46,09-05-2027,21:17:44,00:17:44,06:17:44,Technology and society conference
+179,Sports Meet 547,7,21,09-03-2030,12:17:59,22:17:59,21:17:59,Basketball tournament finals
+180,Seminar 864,1,30,12-05-2025,10:25:17,13:25:17,20:25:17,Blockchain technology summit
+181,Seminar 218,20,64,09-06-2029,20:29:09,02:29:09,11:29:09,Spring music celebration
+182,Startup Meet 552,8,96,21-10-2029,18:25:23,23:25:23,09:25:23,Computer vision techniques
+183,Robotics Expo 94,1,15,19-09-2026,20:10:50,04:10:50,05:10:50,Annual inter-college sports tournament
+184,Cultural Night 391,19,60,08-12-2030,08:35:55,10:35:55,12:35:55,Cricket championship match
+185,Music Fest 699,17,97,29-12-2027,20:21:07,02:21:07,16:21:07,Track and field championship
+186,Robotics Expo 4,8,65,02-01-2027,16:58:06,22:58:06,23:58:06,Computer vision techniques
+187,Hackathon 157,11,98,24-10-2026,17:49:59,03:49:59,16:49:59,Career development workshop
+188,Seminar 501,0,15,26-01-2029,09:15:03,14:15:03,20:15:03,Annual inter-college sports tournament
+189,Music Fest 750,15,9,22-12-2030,04:08:42,13:08:42,16:08:42,Track and field championship
+190,AI Workshop 541,19,55,18-05-2027,17:48:46,22:48:46,19:48:46,Technology innovation showcase
+191,Cultural Night 688,20,48,30-11-2029,16:28:07,21:28:07,01:28:07,Annual inter-college sports tournament
+192,Seminar 22,18,71,01-08-2027,18:14:00,21:14:00,20:14:00,Technology and society conference
+193,Tech Fest 235,2,5,15-09-2028,02:32:15,08:32:15,07:32:15,Business strategy seminar
+194,Hackathon 553,4,93,21-04-2030,07:50:30,15:50:30,18:50:30,Live music performances festival
+195,Music Fest 675,13,46,01-10-2029,13:29:55,15:29:55,17:29:55,Technology and society conference
+196,Music Fest 63,12,94,21-10-2028,03:15:12,08:15:12,16:15:12,Summer music extravaganza
+197,Sports Meet 433,5,36,10-03-2030,07:55:59,10:55:59,02:55:59,International cultural celebration
+198,Startup Meet 101,1,84,02-03-2025,02:59:48,07:59:48,15:59:48,Leadership development seminar
+199,Robotics Expo 493,6,52,29-08-2025,05:24:00,13:24:00,12:24:00,Blockchain technology summit
+200,Robotics Expo 293,13,90,17-06-2030,04:12:18,09:12:18,00:12:18,Classical music concert series
