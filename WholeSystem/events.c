@@ -573,28 +573,60 @@ void addEvent(void) {
 // Delete the entry At Organizer_%d.csv file
 
 void deleteEntry(int userId, int eventId) {
-    FILE *fp, *temp;
+    FILE *fp = NULL, *temp = NULL;
     char line[2048];
-    char filename[64];
+    char line_copy[2048];
+    char filename[128];
+    char tempFilename[128];
     
-    sprintf(filename, "../Data/organizers/Organizer_%d.csv", userId);
+    snprintf(filename, sizeof(filename), "../Data/organizers/Organizer_%d.csv", userId);
+    snprintf(tempFilename, sizeof(tempFilename), "../Data/organizers/temp_%d.csv", userId);
+    
     fp = fopen(filename, "r");
-    temp = fopen("../Data/organizers/temp.csv", "w");
-    while (fgets(line, 2048, fp) != NULL) 
-    {
-        char *token = strtok(line, ",");
+    if (!fp) {
+        fprintf(stderr, "Error opening organizer file '%s'\n", filename);
+        return;
+    }
+    
+    temp = fopen(tempFilename, "w");
+    if (!temp) {
+        fprintf(stderr, "Error creating temp file '%s'\n", tempFilename);
+        fclose(fp);
+        return;
+    }
+    
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        // make a working copy for strtok so original 'line' remains intact
+        strncpy(line_copy, line, sizeof(line_copy) - 1);
+        line_copy[sizeof(line_copy) - 1] = '\0';
+        
+        char *token = strtok(line_copy, ",");
+        if (!token) {
+            // malformed line, preserve as-is
+            fprintf(temp, "%s", line);
+            continue;
+        }
+        
         int obEventId = atoi(token);
         if (obEventId == eventId) {
             continue;
         }
-        fprintf(temp, "%d,", obEventId);
-        int len = strlen(line);
-        fwrite(line, sizeof(char), len, temp);
+        
+        // not the one to delete — write the full original line unchanged
+        fprintf(temp, "%s", line);
     }
-    fclose(temp);
+    
     fclose(fp);
-    remove(filename);
-    rename("../Data/organizers/temp.csv", filename);
+    fclose(temp);
+    
+    if (remove(filename) != 0) {
+        perror("remove");
+        // leave temp file for inspection
+        return;
+    }
+    if (rename(tempFilename, filename) != 0) {
+        perror("rename");
+    }
 }
 
 // Delete event (using BST)
