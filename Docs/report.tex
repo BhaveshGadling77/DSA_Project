@@ -401,7 +401,7 @@ Although the EMS functions reliably for small to medium-scale usage, several lim
     \item \textbf{File-based Storage:} The use of CSV files limits scalability. As the number of users or events grows, file operations become slower and more prone to data inconsistency due to partial writes or unexpected termination.
     \item \textbf{Lack of Concurrency Support:} Two users cannot safely modify the system at the same time. Without locking mechanisms, simultaneous updates may lead to overwritten data.
     \item \textbf{Basic User Interface:} The console interface, while functional, does not provide the ease and accessibility of graphical or web-based platforms.
-    \item \textbf{Limited Security Features:} Passwords are stored in plain text and role permissions are basic. The system is not designed for high-security environments.
+    \item \textbf{Security Limitations :} The system does not use password authentication. User details are stored in plain text, role-based access control is minimal, and the system is not intended for high-security applications.
     \item \textbf{No Real-Time Notifications:} Users must manually check event information; the system does not push reminders or updates.
 \end{itemize}
 
