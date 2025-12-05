@@ -10,8 +10,8 @@ Working on Events and venues
 
 
 ### Tasks to be done before 4th Dec.
-- [ ] Piyush Technical documentation is remaining.
-- [ ] Try To improve the UI.
-- [ ] Make a Report.
-- [ ] Make a Pointer diagram.
+- [x] Piyush Technical documentation is remaining.
+- [x] Try To improve the UI.
+- [x] Make a Report.
+- [x] Make a Pointer diagram.
 - [ ] GitHub Readme of project.

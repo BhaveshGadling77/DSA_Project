@@ -5,25 +5,33 @@
 #include "venues.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 int isYourEvent(int eventId) {
     char filename[64];
     userStatus user = getDetails();
-    snprintf(filename, sizeof(filename), "../Data/Organizer_%d.csv", user.userId);
+    snprintf(filename, sizeof(filename), "../Data/organizers/Organizer_%d.csv", user.userId);
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
         return 0; 
     }
     char line[2048];
     while (fgets(line, 2048, fp) != NULL) {
+        // printf("%s\n", line);
         printf("%s\n", line);
         memset(line, 0, 2048);
         char *token = strtok(line, ",");
-        if (token == NULL) continue;
+        // printf("%s\n", token);
+        if (token == NULL){ 
+            printf("Error in the tokens.\n");    
+            continue;
+        }
         int id = atoi(token);
+        // printf("id = %d\n", id);
         if (id == eventId) {
             fclose(fp);
             return 1;
         }
+        memset(line, 0, 2048);
     }
     fclose(fp);
     return 0;
@@ -44,7 +52,7 @@ void optionsAtOrganizer() {
         printf("5. Mark Attendees.\n");
         printf("6. View Statistics.\n");
         printf("7. List Your Events\n");
-        printf("8. List All Available veunues.\n");
+        printf("8. List All Available Venues.\n");
         printf("9. Logout.\n");
         check = scanf("%d", &choice);
         switch (choice)
@@ -70,8 +78,12 @@ void optionsAtOrganizer() {
                 printf("You haven't organised this Event.\n");
                 break;
             }
-            head = NULL;                     // ensure initialized
+            head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -90,7 +102,14 @@ void optionsAtOrganizer() {
             }
 
             head = NULL;
+
+            head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
+            markAttendance(&head);
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -108,6 +127,10 @@ void optionsAtOrganizer() {
             }
             head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -151,9 +174,8 @@ void optionsAtAttendee() {
         printf("2. unregister for Event.\n");
         printf("3. Sort Events by Chronological Order.\n");
         printf("4. Sort Events by There IDs.\n");
-        printf("5. Sort Events by there Timings.\n");
-        printf("6. List All the Events.\n");
-        printf("7. Logout\n");
+        printf("5. List All the Events.\n");
+        printf("6. Logout\n");
         check = scanf("%d", &choice);   // removed shadowed 'int' declaration
         switch (choice)
         {
@@ -164,7 +186,7 @@ void optionsAtAttendee() {
             printf("Enter The Event ID: ");
             scanf("%d", &eventId);
             loadFromFile(&head, eventId);
-            registerAttendeeForEvent(&head, eventId, &st);
+            registerAttendeeForEvent(&head, eventId, &st); 
             freeList(head);
             printf("\nRegistered for Event.\n");
             break;
@@ -173,10 +195,11 @@ void optionsAtAttendee() {
             printf("Enter the Event ID: ");
             scanf("%d", &eventId);
             loadFromFile(&head, eventId);
-            unregisterAttendee(&head, &st);
-            saveToFile(head, eventId);
+            if(unregisterAttendee(&head, &st)) {
+                saveToFile(head, eventId);
+                printf("\nUnregistered for Event.\n");
+            }
             freeList(head);
-            printf("\nunRegistered for Event.\n");
             break;
 
         case 3:
@@ -190,15 +213,10 @@ void optionsAtAttendee() {
             break;
         
         case 5:
-            sortEventByTime();
-            printf("\nSorted the Events by there Timings.\n");
-            break;
-        
-        case 6:
             viewEvents();
             printf("\nList All the Events.\n");
             break;
-        case 7:
+        case 6:
             printf("\nLogging out");
             for (int i = 0; i < 3; i++) {
                 printf(".");

@@ -35,6 +35,7 @@ typedef struct EventNode {
 // BST node for events by eventID
 typedef struct EventBST {
     struct event evt;
+    int height;
     struct EventBST *left;
     struct EventBST *right;
 } EventBST;
@@ -69,4 +70,10 @@ int checkValidDate(date d);                             // Return 1 if valid, 0 
 int generateEventID(void);                              // Generates a unique event ID
 void listEventsOfOrganizer();                           // list the events Organised by specific organiser.
 void modifyEventDetailsInOrganizerFile(event modified); // modify's the event details of the particular Organizer_<userId>.csv
+int height(EventBST *n);
+int maximum(int a, int b);
+int getBalance(EventBST *n);
+void calculateCost(event e);                            
+EventBST *rightRotate(EventBST* y);
+EventBST *leftRotate(EventBST *x);
 #endif

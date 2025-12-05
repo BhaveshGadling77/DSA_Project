@@ -10,6 +10,41 @@
 EventNode *eventList = NULL;                            // Linked list for sequential access
 EventBST *eventTree = NULL;                             // BST for fast search/delete by ID
 
+// Function to give the height of a node
+int height(EventBST *n) {
+    return n ? n->height : 0;
+}
+
+// Function to find max of two nums
+int maximum(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+// Function to check if the node is balanced or not
+int getBalance(EventBST *n) {
+    return n ? height(n->left) - height(n->right) : 0;
+}
+
+// Function to rotate right
+EventBST *rightRotate(EventBST *y) {
+    EventBST *x = y->left;
+    EventBST *T2 = x->right;
+    x->right = y; y->left = T2;
+    y->height = maximum(height(y->left), height(y->right)) + 1;
+    x->height = maximum(height(x->left), height(x->right)) + 1;
+    return x;
+}
+
+// Function to rotate left
+EventBST *leftRotate(EventBST *x) {
+    EventBST *y = x->right;
+    EventBST *T2 = y->left;
+    y->left = x; x->right = T2;
+    x->height = maximum(height(x->left), height(x->right)) + 1;
+    y->height = maximum(height(y->left), height(y->right)) + 1;
+    return y;
+}
+
 // Function to check if the provided time is valid or not
 int checkValidTime(Time regEndtime, Time startTime, Time endTime) {
     if (startTime.hour >= 24 || startTime.minute >= 60 ||  startTime.second >= 60) {
@@ -80,18 +115,42 @@ int checkValidDate(date d) {
 EventBST* newBSTNode(event e) {
     EventBST* node = (EventBST*)malloc(sizeof(EventBST));
     node->evt = e;
+    node->height = 1;
     node->left = node->right = NULL;
     return node;
 }
 
 // Insert into BST by eventID
-EventBST* insertBST(EventBST* root, event e) {
-    if (root == NULL) return newBSTNode(e);
-    if (e.eventID < root->evt.eventID)
-        root->left = insertBST(root->left, e);
-    else if (e.eventID > root->evt.eventID)
-        root->right = insertBST(root->right, e);
-    return root;
+EventBST* insertBST(EventBST* node, event e) {
+    if (node == NULL) return newBSTNode(e);
+
+    if (e.eventID < node->evt.eventID)
+        node->left = insertBST(node->left, e);
+    else if (e.eventID > node->evt.eventID)
+        node->right = insertBST(node->right, e);
+    else
+        return node;  // duplicate
+
+    node->height = 1 + maximum(height(node->left), height(node->right));
+    int balance = getBalance(node);
+
+    // Left Left
+    if (balance > 1 && e.eventID < node->left->evt.eventID)
+        return rightRotate(node);
+    // Right Right
+    if (balance < -1 && e.eventID > node->right->evt.eventID)
+        return leftRotate(node);
+    // Left Right
+    if (balance > 1 && e.eventID > node->left->evt.eventID) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+    // Right Left
+    if (balance < -1 && e.eventID < node->right->evt.eventID) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+    return node;
 }
 
 // Search in BST by eventID
@@ -110,8 +169,10 @@ EventBST* minValueNode(EventBST* node) {
 }
 
 // Delete from BST
+// AVL-balanced delete
 EventBST* deleteBST(EventBST* root, int eventID) {
-    if (root == NULL) return root;
+    if (root == NULL)
+        return root;
     if (eventID < root->evt.eventID)
         root->left = deleteBST(root->left, eventID);
     else if (eventID > root->evt.eventID)
@@ -130,6 +191,32 @@ EventBST* deleteBST(EventBST* root, int eventID) {
         root->evt = temp->evt;
         root->right = deleteBST(root->right, temp->evt.eventID);
     }
+    if (root == NULL)
+        return root;
+    // Update height
+    root->height = 1 + maximum(height(root->left), height(root->right));
+    // Get balance factor
+    int balance = getBalance(root);
+    // Left Heavy
+    if (balance > 1) {
+        if (getBalance(root->left) >= 0)
+            return rightRotate(root);           // LL
+        else {
+            root->left = leftRotate(root->left);
+            return rightRotate(root);           // LR
+        }
+    }
+
+    // Right Heavy
+    if (balance < -1) {
+        if (getBalance(root->right) <= 0)
+            return leftRotate(root);            // RR
+        else {
+            root->right = rightRotate(root->right);
+            return leftRotate(root);            // RL
+        }
+    }
+
     return root;
 }
 
@@ -367,6 +454,16 @@ void updateEventsOrganized(int userID) {
     }
 }
 
+// calculate and print the cost of venue.
+void calculateCost(event e) {
+    // calculate total rental cost.
+    unsigned long t = (e.endTime.hour - e.startTime.hour) * 3600 + 
+            (e.endTime.minute - e.startTime.minute) * 60 + 
+            (e.endTime.second - e.startTime.second);
+    Venue *v = getVenueByID(e.venueID);
+    double cost = (t * (v->rentalCostPerHour)) / 3600.f;
+    printf("Total Cost for for renting the venue :- %.2lf\n", cost);
+}
 // Add event
 void addEvent(void) {
     event newEvent;
@@ -426,7 +523,8 @@ void addEvent(void) {
         printf("Error: Event ID already exists.\n");
         return;
     }
-
+    
+    calculateCost(newEvent);
     addToList(newEvent);
     eventTree = insertBST(eventTree, newEvent);
 
@@ -450,8 +548,8 @@ void addEvent(void) {
     printf("Event added!\n");
 
     // Creation of a file to store the attendees of that event
-    char filename[32];
-    sprintf(filename, "../Data/event_%d.csv", newEvent.eventID);
+    char filename[64];
+    sprintf(filename, "../Data/events/event_%d.csv", newEvent.eventID);
     file = fopen(filename, "w");
     if (file) {
         fclose(file);
@@ -460,7 +558,7 @@ void addEvent(void) {
     }
 
     // event details to be added in organiser_<userID>.csv
-    sprintf(filename, "../Data/Organizer_%d.csv", user.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", user.userId);
     file = fopen(filename, "a");
     fprintf(file, "%d,%s,%d,%d,%02hd-%02hd-%04hd,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%02hu:%02hu:%02hu,%s\n",
         newEvent.eventID, newEvent.eventName, newEvent.organiserID, newEvent.venueID,
@@ -470,6 +568,65 @@ void addEvent(void) {
         newEvent.regDue.hour, newEvent.regDue.minute, newEvent.regDue.second,
         newEvent.description ? newEvent.description : "");
     fclose(file);
+}
+
+// Delete the entry At Organizer_%d.csv file
+
+void deleteEntry(int userId, int eventId) {
+    FILE *fp = NULL, *temp = NULL;
+    char line[2048];
+    char line_copy[2048];
+    char filename[128];
+    char tempFilename[128];
+    
+    snprintf(filename, sizeof(filename), "../Data/organizers/Organizer_%d.csv", userId);
+    snprintf(tempFilename, sizeof(tempFilename), "../Data/organizers/temp_%d.csv", userId);
+    
+    fp = fopen(filename, "r");
+    if (!fp) {
+        fprintf(stderr, "Error opening organizer file '%s'\n", filename);
+        return;
+    }
+    
+    temp = fopen(tempFilename, "w");
+    if (!temp) {
+        fprintf(stderr, "Error creating temp file '%s'\n", tempFilename);
+        fclose(fp);
+        return;
+    }
+    
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        // make a working copy for strtok so original 'line' remains intact
+        strncpy(line_copy, line, sizeof(line_copy) - 1);
+        line_copy[sizeof(line_copy) - 1] = '\0';
+        
+        char *token = strtok(line_copy, ",");
+        if (!token) {
+            // malformed line, preserve as-is
+            fprintf(temp, "%s", line);
+            continue;
+        }
+        
+        int obEventId = atoi(token);
+        if (obEventId == eventId) {
+            continue;
+        }
+        
+        // not the one to delete — write the full original line unchanged
+        fprintf(temp, "%s", line);
+    }
+    
+    fclose(fp);
+    fclose(temp);
+    
+    if (remove(filename) != 0) {
+        perror("remove");
+        // leave temp file for inspection
+        return;
+    }
+    if (rename(tempFilename, filename) != 0) {
+        perror("rename");
+    }
 }
 
 // Delete event (using BST)
@@ -529,6 +686,7 @@ void deleteEvent(void) {
     printf("Event deleted!\n");
     char filename[64];
     sprintf(filename, "event_%d.csv", eventID);
+    deleteEntry(user.userId, eventID);
     remove(filename);
 }
 void listEventsOfOrganizer() {
@@ -536,13 +694,13 @@ void listEventsOfOrganizer() {
     char line[2048];
     char filename[64];
     
-    sprintf(filename, "../Data/Organizer_%d.csv", st.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         printf("No organizer file found for user %d\n", st.userId);
         return;
     }
-    printf("List of Events organised:- \n\n");
+    printf("List of Events organised:- \n");
     while (fgets(line, sizeof(line), fp) != NULL) {
         struct event e;
         char desc[2048];
@@ -561,7 +719,7 @@ void listEventsOfOrganizer() {
         printf("Starting Time: %s\n", startTimeStr);
         printf("End Time: %s\n", endTimeStr);
         printf("Registration Ends at: %s\n", regDue);
-        printf("Description: %s\n", desc);
+        printf("Description: %s\n\n", desc);
         memset(line, 0, sizeof(line));
     }
     fclose(fp);
@@ -570,7 +728,7 @@ void listEventsOfOrganizer() {
 void modifyEventDetailsInOrganizerFile(event modified) {
     userStatus st = getDetails();
     char filename[64];
-    sprintf(filename, "Organizer_%d.csv", st.userId);
+    sprintf(filename, "../Data/organizers/Organizer_%d.csv", st.userId);
     FILE *fp = fopen(filename, "r");                    // main file to read data
     FILE *temp = fopen("../Data/temp.csv", "w");        // temp file to write/update data
 
@@ -612,11 +770,12 @@ void modifyEventDetailsInOrganizerFile(event modified) {
         }
         memset(line, 0, sizeof(line));
     }
-    fclose(fp);
-    fclose(temp);
     // replace old file with new file
     remove(filename);
     rename("../Data/temp.csv", filename);
+    
+    fclose(fp);
+    fclose(temp);
 }
 // Modify event (using BST)
 void modifyEvent(void) {
@@ -694,6 +853,7 @@ void modifyEvent(void) {
         free(desc);
         return;
     }
+    calculateCost(node->evt);
     // Update linked list
     EventNode *curr = eventList;
     while (curr) {

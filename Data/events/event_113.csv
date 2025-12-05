@@ -1,0 +1,8 @@
+AttendeeID,Name,Email,Phone,EventID,Status,RegistrationDate
+41,User41,user41@gmail.com,9724230947,113,Cancelled,2025-09-27
+3,User3,user3@gmail.com,9446737272,113,Cancelled,2025-10-29
+76,User76,user76@gmail.com,9834820954,113,Cancelled,2025-09-25
+9,User9,user9@gmail.com,8358798143,113,Attended,2025-10-04
+90,User90,user90@gmail.com,9603647189,113,Attended,2025-08-31
+19,User19,user19@gmail.com,7314652384,113,Cancelled,2025-10-29
+34,User34,user34@gmail.com,8169726681,113,Attended,2025-11-01

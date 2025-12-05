@@ -1,20 +1,18 @@
 CC = gcc
-FLAGS = -O3
-
 a.out: main.o login_registration.o events.o attendee.o venues.o
-	${CC} ${FLAGS} $^
+	${CC}  $^
 
 login_registration.o: login_registration.c
-	${CC} ${FLAGS} $^ -c 
+	${CC}  $^ -c 
 
 attendee.o: attendee.c
-	${CC} ${FLAGS} $^ -c 
+	${CC}  $^ -c 
 
 main.o:	main.c
-	${CC} ${FLAGS} $^ -c
+	${CC}  $^ -c
 
 events.o: events.c
-	${CC} ${FLAGS} $^ -c
+	${CC}  $^ -c
 
 venues.o: venues.c
-	${CC} ${FLAGS} $^ -c
+	${CC}  $^ -c

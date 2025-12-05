@@ -6,10 +6,11 @@
 // Attendee structure
 typedef struct Attendee {
     int attendeeID;
-    char name[50];
-    char email[50];
+    char name[64];
+    char email[128];
     unsigned long long phoneNo;
     int eventID;
+    int eventsRegistered;
     char status[15];           // present, absent or only registered
     char registrationDate[30];
 } Attendee;
@@ -20,13 +21,13 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-// Function declarations
-
+#define DECREASE 1
+#define INCREASE 2
 // Attendee Functions (only attendees can call)
 void registerAttendeeForEvent(Node** head, int eventID, userStatus *user);
-void unregisterAttendee(Node** head, userStatus* user);
+bool unregisterAttendee(Node** head, userStatus* user);
 bool fetchUserData(int userID, Attendee *a);
-void updateEventsAttended(int userID);
+void updateEventsAttended(int userID, int choice);
 
 // organizer functions
 void markAttendance(Node** head);

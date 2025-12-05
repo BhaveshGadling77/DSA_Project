@@ -7,3 +7,4 @@ https://stackoverflow.com/questions/13566082/how-to-check-if-a-file-has-content-
 https://www.geeksforgeeks.org/c/c-file-pointer/
 https://www.geeksforgeeks.org/c/memset-c-example/
 https://www.geeksforgeeks.org/c/fgets-function-in-c/
+https://app.diagrams.net/#G1GGxba8qlyancuFZS3CsWSst3u1rytSaa#%7B%22pageId%22%3A%22XdTsOxpON77gtYckJoEz%22%7D

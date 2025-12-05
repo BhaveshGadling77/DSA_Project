@@ -199,7 +199,7 @@ int registerAsUser(int choice) {
     if (choice == 1) {
         char filename[128];
         /* fixed: properly build filename */
-        sprintf(filename,"../Data/Organizer_%d.csv", att->userId);
+        sprintf(filename,"../Data/organizers/Organizer_%d.csv", att->userId);
         FILE *fp1 = fopen(filename, "w");
         if (fp1) fclose(fp1);
     }
