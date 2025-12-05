@@ -5,8 +5,7 @@
     <h1 align="center">Event Management System</h1>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/last-commit/
-BhaveshGadling77/DSA_Project?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/last-commit/BhaveshGadling77/DSA_Project?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/BhaveshGadling77/DSA_Project?style=flat&color=0080ff" alt="repo-top-language">
 	<img src="https://img.shields.io/github/languages/count/BhaveshGadling77/DSA_Project?style=flat&color=0080ff" alt="repo-language-count">
 <p>
