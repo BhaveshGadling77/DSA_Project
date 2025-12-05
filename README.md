@@ -342,4 +342,5 @@ Contributions are highly appreciated. Please create a pull request if you have a
 This project solidified our understanding of DSA in practice, from balancing trees to chaining hashes. It not only met lab requirements but also created a functional system we'd use for real events. We're proud of the result and open to feedback..Feel free to fork and improve!
 
 Team: [Sumit Desai](https://github.com/SumitDesai-21), [Piyush Deshpande](https://github.com/Piyush-D24), & [Bhavesh Gadling](https://github.com/BhaveshGadling77)
+
 COEP Technological University, Pune.
