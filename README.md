@@ -33,7 +33,7 @@ Throughout development, we gained deep insights into how data structures impact 
 
 On the algorithmic side, we implemented QuickSort with custom comparators for flexible event sorting and an Interval Tree for efficient venue conflict detection avoiding brute force O(m²) checks that could slow down the system. Working as a team taught us about modular design: separating login, event, and attendee modules ensured clean integration. Finally, handling edge cases like leap years in date validation and midnight-crossing events built our problem-solving resilience.
 
-###8 A Bit About Our Project
+### 8 A Bit About Our Project
 
 Our Event Management System is a complete console application in C that supports organizers and attendees. It consists of three interconnected modules:
 
