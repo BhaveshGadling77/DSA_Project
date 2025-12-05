@@ -13,22 +13,10 @@ void getCurrentDateTime(char *buffer)
 
 void updateEventsAttended(int userID, int choice)
 {
-    FILE *fp = fopen("../Data/userAttendee.csv", "r+");
+    FILE *fp = fopen("../Data/userAttendee.csv", "r");
     FILE *temp = fopen("../Data/temp.csv", "w");
 
-    if (!fp || !temp)
-    {
-        printf("Error opening user file!\n");
-        if(fp) fclose(fp);
-        if(temp) fclose(temp);
-        return;
-    }
-
-    // char buffer[500];
-    // fgets(buffer, sizeof(buffer), fp);
-    // fprintf(temp, "%s", buffer);
-
-    int id, eventsAttended;
+    int id, events;
     unsigned long long phone;
     char name[100], email[100];
 
@@ -94,23 +82,13 @@ void updateEventsAttended(int userID, int choice)
     rename("../Data/temp.csv", "../Data/userAttendee.csv");
 }
 
+
 bool fetchUserData(int userID, Attendee *a)
 {
     FILE *fp = fopen("../Data/userAttendee.csv", "r");
-    if (!fp)
-    {
-        printf("Error: User database not found!\n");
-        return false;
-    }
+    if (!fp) return false;
 
-    // char buffer[500];
-    // fgets(buffer, sizeof(buffer), fp);
-
-    int id, eventsAttended;
-    char name[100], email[100];
-    unsigned long long phone;
     char line[2048];
-
     while (fgets(line, sizeof(line), fp)) {
         char *p = line;
         char *token;
@@ -150,6 +128,7 @@ bool fetchUserData(int userID, Attendee *a)
     fclose(fp);
     return false;
 }
+
 
 void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 {

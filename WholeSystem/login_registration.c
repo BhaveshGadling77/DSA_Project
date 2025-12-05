@@ -8,111 +8,122 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
+
 /*Convert Uppercase to lower case*/
 void convertToLowerCase(char *s) {
-	int n = strlen(s);
-	for (int i = 0; i < strlen(s); i++) {
+    for (int i = 0; i < strlen(s); i++) {
         s[i] = tolower(s[i]);
     }
 }
 
 /*User id of the person.*/
 static userStatus st;
+
 /* Validate the email*/
 int validateEmail(char *email) {
- 	int n = strlen(email);
-	int cntat = 0;
-	for (int i = 0; i < n; i++) {
-		if (email[i] == '@') {
-			cntat++;
-		}
-		if (email[i] == ' ' || email[i] == '/' || email[i] == ':' || email[i] == ';'
-				|| email[i] == '<' || email[i] == '['|| email[i] == '>' || email[i] == ']' || email[i] == ':') {
-			return 0;
-		}
- 	}
-	if (cntat == 1) {
-		if (email[0] != '@') {
-			char *dot = strchr(email, '.');
-			if (dot != NULL && dot > strchr(email, '@')) {
-				return 1;
-			}
-		}
-	}
-	return 0;
+    int n = strlen(email);
+    int cntat = 0;
+    for (int i = 0; i < n; i++) {
+        if (email[i] == '@') {
+            cntat++;
+        }
+        if (email[i] == ' ' || email[i] == '/' || email[i] == ':' || email[i] == ';'
+            || email[i] == '<' || email[i] == '['|| email[i] == '>' || email[i] == ']' || email[i] == ':') {
+            return 0;
+        }
+    }
+    if (cntat == 1) {
+        if (email[0] != '@') {
+            char *dot = strchr(email, '.');
+            if (dot != NULL && dot > strchr(email, '@')) {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
+
 /* Validate and insert the mobile number in Organiser struct.*/
 long long giveValidMobileNumber() {
-	char num[32];
-	long long n;
-	while (scanf("%s", num) == 1) {
-		if (strlen(num) == 10) {
-			n = atol(num);
-			// printf("%ld\n", n);
-			break;
-		} else {
-	 		printf("Mobile Number Should be of 10 digits.\n");
-	 		printf("Please Enter Your Mobile Number Again:- ");
-		}
-	}
-	return n;
+    char num[32];
+    long long n;
+    while (scanf("%s", num) == 1) {
+        if (strlen(num) == 10) {
+            n = atoll(num);
+            break;
+        } else {
+            printf("Mobile Number Should be of 10 digits.\n");
+            printf("Please Enter Your Mobile Number Again:- ");
+        }
+    }
+    return n;
 }
+
 int userValidation(user *a, int choice) {
-	int userId;
-	FILE *fp;
-	unsigned int noOfEventattended;
-	char name[256], email[256];
-	long long mobileNum;
-	if (choice == 1) {
-		fp = fopen("../Data/userOrganizer.csv", "r");
-	} else {
-		fp = fopen("../Data/userAttendee.csv", "r");
-	}
-	if (fp == NULL) {
-		printf("Error in file opening.\n");
-		exit(1);
-	}
-	char buffer[2048];
-	/* Checking if the user already exist or not.*/
-	while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-		/* tokenize safely and check each token before using */
-		char *token = strtok(buffer, ",");
-		if (token == NULL) continue;
-		userId = atoi(token);
+    int userId;
+    FILE *fp;
+    unsigned int noEvents;
+    char name[256], email[256];
+    long long mobileNum;
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		strncpy(name, token, sizeof(name) - 1);
-		name[sizeof(name) - 1] = '\0';
+    if (choice == 1)
+        fp = fopen("../Data/userOrganizer.csv", "r");
+    else
+        fp = fopen("../Data/userAttendee.csv", "r");
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		mobileNum = atol(token);
+    if (fp == NULL) {
+        printf("Error in file opening.\n");
+        exit(1);
+    }
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		noOfEventattended = (unsigned int)atoi(token);
+    char buffer[2048];
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		/* remove any trailing newline from email token */
-		strncpy(email, token, sizeof(email) - 1);
-		email[sizeof(email) - 1] = '\0';
-		size_t ln = strlen(email);
-		if (ln > 0 && email[ln - 1] == '\n') email[ln - 1] = '\0';
+    /* Checking if the user already exist or not.*/
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
 
-		// Convert the name and email to the lower case 
-		convertToLowerCase(email);
-		convertToLowerCase(name);
-		if (strcmp(email, a->email) == 0 || strcmp(name, a->name) == 0 || mobileNum == a->mobileNumber) {
-			printf("User Already Exist please Try to login.\n");
-			fclose(fp);
-			return 1;
-		}
-	}
-	fclose(fp);
-	return -1;
+        char *token = strtok(buffer, ",");
+        if (!token) continue;
+        userId = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(name, token, sizeof(name));
+        name[sizeof(name)-1] = '\0';
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        noEvents = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        mobileNum = atoll(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(email, token, sizeof(email));
+        email[sizeof(email)-1] = '\0';
+        size_t ln = strlen(email);
+        if (ln > 0 && email[ln-1] == '\n') email[ln-1] = '\0';
+
+        convertToLowerCase(name);
+        convertToLowerCase(email);
+
+        char aName[64], aEmail[128];
+        strcpy(aName, a->name);
+        strcpy(aEmail, a->email);
+        convertToLowerCase(aName);
+        convertToLowerCase(aEmail);
+
+        if (strcmp(email, aEmail) == 0 || strcmp(name, aName) == 0 || mobileNum == a->mobileNumber) {
+            printf("User Already Exist please Try to login.\n");
+            fclose(fp);
+            return 1;
+        }
+    }
+    fclose(fp);
+    return -1;
 }
+
 /*Register as Both organiser and attendee based on the choice.*/
 int registerAsUser(int choice) {
     user *att = (user *)malloc(sizeof(user));
@@ -198,40 +209,40 @@ int registerAsUser(int choice) {
     free(att);
     return 1;
 }
+
 int giveUserDetails(char *email, int id, FILE *fp, char *givenName) {
-	char buffer[2048];
-	char name[128];
-	int userId;
-	char emailF[128];
-	long long mobileNum;
-	unsigned int noOfEventattended;
-	/* Checking if the user already exist or not.*/
-	while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-		/* tokenize safely and check each token before using */
-		char *token = strtok(buffer, ",");
-		if (token == NULL) continue;
-		userId = atoi(token);
+    char buffer[2048];
+    int userId;
+    char name[128];
+    char emailF[128];
+    unsigned int noEvents;
+    long long mobileNum;
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		strncpy(name, token, sizeof(name) - 1);
-		name[sizeof(name) - 1] = '\0';
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		mobileNum = atol(token);
+        char *token = strtok(buffer, ",");
+        if (!token) continue;
+        userId = atoi(token);
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		noOfEventattended = (unsigned int)atoi(token);
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(name, token, sizeof(name));
+        name[sizeof(name)-1] = '\0';
 
-		token = strtok(NULL, ",");
-		if (token == NULL) continue;
-		/* remove any trailing newline from email token */
-		strncpy(emailF, token, sizeof(emailF) - 1);
-		emailF[sizeof(emailF) - 1] = '\0';
-		size_t ln = strlen(emailF);
-		if (ln > 0 && emailF[ln - 1] == '\n') emailF[ln - 1] = '\0';
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        noEvents = atoi(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        mobileNum = atoll(token);
+
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strncpy(emailF, token, sizeof(emailF));
+        emailF[sizeof(emailF)-1] = '\0';
+        size_t ln = strlen(emailF);
+        if (ln > 0 && emailF[ln-1] == '\n') emailF[ln-1] = '\0';
 
 		// Convert the name and email to the lower case 
 		convertToLowerCase(emailF);
@@ -301,6 +312,7 @@ int loginAsUser(int choice) {
 	}
 	return 1;
 }
+
 userStatus getDetails() {
 	
 	return st; 

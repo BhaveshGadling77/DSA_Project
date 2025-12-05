@@ -17,6 +17,8 @@ int isYourEvent(int eventId) {
     char line[2048];
     while (fgets(line, 2048, fp) != NULL) {
         // printf("%s\n", line);
+        printf("%s\n", line);
+        memset(line, 0, 2048);
         char *token = strtok(line, ",");
         // printf("%s\n", token);
         if (token == NULL){ 
@@ -82,6 +84,10 @@ void optionsAtOrganizer() {
                 printf("No attendees registered for this event yet.\n");
                 break;
             }
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             viewAllAttendees(head, eventId);
             freeList(head);
             break;
@@ -96,7 +102,14 @@ void optionsAtOrganizer() {
             }
 
             head = NULL;
+
+            head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
+            markAttendance(&head);
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;
@@ -114,6 +127,10 @@ void optionsAtOrganizer() {
             }
             head = NULL;
             loadFromFile(&head, eventId);
+            if (head == NULL) {
+                printf("No attendees registered for this event yet.\n");
+                break;
+            }
             if (head == NULL) {
                 printf("No attendees registered for this event yet.\n");
                 break;

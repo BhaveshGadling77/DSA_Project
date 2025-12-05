@@ -11,9 +11,9 @@ void getCurrentDateTime(char *buffer)
     sprintf(buffer, "%02d-%02d-%d %02d:%02d", t->tm_mday, t->tm_mon + 1, t->tm_year + 1900, t->tm_hour, t->tm_min);
 }
 
-void updateEventsAttended(int userID)
+void updateEventsAttended(int userID, int choice)
 {
-    FILE *fp = fopen("../Data/userAttendee.csv", "r");
+    FILE *fp = fopen("../Data/userAttendee.csv", "r+");
     FILE *temp = fopen("../Data/temp.csv", "w");
 
     if (!fp || !temp)
@@ -24,23 +24,67 @@ void updateEventsAttended(int userID)
         return;
     }
 
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp);
-    fprintf(temp, "%s", buffer);
+    // char buffer[500];
+    // fgets(buffer, sizeof(buffer), fp);
+    // fprintf(temp, "%s", buffer);
 
     int id, eventsAttended;
-    unsigned long phone;
+    unsigned long long phone;
     char name[100], email[100];
 
-    while (fscanf(fp, "%d,%[^,],%lu,%d,%[^,\n]\n",
-                  &id, name, &phone, &eventsAttended, email) == 5)
-    {
-        if (id == userID)
-        {
+    // while (fscanf(fp, "%d,%[^,],%llu,%d,%[^,]\n",
+    //               &id, name, &phone, &eventsAttended, email) == 5)
+    // {
+    //     if (id == userID)
+    //     {
+    //         eventsAttended++;
+    //         printf("Event Incremented\n");
+    //     }
+    //     printf("%d,%s,%llu,%d,%s\n",
+    //             id, name, phone, eventsAttended, email);
+    //     fprintf(temp, "%d,%s,%llu,%d,%s\n",
+    //             id, name, phone, eventsAttended, email);
+    // }
+    char line[2048];
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        char *token;
+        
+        // AttendeeID
+        token = strtok(p, ",");
+        if (!token) 
+            continue;
+    
+        id = atoi(token);
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        strcpy(name, token);
+        
+        //no of events attended
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        eventsAttended = atoi(token);
+        if (id == userID && choice == INCREASE) {
             eventsAttended++;
+        } else if (id == userID && choice == DECREASE) {
+            eventsAttended--;
         }
-        fprintf(temp, "%d,%s,%lu,%d,%s\n",
-                id, name, phone, eventsAttended, email);
+        // Phone
+        token = strtok(NULL, ",");
+        if (!token) continue;
+        phone = strtoul(token, NULL, 10);
+
+        // Email
+        token = strtok(NULL, ",\n");
+        if (!token) continue;
+        strncpy(email, token, sizeof(email)-1);
+
+        // printf("%d,%s,%llu,%d,%s\n",
+        //         id, name, phone, eventsAttended, email);
+        fprintf(temp, "%d,%s,%d,%llu,%s\n",
+                id, name, eventsAttended, phone, email);
+        memset(line, 0, sizeof(line));
+
     }
 
     fclose(fp);
@@ -59,15 +103,15 @@ bool fetchUserData(int userID, Attendee *a)
         return false;
     }
 
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), fp);
+    // char buffer[500];
+    // fgets(buffer, sizeof(buffer), fp);
 
     int id, eventsAttended;
     char name[100], email[100];
     unsigned long phone;
 
-    while (fscanf(fp, "%d,%[^,],%d,%lld,%[^,\n]\n", 
-                  &id, name, &eventsAttended, &phone,email) == 5)
+    while (fscanf(fp, "%d,%[^,],%d,%lu,%[^,\n]\n", 
+                  &id, name, &eventsAttended, &phone, email) == 5)
     {
         if (id == userID)
         {
@@ -77,8 +121,9 @@ bool fetchUserData(int userID, Attendee *a)
             fclose(fp);
             return true;
         }
+        memset(line, 0, sizeof(line));
     }
-    
+
     fclose(fp);
     return false;
 }
@@ -111,6 +156,7 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
 
     // Fetch user data
     Attendee a;
+    printf("your userId is :- %d\n", user->userId);
     if (!fetchUserData(user->userId, &a))
     {
         printf("\nError: Couldn't fetch user data!\n");
@@ -133,17 +179,18 @@ void registerAttendeeForEvent(Node **head, int eventID, userStatus *user)
     saveToFile(*head, eventID);
 
     // Update events attended by attendee
-    updateEventsAttended(user->userId);
+    updateEventsAttended(user->userId, INCREASE);
 
     printf("\nSuccessfully registered for event %d!\n", eventID);
 }
 
-void unregisterAttendee(Node **head, userStatus *user)
+bool unregisterAttendee(Node **head, userStatus *user)
 {
+
     if (*head == NULL)
     {
         printf("\nNo registrations found.\n");
-        return;
+        return false;
     }
 
     Node *temp = *head, *prev = NULL;
@@ -157,7 +204,7 @@ void unregisterAttendee(Node **head, userStatus *user)
     if (temp == NULL)
     {
         printf("\nYou are not registered for any event.\n");
-        return;
+        return 0;
     }
 
     int eventID = temp->data.eventID;
@@ -172,14 +219,15 @@ void unregisterAttendee(Node **head, userStatus *user)
     
     // Free the node
     free(temp);
-    
+    updateEventsAttended(user->userId, DECREASE);
     // Save updated list
     saveToFile(*head, eventID);
+    return true;
 }
 
-void markAttendance(Node *head)
+void markAttendance(Node **head)
 {
-    if (head == NULL)
+    if (*head == NULL)
     {
         printf("\nNo attendees registered.\n");
         return;
@@ -189,9 +237,8 @@ void markAttendance(Node *head)
     printf("\nEnter Attendee ID: ");
     scanf("%d", &id);
 
-    Node *temp = head;
-    while (temp != NULL)
-    {
+    Node *temp = *head;
+    while (temp != NULL) {
         if (temp->data.attendeeID == id)
         {
             if (strcmp(temp->data.status, "Present") == 0)
@@ -201,7 +248,7 @@ void markAttendance(Node *head)
             }
             
             strcpy(temp->data.status, "Present");
-            saveToFile(head, temp->data.eventID);
+            saveToFile(*head, temp->data.eventID);
             printf("\nMarked Present: %s\n", temp->data.name);
             return;
         }
@@ -245,12 +292,12 @@ void viewAllAttendees(Node *head, int eventID)
     while (temp != NULL)
     {
         // Print to terminal
-        printf("%-5d %-20s %-25s %-15lu %-12s\n",
+        printf("%-5d %-20s %-25s %-15llu %-12s\n",
                temp->data.attendeeID, temp->data.name, temp->data.email,
                temp->data.phoneNo, temp->data.status);
 
         // Write same line to file
-        fprintf(fp, "%-5d %-20s %-25s %-15lu %-12s\n",
+        fprintf(fp, "%-5d %-20s %-25s %-15llu %-12s\n",
                 temp->data.attendeeID, temp->data.name, temp->data.email,
                 temp->data.phoneNo, temp->data.status);
 
@@ -282,7 +329,7 @@ void searchAttendee(Node *head)
             printf("ID: %d\n", temp->data.attendeeID);
             printf("Name: %s\n", temp->data.name);
             printf("Email: %s\n", temp->data.email);
-            printf("Phone: %lu\n", temp->data.phoneNo);
+            printf("Phone: %llu\n", temp->data.phoneNo);
             printf("Event ID: %d\n", temp->data.eventID);
             printf("Status: %s\n", temp->data.status);
             printf("Registered: %s\n", temp->data.registrationDate);
@@ -325,9 +372,11 @@ void viewStatistics(Node *head)
 
 void saveToFile(Node *head, int eventId)
 {
+    
     char filename[100];
-    sprintf(filename, "../Data/events/event_%d.csv", eventId);
+    sprintf(filename, "../Data/event_%d.csv", eventId);
 
+    sprintf(filename, "../Data/events/event_%d.csv", eventId);
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
     {
@@ -341,7 +390,7 @@ void saveToFile(Node *head, int eventId)
     Node *temp = head;
     while (temp != NULL)
     {
-        fprintf(fp, "%d,%s,%s,%lu,%d,%s,%s\n",
+        fprintf(fp, "%d,%s,%s,%llu,%d,%s,%s\n",
                 temp->data.attendeeID, 
                 temp->data.name, 
                 temp->data.email, 
@@ -426,6 +475,7 @@ void loadFromFile(Node **head, int eventID)
         newNode->data = a;
         newNode->next = *head;
         *head = newNode;
+        memset(line, 0, sizeof(line));
     }
 
     fclose(fp);
