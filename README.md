@@ -267,24 +267,24 @@ The first time you run it, the system will automatically create the required CSV
 
 ### Project Structure
 ```
-├── Attendee_system
+├── Attendance_Module
 │   ├── attendee.c        
 │   ├── attendee.h  
 │   ├── Document.md
 │   └── main.c    
 ├── Data
 │   ├── attendees
-│   ├── events
-│   ├── organizers
+│   ├── events/
+│   ├── organizers/
 │   ├── events.csv
 │   ├── temp.csv
 │   ├── userAttendee.csv
 │   ├── userOrganizer.csv
 │   └── venues.csv
 ├── Docs
-│   ├── Pointer Digrams
-│   ├── Project Presentation
-│   ├── Project Report
+│   ├── final_pointer_diagram.jpg
+│   ├── Project_Presentation.pdf
+│   ├── ProjectReport.pdf
 │   ├── References.odt
 │   ├── References.txt
 │   └── Report.tex (Latex Code)
